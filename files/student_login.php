@@ -1,7 +1,7 @@
 <?php
     include '../database/config.php';
     session_start();
-    
+
     try {
         if (!isset($_POST['rollNumber']) || !isset($_POST['password'])) {
             throw new Exception('Roll number or password is missing.');
@@ -10,8 +10,23 @@
         $student_roll_number = $_POST['rollNumber'];
         $student_password = $_POST['password'];
 
+        // Function to get the user's IP address
+        function getUserIP() {
+            if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+                return $_SERVER['HTTP_CLIENT_IP'];
+            } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                return $_SERVER['HTTP_X_FORWARDED_FOR'];
+            } else {
+                return $_SERVER['REMOTE_ADDR'];
+            }
+        }
+
+        // Log the IP address
+        $user_ip = getUserIP();
+        error_log("Login attempt from IP: $user_ip with Roll Number: $student_roll_number");
+
         // Prepare the first statement
-        $sql1 = "SELECT id FROM student_data WHERE rollno = ?";
+        $sql1 = "SELECT id, role FROM student_data WHERE rollno = ?";
         $stmt1 = mysqli_prepare($conn, $sql1);
         if ($stmt1 === false) {
             throw new Exception('Prepare error for SQL1: ' . mysqli_error($conn));
@@ -27,6 +42,7 @@
             throw new Exception('No student found with the provided roll number.');
         }
         $student_id = $row1["id"];
+        $role = $row1["role"];
         mysqli_stmt_close($stmt1);
 
         // Prepare the second statement
@@ -49,7 +65,8 @@
                 $info[] = $row2;
 
                 echo 'CREDS_OK';
-                $_SESSION['student_details'] = json_encode($info); 
+                $_SESSION['student_details'] = json_encode($info);
+                $_SESSION['role'] = $role;
             } else {
                 throw new Exception('Incorrect password.');
             }
@@ -59,7 +76,14 @@
 
         mysqli_stmt_close($stmt2);
     } catch (Exception $e) {
-        echo json_encode(['error' => $e->getMessage()]);
+        if (isset($role) && $role === 'admin') {
+            // Detailed error for admin
+            echo json_encode(['error' => $e->getMessage()]);
+        } else {
+            // Generic error for students
+            echo json_encode(['error' => 'An error occurred during the login process.']);
+        }
+        error_log("Error for user with Roll Number: $student_roll_number from IP: $user_ip - " . $e->getMessage());
     } finally {
         mysqli_close($conn);
     }
