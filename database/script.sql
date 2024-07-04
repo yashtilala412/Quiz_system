@@ -157,6 +157,13 @@ CREATE TABLE `tests` (
   `class_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE rate_limit (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ip VARCHAR(45) NOT NULL,
+    timestamp INT NOT NULL
+);
+
+
 --
 -- Indexes for dumped tables
 --
