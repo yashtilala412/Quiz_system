@@ -41,6 +41,18 @@ if(!isset($_SESSION['user_id'])){
 echo '<script>var timer = setTimeout(function(){ alert("Time up!"); window.location.href = "results.php"; }, 60000);</script>'; // 60 seconds for example
 // Add progress bar in HTML
 echo '<progress id="progressBar" value="' . $_SESSION['question_counter'] . '" max="' . sizeof($_SESSION['question_IDS_fetched']) . '"></progress>';
+if(!isset($_SESSION['question_IDS_fetched'])){
+    $result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '".$test_id."' ");
+    if (mysqli_num_rows($result) > 0){
+        while($row = mysqli_fetch_assoc($result)) {
+            $question_ids[] = $row;
+        }
+        shuffle($question_ids); // Shuffle the questions
+        $_SESSION['question_IDS_fetched'] = $question_ids;
+        $_SESSION['question_counter'] = 0;
+        getQuestion($conn,true);
+    }
+}
 
             function getQuestion($conn, $isFirst)
             {
