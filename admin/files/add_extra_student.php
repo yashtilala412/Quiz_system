@@ -71,6 +71,9 @@ header('Content-Type: application/json');
 echo json_encode(["message" => "New record created successfully"]);
 mysqli_set_charset($conn, "utf8");
 $stmt->close();
+function addStudent($class_name, $roll_number, $conn) {
+    // Function body
+}
 
     mysqli_close($conn);
 ?>
