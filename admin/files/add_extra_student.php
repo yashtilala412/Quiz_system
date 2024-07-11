@@ -65,6 +65,7 @@ mysqli_query($conn, $log);
 header('Content-Type: application/json');
 echo json_encode(["message" => "New record created successfully"]);
 mysqli_set_charset($conn, "utf8");
+$stmt->close();
 
     mysqli_close($conn);
 ?>
