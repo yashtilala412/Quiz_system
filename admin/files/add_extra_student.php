@@ -36,6 +36,11 @@
         } else {
             echo "0 results";
         }
-
+        $check = "SELECT * FROM student_data WHERE rollno = '$roll_number'";
+        $check_result = mysqli_query($conn, $check);
+        if (mysqli_num_rows($check_result) > 0) {
+            die("Roll number already exists");
+        }
+        
     mysqli_close($conn);
 ?>
