@@ -20,6 +20,10 @@
             $stmt = $conn->prepare("SELECT id FROM classes WHERE name = ?");
             $stmt->bind_param("s", $class_name);
             $stmt->execute();
+            $result = $stmt->get_result();
+            if ($row = $result->fetch_assoc()) {
+                $id = $row['id'];
+            }
             
         $sql = "INSERT INTO student_data (rollno, class_id) VALUES ('".$_POST['extra_roll_number']."', $id)";
 
