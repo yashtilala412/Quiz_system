@@ -80,6 +80,9 @@ if (!$row) {
 if (mysqli_errno($conn) == 1062) {
     die("Duplicate entry");
 }
+if (getenv('APP_ENV') == 'development') {
+    error_reporting(E_ALL);
+}
 
     mysqli_close($conn);
 ?>
