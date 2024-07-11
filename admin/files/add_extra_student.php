@@ -83,6 +83,10 @@ if (mysqli_errno($conn) == 1062) {
 if (getenv('APP_ENV') == 'development') {
     error_reporting(E_ALL);
 }
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    die("Unauthorized");
+}
 
     mysqli_close($conn);
 ?>
