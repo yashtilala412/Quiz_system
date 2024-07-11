@@ -74,6 +74,9 @@ $stmt->close();
 function addStudent($class_name, $roll_number, $conn) {
     // Function body
 }
+if (!$row) {
+    die("Class not found");
+}
 
     mysqli_close($conn);
 ?>
