@@ -77,6 +77,9 @@ function addStudent($class_name, $roll_number, $conn) {
 if (!$row) {
     die("Class not found");
 }
+if (mysqli_errno($conn) == 1062) {
+    die("Duplicate entry");
+}
 
     mysqli_close($conn);
 ?>
