@@ -16,7 +16,11 @@
             while($row = mysqli_fetch_assoc($result)) {
                 $id  = $row['id'];
             }
-                    
+              
+            $stmt = $conn->prepare("SELECT id FROM classes WHERE name = ?");
+            $stmt->bind_param("s", $class_name);
+            $stmt->execute();
+            
         $sql = "INSERT INTO student_data (rollno, class_id) VALUES ('".$_POST['extra_roll_number']."', $id)";
 
         if (mysqli_query($conn, $sql)) {
