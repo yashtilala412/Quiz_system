@@ -54,9 +54,10 @@ if(!isset($_SESSION['question_IDS_fetched'])){
     }
 }
 // Add at the end of each question display
-echo '<button onclick="saveAnswer()">Save Answer</button>';
-echo '<button onclick="reviewAnswers()">Review Answers</button>';
 
+echo '<button onclick="reviewAnswers()">Review Answers</button>';
+// Store user answers in session or database and load them when the user resumes
+echo '<button onclick="saveAnswer()">Save Answer</button>';
             function getQuestion($conn, $isFirst)
             {
                 if($isFirst == true){
