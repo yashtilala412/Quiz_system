@@ -64,6 +64,7 @@ $log = "INSERT INTO activity_log (action) VALUES ('Added roll number $roll_numbe
 mysqli_query($conn, $log);
 header('Content-Type: application/json');
 echo json_encode(["message" => "New record created successfully"]);
+mysqli_set_charset($conn, "utf8");
 
     mysqli_close($conn);
 ?>
