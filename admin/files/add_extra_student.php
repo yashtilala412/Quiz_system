@@ -1,6 +1,10 @@
 <?php
     $id;
 	include "../../database/config.php";
+    if (!isset($_POST['class_name']) || !isset($_POST['extra_roll_number'])) {
+        die("Invalid input");
+    }
+    
    
         $classes = "SELECT id FROM classes where name = '".$_POST['class_name']."' ";
         $result = mysqli_query($conn, $classes);
