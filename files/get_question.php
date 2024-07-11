@@ -39,6 +39,8 @@ if(!isset($_SESSION['user_id'])){
 }
 // Add a timer JavaScript in your HTML
 echo '<script>var timer = setTimeout(function(){ alert("Time up!"); window.location.href = "results.php"; }, 60000);</script>'; // 60 seconds for example
+// Add progress bar in HTML
+echo '<progress id="progressBar" value="' . $_SESSION['question_counter'] . '" max="' . sizeof($_SESSION['question_IDS_fetched']) . '"></progress>';
 
             function getQuestion($conn, $isFirst)
             {
