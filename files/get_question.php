@@ -33,7 +33,11 @@
                        
             }
 
-            
+            // Add at the top of the script
+if(!isset($_SESSION['user_id'])){
+    header("Location: login.php");
+}
+
             function getQuestion($conn, $isFirst)
             {
                 if($isFirst == true){
