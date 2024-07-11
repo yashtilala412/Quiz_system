@@ -6,6 +6,10 @@ require 'path/to/PHPMailer/src/Exception.php';
 require 'path/to/PHPMailer/src/PHPMailer.php';
 require 'path/to/PHPMailer/src/SMTP.php';
 include "../../database/config.php";
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'username');
+define('DB_PASSWORD', 'password');
+define('DB_NAME', 'database');
 
     $id;
 	include "../../database/config.php";
