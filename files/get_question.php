@@ -37,6 +37,8 @@
 if(!isset($_SESSION['user_id'])){
     header("Location: login.php");
 }
+// Add a timer JavaScript in your HTML
+echo '<script>var timer = setTimeout(function(){ alert("Time up!"); window.location.href = "results.php"; }, 60000);</script>'; // 60 seconds for example
 
             function getQuestion($conn, $isFirst)
             {
