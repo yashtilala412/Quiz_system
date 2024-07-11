@@ -62,6 +62,8 @@ $sql = "INSERT INTO student_data (rollno, class_id) VALUES ('$roll_number', $id)
 mail("yashtilala08@gmail.com", "New Student Added", "Student with roll number $roll_number added to class ID $id.");
 $log = "INSERT INTO activity_log (action) VALUES ('Added roll number $roll_number to class $class_name')";
 mysqli_query($conn, $log);
+header('Content-Type: application/json');
+echo json_encode(["message" => "New record created successfully"]);
 
     mysqli_close($conn);
 ?>
