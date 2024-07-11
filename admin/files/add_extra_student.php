@@ -49,6 +49,8 @@
             mysqli_rollback($conn);
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
+// Add unique constraint in database or handle in PHP
+$sql = "INSERT INTO student_data (rollno, class_id) VALUES ('$roll_number', $id)";
                 
     mysqli_close($conn);
 ?>
