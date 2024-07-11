@@ -41,6 +41,7 @@
         if (mysqli_num_rows($check_result) > 0) {
             die("Roll number already exists");
         }
+        mysqli_begin_transaction($conn);
         
     mysqli_close($conn);
 ?>
