@@ -53,6 +53,9 @@ if(!isset($_SESSION['question_IDS_fetched'])){
         getQuestion($conn,true);
     }
 }
+// Add at the end of each question display
+echo '<button onclick="saveAnswer()">Save Answer</button>';
+echo '<button onclick="reviewAnswers()">Review Answers</button>';
 
             function getQuestion($conn, $isFirst)
             {
