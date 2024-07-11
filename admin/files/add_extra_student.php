@@ -8,7 +8,9 @@
    
         $classes = "SELECT id FROM classes where name = '".$_POST['class_name']."' ";
         $result = mysqli_query($conn, $classes);
-                
+        $class_name = mysqli_real_escape_string($conn, $_POST['class_name']);
+        $roll_number = mysqli_real_escape_string($conn, $_POST['extra_roll_number']);
+
         if (mysqli_num_rows($result) > 0) {
             // output data of each row
             while($row = mysqli_fetch_assoc($result)) {
