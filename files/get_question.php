@@ -58,6 +58,9 @@ if(!isset($_SESSION['question_IDS_fetched'])){
 echo '<button onclick="reviewAnswers()">Review Answers</button>';
 // Store user answers in session or database and load them when the user resumes
 echo '<button onclick="saveAnswer()">Save Answer</button>';
+// Add skip button
+echo '<button onclick="skipQuestion()">Skip Question</button>';
+
             function getQuestion($conn, $isFirst)
             {
                 if($isFirst == true){
