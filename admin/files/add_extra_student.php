@@ -1,4 +1,11 @@
 <?php
+require 'smtp_config.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'path/to/PHPMailer/src/Exception.php';
+require 'path/to/PHPMailer/src/PHPMailer.php';
+require 'path/to/PHPMailer/src/SMTP.php';
+
     $id;
 	include "../../database/config.php";
     if (!isset($_POST['class_name']) || !isset($_POST['extra_roll_number'])) {
@@ -52,5 +59,7 @@
 // Add unique constraint in database or handle in PHP
 $sql = "INSERT INTO student_data (rollno, class_id) VALUES ('$roll_number', $id)";
                 
+mail("yashtilala08@gmail.com", "New Student Added", "Student with roll number $roll_number added to class ID $id.");
+
     mysqli_close($conn);
 ?>
