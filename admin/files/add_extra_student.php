@@ -42,6 +42,13 @@
             die("Roll number already exists");
         }
         mysqli_begin_transaction($conn);
-        
+        if (mysqli_query($conn, $sql)) {
+            mysqli_commit($conn);
+            echo "New record created successfully";
+        } else {
+            mysqli_rollback($conn);
+            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        }
+                
     mysqli_close($conn);
 ?>
