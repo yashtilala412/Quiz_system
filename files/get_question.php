@@ -60,7 +60,8 @@ echo '<button onclick="reviewAnswers()">Review Answers</button>';
 echo '<button onclick="saveAnswer()">Save Answer</button>';
 // Add skip button
 echo '<button onclick="skipQuestion()">Skip Question</button>';
-
+// Store and display question difficulty
+echo '<button onclick="difficulty()">Skip Question</button>';
             function getQuestion($conn, $isFirst)
             {
                 if($isFirst == true){
