@@ -25,9 +25,15 @@ button {
     transform: translate(0, -50%);
     text-align: center;
     color: white;
-    background-color: #f39c12;
-    border: 2px solid #e67e22;
-    padding: 20px;
+    background-color: #3498db;
+    border: 2px solid #2980b9;
+    padding: 18px 60px;
     font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
 }
