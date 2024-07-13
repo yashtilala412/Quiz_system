@@ -164,12 +164,15 @@ label.btn-block {
       }
   }
   .modal-header {
-    background: repeating-linear-gradient(45deg, #3498db, #3498db 10px, #2980b9 10px, #2980b9 20px);
+    background-color: rgba(52, 152, 219, 0.5);
     color: white;
+    border: 1px solid #3498db;
 }
 
 .modal-body {
     min-height: 205px;
+    background-color: rgba(52, 152, 219, 0.5);
+    border: 1px solid #3498db;
 }
 
 
