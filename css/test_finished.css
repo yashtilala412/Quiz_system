@@ -16,16 +16,19 @@ h5{
     font-weight: bold;
 } 
 
-button{
+button {
     margin: 0;
     width: 100%;
-    position: static;               
-    top: 50%;      
+    position: static;
+    top: 50%;
     font-size: 40px;
     margin-top: -40px;
     transform: translate(0, -50%);
     text-align: center;
     color: white;
-    size: 100;
-    font-weight: bold;  
+    background-color: #3498db;
+    border: 2px solid #2980b9;
+    padding: 20px;
+    font-weight: bold;
+    cursor: pointer;
 }
