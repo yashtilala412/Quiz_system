@@ -164,15 +164,14 @@ label.btn-block {
       }
   }
   .modal-header {
-    background-color: #34495e;
+    background: url('texture.png');
     color: white;
-    background-image: url('icon.png');
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 .modal-body {
     min-height: 205px;
+    background: url('texture.png');
+    color: white;
 }
 
 
