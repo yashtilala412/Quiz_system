@@ -25,8 +25,8 @@ button {
     transform: translate(0, -50%);
     text-align: center;
     color: white;
-    background-color: #2ecc71;
-    border: 2px solid #27ae60;
+    background-color: #e74c3c;
+    border: 2px solid #c0392b;
     padding: 18px 60px;
     font-weight: bold;
     cursor: pointer;
@@ -34,6 +34,7 @@ button {
 }
 
 button:hover {
-    background-color: #27ae60;
+    background-color: #c0392b;
     transform: scale(1.05);
 }
+
