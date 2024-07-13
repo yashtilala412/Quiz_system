@@ -164,16 +164,15 @@ label.btn-block {
       }
   }
   .modal-header {
-    background: linear-gradient(to bottom, #3498db, #2980b9);
+    background: linear-gradient(to right, #e67e22, #d35400);
     color: white;
 }
 
 .modal-body {
     min-height: 205px;
-    background: linear-gradient(to bottom, #3498db, #2980b9);
+    background: linear-gradient(to right, #e67e22, #d35400);
     color: white;
 }
-
 
 
   .blockG {
