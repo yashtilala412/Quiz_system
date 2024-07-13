@@ -26,8 +26,8 @@ button {
     transform: translate(0, -50%);
     text-align: center;
     color: white;
-    background-color: #9b59b6;
-    border: 2px solid #8e44ad;
+    background-color: #34495e;
+    border: 2px solid #2c3e50;
     padding: 20px;
     font-weight: bold;
     cursor: pointer;
