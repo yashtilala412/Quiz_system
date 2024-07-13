@@ -5,8 +5,8 @@
     border-radius: 20px;
   }
   label.btn {
-    padding: 16px 64px;
-    white-space: nowrap;
+    padding: 22px 50px;
+    white-space: normal;
     -webkit-transform: scale(1.0);
     -moz-transform: scale(1.0);
     -o-transform: scale(1.0);
@@ -16,14 +16,15 @@
 }
 
 label.btn:hover {
-    text-shadow: 0 4px 2px rgba(0,0,0,0.4);
-    -webkit-transform: scale(1.15);
-    -moz-transform: scale(1.15);
-    -o-transform: scale(1.15);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    -webkit-transform: scale(1.08);
+    -moz-transform: scale(1.08);
+    -o-transform: scale(1.08);
 }
 label.btn-block {
-    text-align: right;
+    text-align: center;
 }
+
 
 
   label.btn-block {
