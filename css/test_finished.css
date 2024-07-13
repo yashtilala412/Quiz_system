@@ -26,10 +26,9 @@ button {
     transform: translate(0, -50%);
     text-align: center;
     color: white;
-    background-color: #e74c3c;
-    border: 2px solid #c0392b;
+    background-color: #9b59b6;
+    border: 2px solid #8e44ad;
     padding: 20px;
     font-weight: bold;
     cursor: pointer;
 }
-
