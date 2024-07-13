@@ -164,16 +164,17 @@ label.btn-block {
       }
   }
   .modal-header {
-    background-color: #2980b9;
+    background-color: #f39c12;
     color: white;
-    font-family: 'Courier New', Courier, monospace;
+}
+
+.modal-header::before {
+    content: '⚠️ ';
 }
 
 .modal-body {
     min-height: 205px;
-    font-family: 'Courier New', Courier, monospace;
 }
-
 
 
   .blockG {
