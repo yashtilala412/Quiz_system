@@ -5,7 +5,7 @@
     border-radius: 20px;
   }
   label.btn {
-    padding: 18px 65px;
+    padding: 15px 70px;
     white-space: normal;
     -webkit-transform: scale(1.0);
     -moz-transform: scale(1.0);
@@ -13,21 +13,21 @@
     -webkit-transition-duration: .3s;
     -moz-transition-duration: .3s;
     -o-transition-duration: .3s;
-    border: 2px solid #34495e;
-    background-color: #34495e;
+    border: 2px solid #f39c12;
+    background-color: #f39c12;
     color: #fff;
 }
 
 label.btn:hover {
-    text-shadow: 0 3px 3px rgba(0,0,0,0.4);
-    -webkit-transform: scale(1.12);
-    -moz-transform: scale(1.12);
-    -o-transform: scale(1.12);
-    background-color: #2c3e50;
-    border-color: #2c3e50;
+    text-shadow: 0 3px 1px rgba(0,0,0,0.3);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    background-color: #e67e22;
+    border-color: #e67e22;
 }
 label.btn-block {
-    text-align: center;
+    text-align: right;
 }
 
 
