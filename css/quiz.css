@@ -164,14 +164,17 @@ label.btn-block {
       }
   }
   .modal-header {
-    background-color: #8e44ad;
+    background-color: #34495e;
     color: white;
-    border-bottom: 6px solid #9b59b6;
+    transition: background-color 0.3s;
+}
+
+.modal-header:hover {
+    background-color: #2c3e50;
 }
 
 .modal-body {
     min-height: 205px;
-    border: 3px solid #8e44ad;
 }
 
 
