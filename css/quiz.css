@@ -164,13 +164,13 @@ label.btn-block {
       }
   }
   .modal-header {
-    background: url('texture.png');
+    background: linear-gradient(to right, #bdc3c7, #2c3e50);
     color: white;
 }
 
 .modal-body {
     min-height: 205px;
-    background: url('texture.png');
+    background: linear-gradient(to right, #bdc3c7, #2c3e50);
     color: white;
 }
 
