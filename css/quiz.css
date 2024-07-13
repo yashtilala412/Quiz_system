@@ -164,14 +164,14 @@ label.btn-block {
       }
   }
   .modal-header {
-    background-color: #ffffff;
-    color: #000000;
-    border-bottom: 1px solid #dcdcdc;
+    background-color: #8e44ad;
+    color: white;
+    border-bottom: 3px solid #9b59b6;
 }
 
 .modal-body {
     min-height: 205px;
-    background-color: #ffffff;
+    border: 3px solid #8e44ad;
 }
 
 
