@@ -164,15 +164,16 @@ label.btn-block {
       }
   }
   .modal-header {
-    background-color: #f8f9fa;
-    color: #212529;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    color: white;
 }
 
 .modal-body {
     min-height: 205px;
-    background-color: #ffffff;
-    color: #212529;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    color: white;
 }
+
 
   .blockG {
       position: absolute;
