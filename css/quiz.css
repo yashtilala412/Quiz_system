@@ -164,12 +164,9 @@ label.btn-block {
       }
   }
   .modal-header {
-    background-color: #f39c12;
+    background-color: #16a085;
     color: white;
-}
-
-.modal-header::before {
-    content: '⚠️ ';
+    text-shadow: 2px 2px 4px #000000;
 }
 
 .modal-body {
