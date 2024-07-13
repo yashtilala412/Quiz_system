@@ -164,15 +164,15 @@ label.btn-block {
       }
   }
   .modal-header {
-    background-color: rgba(52, 152, 219, 0.5);
+    background-color: #34495e;
     color: white;
-    border: 1px solid #3498db;
+    background-image: url('icon.png');
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .modal-body {
     min-height: 205px;
-    background-color: rgba(52, 152, 219, 0.5);
-    border: 1px solid #3498db;
 }
 
 
