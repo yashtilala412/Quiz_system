@@ -1,15 +1,8 @@
-// in test_view.php or equivalent file
-<?php
-// Fetch test details
-$test_id = $_GET['test_id'];
-$sql = "SELECT * FROM tests WHERE id = '$test_id'";
-$result = mysqli_query($conn, $sql);
-$test = mysqli_fetch_assoc($result);
+// Fetch test creator details
+$creator_id = $test['creator_id'];
+$sql_creator = "SELECT * FROM users WHERE id = '$creator_id'";
+$result_creator = mysqli_query($conn, $sql_creator);
+$creator = mysqli_fetch_assoc($result_creator);
 
-// Display test details
-echo "<h1>{$test['name']}</h1>";
-echo "<p>Date: {$test['date']}</p>";
-echo "<p>Subject: {$test['subject']}</p>";
-echo "<p>Total Questions: {$test['total_questions']}</p>";
-echo "<p>Time Limit: {$test['time_limit']} minutes</p>";
-?>
+// Display creator details
+echo "<p>Creator: {$creator['name']}</p>";
