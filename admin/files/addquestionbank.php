@@ -41,3 +41,11 @@ echo "<form action='import_questions.php' method='post' enctype='multipart/form-
     <input type='submit' value='Import'>
 </form>";
 echo "<a href='export_questions.php' class='btn btn-secondary'>Export to CSV</a>";
+$sql_stats = "SELECT category, difficulty, COUNT(*) AS count FROM question_bank GROUP BY category, difficulty";
+$result_stats = mysqli_query($conn, $sql_stats);
+
+echo "<h3>Question Statistics:</h3><ul>";
+while ($stat = mysqli_fetch_assoc($result_stats)) {
+    echo "<li>{$stat['category']} - {$stat['difficulty']}: {$stat['count']} questions</li>";
+}
+echo "</ul>";
