@@ -1,14 +1,16 @@
-$difficulties = ['Easy', 'Medium', 'Hard'];
-echo "<form method='GET' action='test_view.php'>
-    <label for='difficulty'>Sort by Difficulty:</label>
-    <select name='difficulty' id='difficulty'>
-        <option value=''>All</option>";
-foreach ($difficulties as $difficulty) {
-    echo "<option value='{$difficulty}'>{$difficulty}</option>";
-}
-echo "</select>
-    <input type='submit' value='Sort'>
-</form>";
+$limit = 10; // Number of questions per page
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+$sql_questions .= " LIMIT $limit OFFSET $offset";
 
-$difficulty_filter = isset($_GET['difficulty']) ? $_GET['difficulty'] : '';
-$sql_questions = "SELECT * FROM question_bank" . ($difficulty_filter ? " WHERE difficulty = '$difficulty_filter'" : "");
+// Fetch questions
+$result_questions = mysqli_query($conn, $sql_questions);
+
+// Display pagination controls
+$total_questions = $question_bank_count['total'];
+$total_pages = ceil($total_questions / $limit);
+echo "<div class='pagination'>";
+for ($i = 1; $i <= $total_pages; $i++) {
+    echo "<a href='test_view.php?page=$i'>$i</a> ";
+}
+echo "</div>";
