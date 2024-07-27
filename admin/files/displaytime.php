@@ -27,3 +27,4 @@ if ($test['time_limit'] > 0) {
     </script>";
 }
 echo "<p>Instructions: {$test['instructions']}</p>";
+echo "<a href='start_test.php?test_id={$test_id}' class='btn btn-success'>Start Test</a>";
