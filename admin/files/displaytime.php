@@ -7,3 +7,4 @@ $creator = mysqli_fetch_assoc($result_creator);
 // Display creator details
 echo "<p>Creator: {$creator['name']}</p>";
 echo "<p>Description: {$test['description']}</p>";
+echo "<p><a href='{$test['resource_link']}' target='_blank'>Related Resources</a></p>";
