@@ -37,3 +37,10 @@ while ($question = mysqli_fetch_assoc($result_questions)) {
 }
 echo "</ul>";
 echo "<a href='view_results.php?test_id={$test_id}' class='btn btn-info'>View Results</a>";
+echo "<h3>Feedback:</h3>";
+echo "<form action='submit_feedback.php' method='post'>
+    <input type='hidden' name='test_id' value='{$test_id}'>
+    <textarea name='feedback' rows='4' cols='50' placeholder='Your feedback...'></textarea>
+    <br>
+    <input type='submit' value='Submit Feedback'>
+</form>";
