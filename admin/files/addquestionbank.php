@@ -40,3 +40,4 @@ echo "<form action='import_questions.php' method='post' enctype='multipart/form-
     <input type='file' name='csv_file'>
     <input type='submit' value='Import'>
 </form>";
+echo "<a href='export_questions.php' class='btn btn-secondary'>Export to CSV</a>";
