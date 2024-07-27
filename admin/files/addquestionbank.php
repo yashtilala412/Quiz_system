@@ -49,4 +49,12 @@ while ($stat = mysqli_fetch_assoc($result_stats)) {
     echo "<li>{$stat['category']} - {$stat['difficulty']}: {$stat['count']} questions</li>";
 }
 echo "</ul>";$sql_questions = "SELECT * FROM question_bank ORDER BY RAND()";
+$sql_popular = "SELECT * FROM question_bank WHERE is_popular = 1";
+$result_popular = mysqli_query($conn, $sql_popular);
+
+echo "<h3>Popular Questions:</h3><ul>";
+while ($question = mysqli_fetch_assoc($result_popular)) {
+    echo "<li>{$question['question_text']}</li>";
+}
+echo "</ul>";
 
