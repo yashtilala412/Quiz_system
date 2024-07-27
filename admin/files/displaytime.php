@@ -28,3 +28,11 @@ if ($test['time_limit'] > 0) {
 }
 echo "<p>Instructions: {$test['instructions']}</p>";
 echo "<a href='start_test.php?test_id={$test_id}' class='btn btn-success'>Start Test</a>";
+$sql_questions = "SELECT * FROM questions WHERE test_id = '$test_id'";
+$result_questions = mysqli_query($conn, $sql_questions);
+
+echo "<h2>Questions:</h2><ul>";
+while ($question = mysqli_fetch_assoc($result_questions)) {
+    echo "<li>{$question['question_text']}</li>";
+}
+echo "</ul>";
