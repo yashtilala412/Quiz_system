@@ -8,3 +8,4 @@ $creator = mysqli_fetch_assoc($result_creator);
 echo "<p>Creator: {$creator['name']}</p>";
 echo "<p>Description: {$test['description']}</p>";
 echo "<p><a href='{$test['resource_link']}' target='_blank'>Related Resources</a></p>";
+echo "<a href='download_test.php?test_id={$test_id}' class='btn btn-primary'>Download Test</a>";
