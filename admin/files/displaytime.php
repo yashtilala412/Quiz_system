@@ -26,3 +26,4 @@ if ($test['time_limit'] > 0) {
     updateTimer();
     </script>";
 }
+echo "<p>Instructions: {$test['instructions']}</p>";
