@@ -48,4 +48,5 @@ echo "<h3>Question Statistics:</h3><ul>";
 while ($stat = mysqli_fetch_assoc($result_stats)) {
     echo "<li>{$stat['category']} - {$stat['difficulty']}: {$stat['count']} questions</li>";
 }
-echo "</ul>";
+echo "</ul>";$sql_questions = "SELECT * FROM question_bank ORDER BY RAND()";
+
