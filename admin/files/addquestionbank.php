@@ -35,3 +35,8 @@ echo "<form action='add_question.php' method='post'>
     </select>
     <input type='submit' value='Add Question'>
 </form>";
+echo "<h3>Import Questions:</h3>";
+echo "<form action='import_questions.php' method='post' enctype='multipart/form-data'>
+    <input type='file' name='csv_file'>
+    <input type='submit' value='Import'>
+</form>";
