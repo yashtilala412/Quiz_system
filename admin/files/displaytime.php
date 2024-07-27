@@ -6,3 +6,4 @@ $creator = mysqli_fetch_assoc($result_creator);
 
 // Display creator details
 echo "<p>Creator: {$creator['name']}</p>";
+echo "<p>Description: {$test['description']}</p>";
