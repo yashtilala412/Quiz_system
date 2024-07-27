@@ -21,3 +21,17 @@ function showDetails(questionId) {
 </script>";
 echo "<a href='edit_question.php?question_id={$question['id']}' class='btn btn-warning'>Edit</a>";
 echo "<a href='delete_question.php?question_id={$question['id']}' class='btn btn-danger' onclick='return confirm(\"Are you sure?\")'>Delete</a>";
+echo "<h3>Add New Question:</h3>";
+echo "<form action='add_question.php' method='post'>
+    <label for='question_text'>Question:</label>
+    <input type='text' name='question_text' id='question_text'>
+    <label for='category'>Category:</label>
+    <input type='text' name='category' id='category'>
+    <label for='difficulty'>Difficulty:</label>
+    <select name='difficulty' id='difficulty'>
+        <option value='Easy'>Easy</option>
+        <option value='Medium'>Medium</option>
+        <option value='Hard'>Hard</option>
+    </select>
+    <input type='submit' value='Add Question'>
+</form>";
