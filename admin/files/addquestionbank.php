@@ -1,8 +1,14 @@
+$difficulties = ['Easy', 'Medium', 'Hard'];
 echo "<form method='GET' action='test_view.php'>
-    <label for='keyword'>Search Questions:</label>
-    <input type='text' name='keyword' id='keyword'>
-    <input type='submit' value='Search'>
+    <label for='difficulty'>Sort by Difficulty:</label>
+    <select name='difficulty' id='difficulty'>
+        <option value=''>All</option>";
+foreach ($difficulties as $difficulty) {
+    echo "<option value='{$difficulty}'>{$difficulty}</option>";
+}
+echo "</select>
+    <input type='submit' value='Sort'>
 </form>";
 
-$keyword_filter = isset($_GET['keyword']) ? $_GET['keyword'] : '';
-$sql_questions = "SELECT * FROM question_bank" . ($keyword_filter ? " WHERE question_text LIKE '%$keyword_filter%'" : "");
+$difficulty_filter = isset($_GET['difficulty']) ? $_GET['difficulty'] : '';
+$sql_questions = "SELECT * FROM question_bank" . ($difficulty_filter ? " WHERE difficulty = '$difficulty_filter'" : "");
