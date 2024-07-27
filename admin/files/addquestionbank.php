@@ -19,3 +19,5 @@ function showDetails(questionId) {
     // Fetch and display question details in a modal or tooltip
 }
 </script>";
+echo "<a href='edit_question.php?question_id={$question['id']}' class='btn btn-warning'>Edit</a>";
+echo "<a href='delete_question.php?question_id={$question['id']}' class='btn btn-danger' onclick='return confirm(\"Are you sure?\")'>Delete</a>";
