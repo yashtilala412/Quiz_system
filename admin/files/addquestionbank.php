@@ -56,5 +56,20 @@ echo "<h3>Popular Questions:</h3><ul>";
 while ($question = mysqli_fetch_assoc($result_popular)) {
     echo "<li>{$question['question_text']}</li>";
 }
-echo "</ul>";
+echo "</ul>";echo "<h3>Tags:</h3>";
+$tags = ['Math', 'Algebra', 'Geometry', 'Physics', 'Biology']; // Example tags
+echo "<form method='GET' action='test_view.php'>
+    <label for='tag'>Filter by Tag:</label>
+    <select name='tag' id='tag'>
+        <option value=''>All</option>";
+foreach ($tags as $tag) {
+    echo "<option value='{$tag}'>{$tag}</option>";
+}
+echo "</select>
+    <input type='submit' value='Filter'>
+</form>";
+
+$tag_filter = isset($_GET['tag']) ? $_GET['tag'] : '';
+$sql_questions = "SELECT * FROM question_bank" . ($tag_filter ? " WHERE tags LIKE '%$tag_filter%'" : "");
+
 
