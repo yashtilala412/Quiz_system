@@ -14,3 +14,8 @@ for ($i = 1; $i <= $total_pages; $i++) {
     echo "<a href='test_view.php?page=$i'>$i</a> ";
 }
 echo "</div>";
+echo "<script>
+function showDetails(questionId) {
+    // Fetch and display question details in a modal or tooltip
+}
+</script>";
