@@ -36,3 +36,4 @@ while ($question = mysqli_fetch_assoc($result_questions)) {
     echo "<li>{$question['question_text']}</li>";
 }
 echo "</ul>";
+echo "<a href='view_results.php?test_id={$test_id}' class='btn btn-info'>View Results</a>";
