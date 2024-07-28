@@ -7,6 +7,10 @@ function logMessage($message) {
     error_log($message . PHP_EOL, 3, 'log.txt');
 }
 
+function validateInput($data) {
+    return htmlspecialchars(stripslashes(trim($data)));
+}
+
 logMessage("Script execution started.");
 
 if (isset($_SESSION['student_details'])) {
@@ -22,7 +26,7 @@ if (isset($_SESSION['student_details'])) {
     }
 
     foreach ($student_data as $obj) {
-        $test_id = $obj->test_id;
+        $test_id = validateInput($obj->test_id);
         logMessage("Processing test_id: " . $test_id);
 
         $query = "SELECT * FROM tests WHERE id = ? AND status_id IN (2)";
