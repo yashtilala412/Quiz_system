@@ -13,17 +13,16 @@
     -webkit-transition-duration: .3s;
     -moz-transition-duration: .3s;
     -o-transition-duration: .3s;
-    border: 2px solid #9b59b6;
-    background-color: #9b59b6;
-    color: #fff;
+    border: 2px solid #e74c3c;
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
     border-radius: 5px;
-    box-shadow: 0px 5px 0px #8e44ad;
-    transition: box-shadow .3s, transform .3s;
+    transition: background-color .3s;
 }
-label.btn:active {
-    box-shadow: 0px 2px 0px #8e44ad;
-    transform: translateY(3px);
+label.btn:hover {
+    background-color: rgba(231, 76, 60, 0.3);
 }
+
 
 
 
