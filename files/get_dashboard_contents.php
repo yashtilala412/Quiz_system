@@ -38,25 +38,4 @@ if (isset($_SESSION['student_details'])) {
 
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    $_SESSION['test_id'] = $row['id'];
-                    $testName = $row['name'];
-                    logMessage("Test found: " . $row['name']);
-                }
-            } else {
-                logMessage("No test found for test_id: " . $test_id);
-            }
-            $stmt->close();
-        } else {
-            logMessage("Failed to prepare statement: " . $conn->error);
-        }
-    }
-
-    echo $testName;
-} else {
-    logMessage("No session data found.");
-    echo "Not Found";
-}
-
-mysqli_close($conn);
-logMessage("Script execution ended.");
-?>
+                    $_SESSION['test_id'] = $row['
