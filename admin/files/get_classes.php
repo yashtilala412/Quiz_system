@@ -13,8 +13,8 @@ include "../../database/config.php";
 $cache_file = 'cache.json';
 $cache_time = 3600; // 1 hour
 
-if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time)) {
-    // Cache file is less than one hour old. Serve it up and exit.
+if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time) && !isset($_GET['search'])) {
+    // Cache file is less than one hour old and no search query. Serve it up and exit.
     $info = json_decode(file_get_contents($cache_file), true);
 } else {
     // Check connection
@@ -27,9 +27,10 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time))
     $limit = 10; // Number of entries to show in a page.
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $start = ($page - 1) * $limit;
+    $search = isset($_GET['search']) ? "%" . $_GET['search'] . "%" : "%";
 
-    $stmt = $conn->prepare("SELECT name FROM classes LIMIT ?, ?");
-    $stmt->bind_param("ii", $start, $limit);
+    $stmt = $conn->prepare("SELECT name FROM classes WHERE name LIKE ? LIMIT ?, ?");
+    $stmt->bind_param("sii", $search, $start, $limit);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -46,7 +47,9 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time))
         while($row = mysqli_fetch_assoc($result)) {
             $info[] = $row['name'];
         }
-        file_put_contents($cache_file, json_encode($info));
+        if (!isset($_GET['search'])) {
+            file_put_contents($cache_file, json_encode($info));
+        }
     } else {
         $info[] = "0 results";
     }
@@ -65,6 +68,10 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time))
 </head>
 <body>
     <h1>Class Names</h1>
+    <form method="GET">
+        <input type="text" name="search" placeholder="Search classes">
+        <input type="submit" value="Search">
+    </form>
     <ul>
         <?php foreach($info as $class): ?>
             <li><?php echo htmlspecialchars($class); ?></li>
