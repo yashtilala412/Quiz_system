@@ -70,4 +70,24 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time) 
 </head>
 <body>
     <h1>Class Names</h1>
-    <
+    <form method="GET">
+        <input type="text" name="search" placeholder="Search classes">
+        <input type="submit" value="Search">
+        <select name="sort" onchange="this.form.submit()">
+            <option value="ASC" <?php if ($sort == 'ASC') echo 'selected'; ?>>Ascending</option>
+            <option value="DESC" <?php if ($sort == 'DESC') echo 'selected'; ?>>Descending</option>
+        </select>
+    </form>
+    <ul>
+        <?php foreach($info as $class): ?>
+            <li><?php echo htmlspecialchars($class); ?></li>
+        <?php endforeach; ?>
+    </ul>
+    <div>
+        <?php if ($page > 1): ?>
+            <a href="?page=<?php echo $page - 1; ?>">Previous</a>
+        <?php endif; ?>
+        <a href="?page=<?php echo $page + 1; ?>">Next</a>
+    </div>
+</body>
+</html>
