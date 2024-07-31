@@ -13,6 +13,8 @@ include "../../database/config.php";
 $cache_file = 'cache.json';
 $cache_time = 3600; // 1 hour
 
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'ASC';
+
 if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time) && !isset($_GET['search'])) {
     // Cache file is less than one hour old and no search query. Serve it up and exit.
     $info = json_decode(file_get_contents($cache_file), true);
@@ -29,7 +31,7 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time) 
     $start = ($page - 1) * $limit;
     $search = isset($_GET['search']) ? "%" . $_GET['search'] . "%" : "%";
 
-    $stmt = $conn->prepare("SELECT name FROM classes WHERE name LIKE ? LIMIT ?, ?");
+    $stmt = $conn->prepare("SELECT name FROM classes WHERE name LIKE ? ORDER BY name $sort LIMIT ?, ?");
     $stmt->bind_param("sii", $search, $start, $limit);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -68,20 +70,4 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time) 
 </head>
 <body>
     <h1>Class Names</h1>
-    <form method="GET">
-        <input type="text" name="search" placeholder="Search classes">
-        <input type="submit" value="Search">
-    </form>
-    <ul>
-        <?php foreach($info as $class): ?>
-            <li><?php echo htmlspecialchars($class); ?></li>
-        <?php endforeach; ?>
-    </ul>
-    <div>
-        <?php if ($page > 1): ?>
-            <a href="?page=<?php echo $page - 1; ?>">Previous</a>
-        <?php endif; ?>
-        <a href="?page=<?php echo $page + 1; ?>">Next</a>
-    </div>
-</body>
-</html>
+    <
