@@ -2,6 +2,13 @@
 header("Access-Control-Allow-Origin: *");
 http_response_code(200);
 
+$valid_api_keys = ['your_api_key_here'];
+
+if (!isset($_GET['api_key']) || !in_array($_GET['api_key'], $valid_api_keys)) {
+    http_response_code(403);
+    die("Forbidden: Invalid API Key");
+}
+
 function log_message($message) {
     $log_file = 'app.log';
     $current_time = date('Y-m-d H:i:s');
@@ -73,6 +80,7 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time) 
 <body>
     <h1>Class Names</h1>
     <form method="GET">
+        <input type="hidden" name="api_key" value="your_api_key_here">
         <input type="text" name="search" placeholder="Search classes" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
         <input type="submit" value="Search">
         <select name="sort" onchange="this.form.submit()">
@@ -87,9 +95,9 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time) 
     </ul>
     <div>
         <?php if ($page > 1): ?>
-            <a href="?page=<?php echo $page - 1; ?>">Previous</a>
+            <a href="?page=<?php echo $page - 1; ?>&api_key=your_api_key_here">Previous</a>
         <?php endif; ?>
-        <a href="?page=<?php echo $page + 1; ?>">Next</a>
+        <a href="?page=<?php echo $page + 1; ?>&api_key=your_api_key_here">Next</a>
     </div>
 </body>
 </html>
