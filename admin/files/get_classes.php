@@ -9,6 +9,25 @@ if (!isset($_GET['api_key']) || !in_array($_GET['api_key'], $valid_api_keys)) {
     die("Forbidden: Invalid API Key");
 }
 
+// Rate limiting
+session_start();
+if (!isset($_SESSION['rate_limit'])) {
+    $_SESSION['rate_limit'] = ['last_request' => time(), 'request_count' => 0];
+}
+$current_time = time();
+$time_diff = $current_time - $_SESSION['rate_limit']['last_request'];
+
+if ($time_diff < 60) { // 1 minute window
+    $_SESSION['rate_limit']['request_count']++;
+    if ($_SESSION['rate_limit']['request_count'] > 10) { // limit to 10 requests per minute
+        http_response_code(429);
+        die("Too Many Requests: Rate limit exceeded");
+    }
+} else {
+    $_SESSION['rate_limit']['last_request'] = $current_time;
+    $_SESSION['rate_limit']['request_count'] = 1;
+}
+
 function log_message($message) {
     $log_file = 'app.log';
     $current_time = date('Y-m-d H:i:s');
@@ -95,9 +114,4 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time) 
     </ul>
     <div>
         <?php if ($page > 1): ?>
-            <a href="?page=<?php echo $page - 1; ?>&api_key=your_api_key_here">Previous</a>
-        <?php endif; ?>
-        <a href="?page=<?php echo $page + 1; ?>&api_key=your_api_key_here">Next</a>
-    </div>
-</body>
-</html>
+            <a href="?page=<?php echo $page - 1; ?>&api_ke
