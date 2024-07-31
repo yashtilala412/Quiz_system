@@ -13,7 +13,8 @@ include "../../database/config.php";
 $cache_file = 'cache.json';
 $cache_time = 3600; // 1 hour
 
-$sort = isset($_GET['sort']) ? $_GET['sort'] : 'ASC';
+$sort_options = ['ASC', 'DESC'];
+$sort = isset($_GET['sort']) && in_array($_GET['sort'], $sort_options) ? $_GET['sort'] : 'ASC';
 
 if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time) && !isset($_GET['search'])) {
     // Cache file is less than one hour old and no search query. Serve it up and exit.
@@ -27,9 +28,9 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time) 
     }
 
     $limit = 10; // Number of entries to show in a page.
-    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
     $start = ($page - 1) * $limit;
-    $search = isset($_GET['search']) ? "%" . $_GET['search'] . "%" : "%";
+    $search = isset($_GET['search']) ? "%" . htmlspecialchars($_GET['search']) . "%" : "%";
 
     $stmt = $conn->prepare("SELECT name FROM classes WHERE name LIKE ? ORDER BY name $sort LIMIT ?, ?");
     $stmt->bind_param("sii", $search, $start, $limit);
@@ -71,7 +72,7 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time) 
 <body>
     <h1>Class Names</h1>
     <form method="GET">
-        <input type="text" name="search" placeholder="Search classes">
+        <input type="text" name="search" placeholder="Search classes" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
         <input type="submit" value="Search">
         <select name="sort" onchange="this.form.submit()">
             <option value="ASC" <?php if ($sort == 'ASC') echo 'selected'; ?>>Ascending</option>
@@ -85,9 +86,4 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time) 
     </ul>
     <div>
         <?php if ($page > 1): ?>
-            <a href="?page=<?php echo $page - 1; ?>">Previous</a>
-        <?php endif; ?>
-        <a href="?page=<?php echo $page + 1; ?>">Next</a>
-    </div>
-</body>
-</html>
+            <a href="?page=<?php echo $page - 1; ?>">
