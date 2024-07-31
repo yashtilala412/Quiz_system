@@ -17,7 +17,12 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$stmt = $conn->prepare("SELECT name FROM classes");
+$limit = 10; // Number of entries to show in a page.
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$start = ($page - 1) * $limit;
+
+$stmt = $conn->prepare("SELECT name FROM classes LIMIT ?, ?");
+$stmt->bind_param("ii", $start, $limit);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -56,5 +61,11 @@ mysqli_close($conn);
             <li><?php echo htmlspecialchars($class); ?></li>
         <?php endforeach; ?>
     </ul>
+    <div>
+        <?php if ($page > 1): ?>
+            <a href="?page=<?php echo $page - 1; ?>">Previous</a>
+        <?php endif; ?>
+        <a href="?page=<?php echo $page + 1; ?>">Next</a>
+    </div>
 </body>
 </html>
