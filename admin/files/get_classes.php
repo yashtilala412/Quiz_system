@@ -1,4 +1,6 @@
 <?php
+http_response_code(200);
+
 function log_message($message) {
     $log_file = 'app.log';
     $current_time = date('Y-m-d H:i:s');
@@ -11,6 +13,7 @@ include "../../database/config.php";
 // Check connection
 if ($conn->connect_error) {
     log_message("Connection failed: " . $conn->connect_error);
+    http_response_code(500);
     die("Connection failed: " . $conn->connect_error);
 }
 
@@ -20,6 +23,7 @@ $result = $stmt->get_result();
 
 if (!$result) {
     log_message("Query failed: " . mysqli_error($conn));
+    http_response_code(500);
     die("Query failed: " . mysqli_error($conn));
 }
 
@@ -30,11 +34,27 @@ if (mysqli_num_rows($result) > 0) {
     while($row = mysqli_fetch_assoc($result)) {
         $info[] = $row['name'];
     }
-    echo json_encode($info);
 } else {
-    echo "0 results";
+    $info[] = "0 results";
 }
 
 $stmt->close();
 mysqli_close($conn);
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Names</title>
+</head>
+<body>
+    <h1>Class Names</h1>
+    <ul>
+        <?php foreach($info as $class): ?>
+            <li><?php echo htmlspecialchars($class); ?></li>
+        <?php endforeach; ?>
+    </ul>
+</body>
+</html>
