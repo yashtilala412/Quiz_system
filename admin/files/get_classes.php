@@ -86,4 +86,9 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time) 
     </ul>
     <div>
         <?php if ($page > 1): ?>
-            <a href="?page=<?php echo $page - 1; ?>">
+            <a href="?page=<?php echo $page - 1; ?>">Previous</a>
+        <?php endif; ?>
+        <a href="?page=<?php echo $page + 1; ?>">Next</a>
+    </div>
+</body>
+</html>
