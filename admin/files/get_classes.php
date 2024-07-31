@@ -14,8 +14,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$classes = "SELECT name FROM classes";
-$result = mysqli_query($conn, $classes);
+$stmt = $conn->prepare("SELECT name FROM classes");
+$stmt->execute();
+$result = $stmt->get_result();
 
 if (!$result) {
     log_message("Query failed: " . mysqli_error($conn));
@@ -34,5 +35,6 @@ if (mysqli_num_rows($result) > 0) {
     echo "0 results";
 }
 
+$stmt->close();
 mysqli_close($conn);
 ?>
