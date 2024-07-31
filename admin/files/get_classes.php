@@ -10,41 +10,50 @@ function log_message($message) {
 $info = [];
 include "../../database/config.php";
 
-// Check connection
-if ($conn->connect_error) {
-    log_message("Connection failed: " . $conn->connect_error);
-    http_response_code(500);
-    die("Connection failed: " . $conn->connect_error);
-}
+$cache_file = 'cache.json';
+$cache_time = 3600; // 1 hour
 
-$limit = 10; // Number of entries to show in a page.
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$start = ($page - 1) * $limit;
-
-$stmt = $conn->prepare("SELECT name FROM classes LIMIT ?, ?");
-$stmt->bind_param("ii", $start, $limit);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if (!$result) {
-    log_message("Query failed: " . mysqli_error($conn));
-    http_response_code(500);
-    die("Query failed: " . mysqli_error($conn));
-}
-
-log_message("Query successful");
-
-if (mysqli_num_rows($result) > 0) {
-    // output data of each row
-    while($row = mysqli_fetch_assoc($result)) {
-        $info[] = $row['name'];
-    }
+if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_time)) {
+    // Cache file is less than one hour old. Serve it up and exit.
+    $info = json_decode(file_get_contents($cache_file), true);
 } else {
-    $info[] = "0 results";
-}
+    // Check connection
+    if ($conn->connect_error) {
+        log_message("Connection failed: " . $conn->connect_error);
+        http_response_code(500);
+        die("Connection failed: " . $conn->connect_error);
+    }
 
-$stmt->close();
-mysqli_close($conn);
+    $limit = 10; // Number of entries to show in a page.
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $start = ($page - 1) * $limit;
+
+    $stmt = $conn->prepare("SELECT name FROM classes LIMIT ?, ?");
+    $stmt->bind_param("ii", $start, $limit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if (!$result) {
+        log_message("Query failed: " . mysqli_error($conn));
+        http_response_code(500);
+        die("Query failed: " . mysqli_error($conn));
+    }
+
+    log_message("Query successful");
+
+    if (mysqli_num_rows($result) > 0) {
+        // output data of each row
+        while($row = mysqli_fetch_assoc($result)) {
+            $info[] = $row['name'];
+        }
+        file_put_contents($cache_file, json_encode($info));
+    } else {
+        $info[] = "0 results";
+    }
+
+    $stmt->close();
+    mysqli_close($conn);
+}
 ?>
 
 <!DOCTYPE html>
