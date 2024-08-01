@@ -19,6 +19,29 @@ function validate_input($input) {
     return htmlspecialchars(stripslashes(trim($input)));
 }
 
+function rate_limit_check($student_id) {
+    $time_window = 60; // time window in seconds
+    $max_requests = 5; // max number of requests allowed in the time window
+
+    $current_time = time();
+    $time_limit = $current_time - $time_window;
+
+    if (!isset($_SESSION['rate_limit'][$student_id])) {
+        $_SESSION['rate_limit'][$student_id] = array();
+    }
+
+    $_SESSION['rate_limit'][$student_id] = array_filter($_SESSION['rate_limit'][$student_id], function($timestamp) use ($time_limit) {
+        return $timestamp > $time_limit;
+    });
+
+    if (count($_SESSION['rate_limit'][$student_id]) >= $max_requests) {
+        return false;
+    }
+
+    $_SESSION['rate_limit'][$student_id][] = $current_time;
+    return true;
+}
+
 $selected_option = validate_input($_POST['selected_option']);
 $question_id = validate_input($_POST['question_id']);
 $score_earned = validate_input($_POST['score']);
@@ -28,6 +51,10 @@ $student_id;
 foreach($student_details as $obj){
     $student_id = $obj->id;
     $test_id = $obj->test_id;
+}
+
+if (!rate_limit_check($student_id)) {
+    die(json_encode(array("status" => "error", "message" => "Rate limit exceeded. Please try again later.")));
 }
 
 if (!$conn) {
@@ -76,4 +103,5 @@ if (!$conn) {
 }
 
 mysqli_close($conn);
-error_log("
+error_log("Connection closed.");
+?>
