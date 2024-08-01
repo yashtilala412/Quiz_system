@@ -3,6 +3,10 @@ session_start();
 
 include '../database/config.php';
 
+define("TABLE_QUESTIONS", "Questions");
+define("TABLE_SCORE", "score");
+define("TABLE_STUDENTS", "students");
+
 function validate_input($input) {
     return htmlspecialchars(stripslashes(trim($input)));
 }
@@ -24,14 +28,14 @@ if (!$conn) {
 } else {
     error_log("Connection established successfully.");
 
-    $stmt = $conn->prepare("SELECT id FROM Questions WHERE id = ? AND correctAns = ? LIMIT 1");
+    $stmt = $conn->prepare("SELECT id FROM " . TABLE_QUESTIONS . " WHERE id = ? AND correctAns = ? LIMIT 1");
     $stmt->bind_param("ss", $question_id, $selected_option);
     $stmt->execute();
     $result = $stmt->get_result();
     
     if ($result->num_rows > 0) {
         // Increase question correct count
-        $stmt = $conn->prepare("UPDATE score SET correct_count = correct_count + 1 WHERE question_id = ?");
+        $stmt = $conn->prepare("UPDATE " . TABLE_SCORE . " SET correct_count = correct_count + 1 WHERE question_id = ?");
         $stmt->bind_param("s", $question_id);
         if ($stmt->execute()) {
             error_log("Correct count updated for question ID: $question_id");
@@ -39,7 +43,7 @@ if (!$conn) {
             error_log("Error updating correct count: " . $stmt->error);
         }
 
-        $stmt = $conn->prepare("UPDATE students SET score = score + ? WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE " . TABLE_STUDENTS . " SET score = score + ? WHERE id = ?");
         $stmt->bind_param("is", $score_earned, $student_id);
         if ($stmt->execute()) {
             echo json_encode(array("status" => "success", "message" => "Score updated successfully."));
@@ -50,7 +54,7 @@ if (!$conn) {
         }
     } else {
         // Increase question wrong count
-        $stmt = $conn->prepare("UPDATE score SET wrong_count = wrong_count + 1 WHERE question_id = ?");
+        $stmt = $conn->prepare("UPDATE " . TABLE_SCORE . " SET wrong_count = wrong_count + 1 WHERE question_id = ?");
         $stmt->bind_param("s", $question_id);
         if ($stmt->execute()) {
             error_log("Wrong count updated for question ID: $question_id");
