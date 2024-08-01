@@ -54,6 +54,7 @@ foreach($student_details as $obj){
 }
 
 if (!rate_limit_check($student_id)) {
+    error_log("Rate limit exceeded for student ID: $student_id");
     die(json_encode(array("status" => "error", "message" => "Rate limit exceeded. Please try again later.")));
 }
 
