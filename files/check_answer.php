@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['student_details'])) {
+    die(json_encode(array("status" => "error", "message" => "Session expired. Please log in again.")));
+}
+
 include '../database/config.php';
 
 define("TABLE_QUESTIONS", "Questions");
