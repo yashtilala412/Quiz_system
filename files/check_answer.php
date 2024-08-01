@@ -5,6 +5,10 @@ if (!isset($_SESSION['student_details'])) {
     die(json_encode(array("status" => "error", "message" => "Session expired. Please log in again.")));
 }
 
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    die(json_encode(array("status" => "error", "message" => "Secure connection required.")));
+}
+
 include '../database/config.php';
 
 define("TABLE_QUESTIONS", "Questions");
@@ -72,5 +76,4 @@ if (!$conn) {
 }
 
 mysqli_close($conn);
-error_log("Connection closed.");
-?>
+error_log("
