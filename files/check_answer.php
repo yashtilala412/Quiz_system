@@ -20,7 +20,7 @@ foreach($student_details as $obj){
 
 if (!$conn) {
     error_log("Connection failed: " . mysqli_connect_error());
-    die("Connection failed: " . mysqli_connect_error());
+    die(json_encode(array("status" => "error", "message" => "Database connection failed.")));
 } else {
     error_log("Connection established successfully.");
 
@@ -42,10 +42,10 @@ if (!$conn) {
         $stmt = $conn->prepare("UPDATE students SET score = score + ? WHERE id = ?");
         $stmt->bind_param("is", $score_earned, $student_id);
         if ($stmt->execute()) {
-            echo "SCORE_UPDATED_SUCCESSFULLY";
+            echo json_encode(array("status" => "success", "message" => "Score updated successfully."));
             error_log("Score updated successfully for student ID: $student_id");
         } else {
-            echo "SCORE_UPDATE_FAILURE";
+            echo json_encode(array("status" => "error", "message" => "Failed to update score."));
             error_log("Error updating score: " . $stmt->error);
         }
     } else {
@@ -57,7 +57,7 @@ if (!$conn) {
         } else {
             error_log("Error updating wrong count: " . $stmt->error);
         }
-        echo "WRONG_ANSWER";
+        echo json_encode(array("status" => "error", "message" => "Wrong answer."));
     }
     
     $stmt->close();
