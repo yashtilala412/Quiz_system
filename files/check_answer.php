@@ -2,9 +2,14 @@
 session_start();
 
 include '../database/config.php';
-$selected_option = $_POST['selected_option'];
-$question_id = $_POST['question_id'];
-$score_earned = $_POST['score'];
+
+function validate_input($input) {
+    return htmlspecialchars(stripslashes(trim($input)));
+}
+
+$selected_option = validate_input($_POST['selected_option']);
+$question_id = validate_input($_POST['question_id']);
+$score_earned = validate_input($_POST['score']);
 $student_details = json_decode($_SESSION['student_details']);
 $student_id;
 
@@ -19,6 +24,9 @@ if (!$conn) {
 } else {
     error_log("Connection established successfully.");
     
+    $question_id = mysqli_real_escape_string($conn, $question_id);
+    $selected_option = mysqli_real_escape_string($conn, $selected_option);
+
     $result = mysqli_query($conn, "SELECT id FROM Questions WHERE id = '".$question_id."' AND correctAns = '".$selected_option."' LIMIT 1 ");        
     if (mysqli_num_rows($result) > 0){
         // Increase question correct count
