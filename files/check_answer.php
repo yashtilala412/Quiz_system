@@ -9,6 +9,10 @@ if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     die(json_encode(array("status" => "error", "message" => "Secure connection required.")));
 }
 
+if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    die(json_encode(array("status" => "error", "message" => "Invalid CSRF token.")));
+}
+
 include '../database/config.php';
 
 define("TABLE_QUESTIONS", "Questions");
@@ -71,7 +75,14 @@ if (!$conn) {
     
     if ($result->num_rows > 0) {
         // Increase question correct count
-       
+        $stmt = $conn->prepare("UPDATE " . TABLE_SCORE . " SET correct_count = correct_count + 1 WHERE question_id = ?");
+        $stmt->bind_param("s", $question_id);
+        if ($stmt->execute()) {
+            error_log("Correct count updated for question ID: $question_id");
+        } else {
+            error_log("Error updating correct count: " . $stmt->error);
+        }
+
         $stmt = $conn->prepare("UPDATE " . TABLE_STUDENTS . " SET score = score + ? WHERE id = ?");
         $stmt->bind_param("is", $score_earned, $student_id);
         if ($stmt->execute()) {
