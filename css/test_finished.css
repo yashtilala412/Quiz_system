@@ -19,17 +19,19 @@ button {
     margin: 10px;
     width: auto;
     padding: 15px 30px;
-    background: repeating-linear-gradient(45deg, #e74c3c, #e74c3c 10px, #c0392b 10px, #c0392b 20px);
-    color: white;
-    border: none;
+    background-color: white;
+    color: #e74c3c;
+    border: 2px solid;
+    border-image: linear-gradient(45deg, #e74c3c, #f39c12) 1;
     border-radius: 4px;
     font-size: 18px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 button:hover {
-    background: repeating-linear-gradient(45deg, #c0392b, #c0392b 10px, #e74c3c 10px, #e74c3c 20px);
+    background-color: #e74c3c;
+    color: white;
 }
 
 
