@@ -19,17 +19,18 @@ button {
     margin: 10px;
     width: auto;
     padding: 15px 30px;
-    background-color: #3498db;
-    color: white;
-    border: none;
+    background-color: transparent;
+    color: #e74c3c;
+    border: 2px solid #e74c3c;
     border-radius: 4px;
     font-size: 18px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 button:hover {
-    background-color: #2980b9;
+    background-color: #e74c3c;
+    color: white;
 }
 
 button:hover {
