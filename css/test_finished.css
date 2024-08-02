@@ -18,22 +18,19 @@ h5{
 button {
     margin: 10px;
     width: auto;
-    padding: 15px 30px;
-    background-color: white;
-    color: #e74c3c;
-    border: 2px solid;
-    border-image: linear-gradient(45deg, #e74c3c, #f39c12) 1;
-    border-radius: 4px;
+    padding: 15px 50px;
+    background-color: #8e44ad;
+    color: white;
+    border: none;
+    border-radius: 30px;
     font-size: 18px;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #e74c3c;
-    color: white;
+    background-color: #732d91;
 }
-
 
 
 button:hover {
