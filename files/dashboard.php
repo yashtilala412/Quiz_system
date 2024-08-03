@@ -150,6 +150,8 @@
         echo "You are not logged in";
         header("Location: ../index.php");
     }
+// Set the session timeout duration (in seconds)
+define('SESSION_TIMEOUT', 1800); // 30 minutes
 
     function createCard(array $row) { ?>
   
