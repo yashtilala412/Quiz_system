@@ -189,29 +189,17 @@ if (isset($_SESSION['user_ip']) && $_SESSION['user_ip'] !== $_SERVER['REMOTE_ADD
     header("Location: ../index.php"); // Redirect to login page
     exit();
 }
-<script>
-    function getFingerprint() {
-        var fingerprint = navigator.userAgent + navigator.platform + screen.width + screen.height + screen.colorDepth;
-        return btoa(fingerprint); // Base64 encode the fingerprint
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var fingerprint = getFingerprint();
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'store_fingerprint.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send('fingerprint=' + encodeURIComponent(fingerprint));
-    });
-</script>
 session_start();
 
-// Verify the device fingerprint
-if (isset($_SESSION['device_fingerprint']) && isset($_POST['fingerprint']) && $_SESSION['device_fingerprint'] !== $_POST['fingerprint']) {
-    session_unset();     // Unset $_SESSION variable for the run-time 
-    session_destroy();   // Destroy session data in storage
-    header("Location: ../index.php"); // Redirect to login page
-    exit();
-}
+$user_id = $_SESSION['user_id'];
+$session_id = session_id();
+$last_activity = date('Y-m-d H:i:s');
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+$sql = "REPLACE INTO active_sessions (user_id, session_id, last_activity) VALUES ('$user_id', '$session_id', '$last_activity')";
+$conn->query($sql);
+$conn->close();
+
 
 $_SESSION['last_activity'] = time(); // Update last activity time stamp
 
