@@ -203,6 +203,15 @@ if (isset($_SESSION['user_ip']) && $_SESSION['user_ip'] !== $_SERVER['REMOTE_ADD
         xhr.send('fingerprint=' + encodeURIComponent(fingerprint));
     });
 </script>
+session_start();
+
+// Verify the device fingerprint
+if (isset($_SESSION['device_fingerprint']) && isset($_POST['fingerprint']) && $_SESSION['device_fingerprint'] !== $_POST['fingerprint']) {
+    session_unset();     // Unset $_SESSION variable for the run-time 
+    session_destroy();   // Destroy session data in storage
+    header("Location: ../index.php"); // Redirect to login page
+    exit();
+}
 
 $_SESSION['last_activity'] = time(); // Update last activity time stamp
 
