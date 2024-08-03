@@ -189,6 +189,20 @@ if (isset($_SESSION['user_ip']) && $_SESSION['user_ip'] !== $_SERVER['REMOTE_ADD
     header("Location: ../index.php"); // Redirect to login page
     exit();
 }
+<script>
+    function getFingerprint() {
+        var fingerprint = navigator.userAgent + navigator.platform + screen.width + screen.height + screen.colorDepth;
+        return btoa(fingerprint); // Base64 encode the fingerprint
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var fingerprint = getFingerprint();
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'store_fingerprint.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send('fingerprint=' + encodeURIComponent(fingerprint));
+    });
+</script>
 
 $_SESSION['last_activity'] = time(); // Update last activity time stamp
 
