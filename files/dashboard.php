@@ -174,6 +174,12 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 }
 
 $_SESSION['last_activity'] = time(); // Update last activity time stamp
+session_start();
+
+// Store the user's IP address when the test starts
+if (!isset($_SESSION['user_ip'])) {
+    $_SESSION['user_ip'] = $_SERVER['REMOTE_ADDR'];
+}
 
 $_SESSION['last_activity'] = time(); // Update last activity time stamp
 
