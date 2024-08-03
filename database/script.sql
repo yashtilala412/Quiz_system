@@ -136,6 +136,11 @@ CREATE TABLE `teachers` (
 --
 -- Dumping data for table `teachers`
 --
+CREATE TABLE active_sessions (
+    user_id INT PRIMARY KEY,
+    session_id VARCHAR(255) NOT NULL,
+    last_activity TIMESTAMP NOT NULL
+);
 
 INSERT INTO `teachers` (`id`, `email`, `password`) VALUES
 (1, 'admin', '37bd45d638c2d11c49c641d2e9c4f49f406caf3ee282743e0c800aa1ed68e2ee');
