@@ -383,6 +383,22 @@ class SpreadsheetReader implements SeekableIterator, Countable
 
     // ... remaining code ...
 }
+class SpreadsheetReader implements SeekableIterator, Countable
+{
+    // ... existing code ...
+
+    /**
+     * Get metadata about the spreadsheet file
+     *
+     * @return array Metadata information
+     */
+    public function getMetadata()
+    {
+        return $this -> Handle -> getMetadata();
+    }
+
+    // ... remaining code ...
+}
 
 	}
 ?>
