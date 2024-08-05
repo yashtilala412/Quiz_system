@@ -470,13 +470,14 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Delete a column from the current sheet
+     * Find a cell value in the current sheet
      *
-     * @param int $Column The column number
+     * @param mixed $Value The value to find
+     * @return array The coordinates of the cell(s) containing the value
      */
-    public function deleteColumn($Column)
+    public function findCellValue($Value)
     {
-        $this -> Handle -> deleteColumn($Column);
+        return $this -> Handle -> findCellValue($Value);
     }
 
     // ... remaining code ...
