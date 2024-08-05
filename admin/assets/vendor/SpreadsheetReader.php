@@ -470,13 +470,13 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Add a column to the current sheet
+     * Delete a column from the current sheet
      *
-     * @param array $Column The column data
+     * @param int $Column The column number
      */
-    public function addColumn(array $Column)
+    public function deleteColumn($Column)
     {
-        $this -> Handle -> addColumn($Column);
+        $this -> Handle -> deleteColumn($Column);
     }
 
     // ... remaining code ...
