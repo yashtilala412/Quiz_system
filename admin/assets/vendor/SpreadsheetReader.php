@@ -5,267 +5,344 @@
  * @version 0.5.10
  * @author Martins Pilsetnieks
  */
-class SpreadsheetReader implements SeekableIterator, Countable
-{
-    // Constants
-    const TYPE_XLSX = 'XLSX';
-    const TYPE_CSV = 'CSV';
+	class SpreadsheetReader implements SeekableIterator, Countable
+	{
+		const TYPE_XLSX = 'XLSX';
+		const TYPE_XLS = 'XLS';
+		const TYPE_CSV = 'CSV';
+		const TYPE_ODS = 'ODS';
 
-    // Properties
-    private $Filepath;
-    private $Type;
-    private $Options = [];
-    private $Handle;
-    private $Sheets = [];
-    private $CurrentSheetIndex = 0;
+		private $Options = array(
+			'Delimiter' => '',
+			'Enclosure' => '"'
+		);
 
-    // Constructor
-    public function __construct($Filepath, $Type, $Options = [])
-    {
-        $this -> Filepath = $Filepath;
-        $this -> Type = $Type;
-        $this -> Options = $Options;
-        $this -> openFile();
-    }
+		/**
+		 * @var int Current row in the file
+		 */
+		private $Index = 0;
 
-    // Method to open the file
-    private function openFile()
-    {
-        switch ($this -> Type)
-        {
-            case self::TYPE_XLSX:
-                $this -> Handle = new XLSXReader($this -> Filepath, $this -> Options);
-                break;
-            case self::TYPE_CSV:
-                $this -> Handle = new CSVReader($this -> Filepath, $this -> Options);
-                break;
-            default:
-                throw new Exception('SpreadsheetReader: Unsupported file type');
-        }
+		/**
+		 * @var SpreadsheetReader_* Handle for the reader object
+		 */
+		private $Handle = array();
 
-        $this -> Sheets = $this -> Handle -> getSheets();
-    }
+		/**
+		 * @var TYPE_* Type of the contained spreadsheet
+		 */
+		private $Type = false;
 
-    // Method to close the file
-    public function close()
-    {
-        $this -> Handle -> close();
-    }
+		/**
+		 * @param string Path to file
+		 * @param string Original filename (in case of an uploaded file), used to determine file type, optional
+		 * @param string MIME type from an upload, used to determine file type, optional
+		 */
+		public function __construct($Filepath, $OriginalFilename = false, $MimeType = false)
+		{
+			if (!is_readable($Filepath))
+			{
+				throw new Exception('SpreadsheetReader: File ('.$Filepath.') not readable');
+			}
 
-    // SeekableIterator methods
-    public function current()
-    {
-        return $this -> Handle -> current();
-    }
+			// To avoid timezone warnings and exceptions for formatting dates retrieved from files
+			$DefaultTZ = @date_default_timezone_get();
+			if ($DefaultTZ)
+			{
+				date_default_timezone_set($DefaultTZ);
+			}
 
-    public function key()
-    {
-        return $this -> Handle -> key();
-    }
+			// Checking the other parameters for correctness
 
-    public function next()
-    {
-        $this -> Handle -> next();
-    }
+			// This should be a check for string but we're lenient
+			if (!empty($OriginalFilename) && !is_scalar($OriginalFilename))
+			{
+				throw new Exception('SpreadsheetReader: Original file (2nd parameter) path is not a string or a scalar value.');
+			}
+			if (!empty($MimeType) && !is_scalar($MimeType))
+			{
+				throw new Exception('SpreadsheetReader: Mime type (3nd parameter) path is not a string or a scalar value.');
+			}
 
-    public function rewind()
-    {
-        $this -> Handle -> rewind();
-    }
+			// 1. Determine type
+			if (!$OriginalFilename)
+			{
+				$OriginalFilename = $Filepath;
+			}
 
-    public function seek($Position)
-    {
-        $this -> Handle -> seek($Position);
-    }
+			$Extension = strtolower(pathinfo($OriginalFilename, PATHINFO_EXTENSION));
 
-    public function valid()
-    {
-        return $this -> Handle -> valid();
-    }
+			switch ($MimeType)
+			{
+				case 'text/csv':
+				case 'text/comma-separated-values':
+				case 'text/plain':
+					$this -> Type = self::TYPE_CSV;
+					break;
+				case 'application/vnd.ms-excel':
+				case 'application/msexcel':
+				case 'application/x-msexcel':
+				case 'application/x-ms-excel':
+				case 'application/vnd.ms-excel':
+				case 'application/x-excel':
+				case 'application/x-dos_ms_excel':
+				case 'application/xls':
+				case 'application/xlt':
+				case 'application/x-xls':
+					// Excel does weird stuff
+					if (in_array($Extension, array('csv', 'tsv', 'txt')))
+					{
+						$this -> Type = self::TYPE_CSV;
+					}
+					else
+					{
+						$this -> Type = self::TYPE_XLS;
+					}
+					break;
+				case 'application/vnd.oasis.opendocument.spreadsheet':
+				case 'application/vnd.oasis.opendocument.spreadsheet-template':
+					$this -> Type = self::TYPE_ODS;
+					break;
+				case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+				case 'application/vnd.openxmlformats-officedocument.spreadsheetml.template':
+				case 'application/xlsx':
+				case 'application/xltx':
+					$this -> Type = self::TYPE_XLSX;
+					break;
+				case 'application/xml':
+					// Excel 2004 xml format uses this
+					break;
+			}
 
-    // Countable method
-    public function count()
-    {
-        return $this -> Handle -> count();
-    }
+			if (!$this -> Type)
+			{
+				switch ($Extension)
+				{
+					case 'xlsx':
+					case 'xltx': // XLSX template
+					case 'xlsm': // Macro-enabled XLSX
+					case 'xltm': // Macro-enabled XLSX template
+						$this -> Type = self::TYPE_XLSX;
+						break;
+					case 'xls':
+					case 'xlt':
+						$this -> Type = self::TYPE_XLS;
+						break;
+					case 'ods':
+					case 'odt':
+						$this -> Type = self::TYPE_ODS;
+						break;
+					default:
+						$this -> Type = self::TYPE_CSV;
+						break;
+				}
+			}
 
-    // Additional methods
-    public function switchSheet($SheetIndex)
-    {
-        if (isset($this -> Sheets[$SheetIndex]))
-        {
-            $this -> CurrentSheetIndex = $SheetIndex;
-            $this -> Handle -> switchSheet($SheetIndex);
-        }
-        else
-        {
-            throw new Exception('SpreadsheetReader: Invalid sheet index');
-        }
-    }
+			// Pre-checking XLS files, in case they are renamed CSV or XLSX files
+			if ($this -> Type == self::TYPE_XLS)
+			{
+				self::Load(self::TYPE_XLS);
+				$this -> Handle = new SpreadsheetReader_XLS($Filepath);
+				if ($this -> Handle -> Error)
+				{
+					$this -> Handle -> __destruct();
 
-    public function setDelimiter($Delimiter)
-    {
-        if ($this -> Type == self::TYPE_CSV)
-        {
-            $this -> Options['Delimiter'] = $Delimiter;
-            $this -> Handle -> setDelimiter($Delimiter);
-        }
-        else
-        {
-            throw new Exception('SpreadsheetReader: Delimiter can only be set for CSV files');
-        }
-    }
+					if (is_resource($ZipHandle = zip_open($Filepath)))
+					{
+						$this -> Type = self::TYPE_XLSX;
+						zip_close($ZipHandle);
+					}
+					else
+					{
+						$this -> Type = self::TYPE_CSV;
+					}
+				}
+			}
 
-    public function setEnclosure($Enclosure)
-    {
-        if ($this -> Type == self::TYPE_CSV)
-        {
-            $this -> Options['Enclosure'] = $Enclosure;
-            $this -> Handle -> setEnclosure($Enclosure);
-        }
-        else
-        {
-            throw new Exception('SpreadsheetReader: Enclosure can only be set for CSV files');
-        }
-    }
+			// 2. Create handle
+			switch ($this -> Type)
+			{
+				case self::TYPE_XLSX:
+					self::Load(self::TYPE_XLSX);
+					$this -> Handle = new SpreadsheetReader_XLSX($Filepath);
+					break;
+				case self::TYPE_CSV:
+					self::Load(self::TYPE_CSV);
+					$this -> Handle = new SpreadsheetReader_CSV($Filepath, $this -> Options);
+					break;
+				case self::TYPE_XLS:
+					// Everything already happens above
+					break;
+				case self::TYPE_ODS:
+					self::Load(self::TYPE_ODS);
+					$this -> Handle = new SpreadsheetReader_ODS($Filepath, $this -> Options);
+					break;
+			}
+		}
 
-    public function getCurrentSheetName()
-    {
-        return $this -> Handle -> getCurrentSheetName();
-    }
+		/**
+		 * Gets information about separate sheets in the given file
+		 *
+		 * @return array Associative array where key is sheet index and value is sheet name
+		 */
+		public function Sheets()
+		{
+			return $this -> Handle -> Sheets();
+		}
 
-    public function getTotalSheetsCount()
-    {
-        return count($this -> Sheets);
-    }
+		/**
+		 * Changes the current sheet to another from the file.
+		 *	Note that changing the sheet will rewind the file to the beginning, even if
+		 *	the current sheet index is provided.
+		 *
+		 * @param int Sheet index
+		 *
+		 * @return bool True if sheet could be changed to the specified one,
+		 *	false if not (for example, if incorrect index was provided.
+		 */
+		public function ChangeSheet($Index)
+		{
+			return $this -> Handle -> ChangeSheet($Index);
+		}
 
-    public function isEmpty()
-    {
-        return $this -> count() == 0;
-    }
+		/**
+		 * Autoloads the required class for the particular spreadsheet type
+		 *
+		 * @param TYPE_* Spreadsheet type, one of TYPE_* constants of this class
+		 */
+		private static function Load($Type)
+		{
+			if (!in_array($Type, array(self::TYPE_XLSX, self::TYPE_XLS, self::TYPE_CSV, self::TYPE_ODS)))
+			{
+				throw new Exception('SpreadsheetReader: Invalid type ('.$Type.')');
+			}
 
-    public function setDateFormat($DateFormat)
-    {
-        if ($this -> Handle)
-        {
-            $this -> Handle -> setDateFormat($DateFormat);
-        }
-    }
+			// 2nd parameter is to prevent autoloading for the class.
+			// If autoload works, the require line is unnecessary, if it doesn't, it ends badly.
+			if (!class_exists('SpreadsheetReader_'.$Type, false))
+			{
+				require(dirname(__FILE__).DIRECTORY_SEPARATOR.'SpreadsheetReader_'.$Type.'.php');
+			}
+		}
 
-    public function getMetadata()
-    {
-        return $this -> Handle -> getMetadata();
-    }
+		// !Iterator interface methods
 
-    public function getCell($Row, $Column)
-    {
-        return $this -> Handle -> getCell($Row, $Column);
-    }
+		/** 
+		 * Rewind the Iterator to the first element.
+		 * Similar to the reset() function for arrays in PHP
+		 */ 
+		public function rewind()
+		{
+			$this -> Index = 0;
+			if ($this -> Handle)
+			{
+				$this -> Handle -> rewind();
+			}
+		}
 
-    public function setCell($Row, $Column, $Value)
-    {
-        $this -> Handle -> setCell($Row, $Column, $Value);
-    }
+		/** 
+		 * Return the current element.
+		 * Similar to the current() function for arrays in PHP
+		 *
+		 * @return mixed current element from the collection
+		 */
+		public function current()
+		{
+			if ($this -> Handle)
+			{
+				return $this -> Handle -> current();
+			}
+			return null;
+		}
 
-    public function addValidationRule(callable $Rule)
-    {
-        $this -> Handle -> addValidationRule($Rule);
-    }
+		/** 
+		 * Move forward to next element. 
+		 * Similar to the next() function for arrays in PHP 
+		 */ 
+		public function next()
+		{
+			if ($this -> Handle)
+			{
+				$this -> Index++;
 
-    public function validate()
-    {
-        return $this -> Handle -> validate();
-    }
+				return $this -> Handle -> next();
+			}
+			return null;
+		}
 
-    public function getRow($Row)
-    {
-        return $this -> Handle -> getRow($Row);
-    }
+		/** 
+		 * Return the identifying key of the current element.
+		 * Similar to the key() function for arrays in PHP
+		 *
+		 * @return mixed either an integer or a string
+		 */ 
+		public function key()
+		{
+			if ($this -> Handle)
+			{
+				return $this -> Handle -> key();
+			}
+			return null;
+		}
 
-    public function getColumn($Column)
-    {
-        return $this -> Handle -> getColumn($Column);
-    }
+		/** 
+		 * Check if there is a current element after calls to rewind() or next().
+		 * Used to check if we've iterated to the end of the collection
+		 *
+		 * @return boolean FALSE if there's nothing more to iterate over
+		 */ 
+		public function valid()
+		{
+			if ($this -> Handle)
+			{
+				return $this -> Handle -> valid();
+			}
+			return false;
+		}
 
-    public function toArray()
-    {
-        return $this -> Handle -> toArray();
-    }
+		// !Countable interface method
+		public function count()
+		{
+			if ($this -> Handle)
+			{
+				return $this -> Handle -> count();
+			}
+			return 0;
+		}
 
-    public function save($Filepath)
-    {
-        $this -> Handle -> save($Filepath);
-    }
+		/**
+		 * Method for SeekableIterator interface. Takes a posiiton and traverses the file to that position
+		 * The value can be retrieved with a current() call afterwards.
+		 *
+		 * @param int Position in file
+		 */
+		public function seek($Position)
+		{
+			if (!$this -> Handle)
+			{
+				throw new OutOfBoundsException('SpreadsheetReader: No file opened');
+			}
 
-    public function addRow(array $Row)
-    {
-        $this -> Handle -> addRow($Row);
-    }
+			$CurrentIndex = $this -> Handle -> key();
 
-    public function deleteRow($Row)
-    {
-        $this -> Handle -> deleteRow($Row);
-    }
+			if ($CurrentIndex != $Position)
+			{
+				if ($Position < $CurrentIndex || is_null($CurrentIndex) || $Position == 0)
+				{
+					$this -> rewind();
+				}
 
-    public function addColumn(array $Column)
-    {
-        $this -> Handle -> addColumn($Column);
-    }
+				while ($this -> Handle -> valid() && ($Position > $this -> Handle -> key()))
+				{
+					$this -> Handle -> next();
+				}
 
-    public function deleteColumn($Column)
-    {
-        $this -> Handle -> deleteColumn($Column);
-    }
+				if (!$this -> Handle -> valid())
+				{
+					throw new OutOfBoundsException('SpreadsheetError: Position '.$Position.' not found');
+				}
+			}
 
-    public function findCellValue($Value)
-    {
-        return $this -> Handle -> findCellValue($Value);
-    }
-
-    public function setCellBackgroundColor($Row, $Column, $Color)
-    {
-        $this -> Handle -> setCellBackgroundColor($Row, $Column, $Color);
-    }
-
-    public function setCellFontStyle($Row, $Column, $FontStyle)
-    {
-        $this -> Handle -> setCellFontStyle($Row, $Column, $FontStyle);
-    }
-
-    public function mergeCells($StartRow, $StartColumn, $EndRow, $EndColumn)
-    {
-        $this -> Handle -> mergeCells($StartRow, $StartColumn, $EndRow, $EndColumn);
-    }
-
-    public function splitMergedCells($Row, $Column)
-    {
-        $this -> Handle -> splitMergedCells($Row, $Column);
-    }
-
-    public function freezePanes($Row, $Column)
-    {
-        $this -> Handle -> freezePanes($Row, $Column);
-    }
-
-    public function unfreezePanes()
-    {
-        $this -> Handle -> unfreezePanes();
-    }
-
-    public function protectSheet($Password)
-    {
-        $this -> Handle -> protectSheet($Password);
-    }
-
-    public function unprotectSheet()
-    {
-        $this -> Handle -> unprotectSheet();
-    }
-
-    public function setSheetVisibility($Visible)
-    {
-        $this -> Handle -> setSheetVisibility($Visible);
-    }
-}
-
+			return null;
+		}
+	}
 ?>
