@@ -316,5 +316,30 @@ class SpreadsheetReader implements SeekableIterator, Countable
 
 			return null;
 		}
+		class SpreadsheetReader implements SeekableIterator, Countable
+{
+    // ... existing code ...
+
+    /**
+     * Set the delimiter for CSV files
+     *
+     * @param string $Delimiter The delimiter character
+     */
+    public function setDelimiter($Delimiter)
+    {
+        if ($this -> Type == self::TYPE_CSV)
+        {
+            $this -> Options['Delimiter'] = $Delimiter;
+            $this -> Handle -> setDelimiter($Delimiter);
+        }
+        else
+        {
+            throw new Exception('SpreadsheetReader: Delimiter can only be set for CSV files');
+        }
+    }
+
+    // ... remaining code ...
+}
+
 	}
 ?>
