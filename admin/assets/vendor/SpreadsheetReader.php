@@ -454,13 +454,13 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Add a row to the current sheet
+     * Delete a row from the current sheet
      *
-     * @param array $Row The row data
+     * @param int $Row The row number
      */
-    public function addRow(array $Row)
+    public function deleteRow($Row)
     {
-        $this -> Handle -> addRow($Row);
+        $this -> Handle -> deleteRow($Row);
     }
 
     // ... remaining code ...
