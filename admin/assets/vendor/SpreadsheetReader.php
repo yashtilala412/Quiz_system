@@ -481,6 +481,20 @@ class SpreadsheetReader implements SeekableIterator, Countable
 
     // ... remaining code ...
 }
+class SpreadsheetReader implements SeekableIterator, Countable
+{
+    // ... existing code ...
+
+    /**
+     * Unprotect the current sheet
+     */
+    public function unprotectSheet()
+    {
+        $this -> Handle -> unprotectSheet();
+    }
+
+    // ... remaining code ...
+}
 
 
 
