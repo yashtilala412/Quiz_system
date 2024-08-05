@@ -325,21 +325,31 @@ class SpreadsheetReader implements SeekableIterator, Countable
      *
      * @param string $Delimiter The delimiter character
      */
-    public function setDelimiter($Delimiter)
-    {
-        if ($this -> Type == self::TYPE_CSV)
-        {
-            $this -> Options['Delimiter'] = $Delimiter;
-            $this -> Handle -> setDelimiter($Delimiter);
-        }
-        else
-        {
-            throw new Exception('SpreadsheetReader: Delimiter can only be set for CSV files');
-        }
-    }
-
-    // ... remaining code ...
-}
+	class SpreadsheetReader implements SeekableIterator, Countable
+	{
+		// ... existing code ...
+	
+		/**
+		 * Set the enclosure for CSV files
+		 *
+		 * @param string $Enclosure The enclosure character
+		 */
+		public function setEnclosure($Enclosure)
+		{
+			if ($this -> Type == self::TYPE_CSV)
+			{
+				$this -> Options['Enclosure'] = $Enclosure;
+				$this -> Handle -> setEnclosure($Enclosure);
+			}
+			else
+			{
+				throw new Exception('SpreadsheetReader: Enclosure can only be set for CSV files');
+			}
+		}
+	
+		// ... remaining code ...
+	}
+	
 
 	}
 ?>
