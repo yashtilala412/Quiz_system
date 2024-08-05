@@ -438,17 +438,19 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Validate all cell values using custom validation rules
+     * Get a row as an array
      *
-     * @return array List of invalid cells
+     * @param int $Row The row number
+     * @return array The row values
      */
-    public function validate()
+    public function getRow($Row)
     {
-        return $this -> Handle -> validate();
+        return $this -> Handle -> getRow($Row);
     }
 
     // ... remaining code ...
 }
+
 
 	}
 ?>
