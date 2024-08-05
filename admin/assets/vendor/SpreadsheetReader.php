@@ -470,14 +470,15 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Find a cell value in the current sheet
+     * Set the background color of a cell
      *
-     * @param mixed $Value The value to find
-     * @return array The coordinates of the cell(s) containing the value
+     * @param int $Row The row number
+     * @param int $Column The column number
+     * @param string $Color The background color (e.g., '#FF0000' for red)
      */
-    public function findCellValue($Value)
+    public function setCellBackgroundColor($Row, $Column, $Color)
     {
-        return $this -> Handle -> findCellValue($Value);
+        $this -> Handle -> setCellBackgroundColor($Row, $Column, $Color);
     }
 
     // ... remaining code ...
