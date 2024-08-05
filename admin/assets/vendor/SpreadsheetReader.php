@@ -438,17 +438,18 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Convert the entire sheet to a 2D array
+     * Save the spreadsheet to a file
      *
-     * @return array The sheet data
+     * @param string $Filepath The file path to save
      */
-    public function toArray()
+    public function save($Filepath)
     {
-        return $this -> Handle -> toArray();
+        $this -> Handle -> save($Filepath);
     }
 
     // ... remaining code ...
 }
+
 
 
 	}
