@@ -449,6 +449,22 @@ class SpreadsheetReader implements SeekableIterator, Countable
 
     // ... remaining code ...
 }
+class SpreadsheetReader implements SeekableIterator, Countable
+{
+    // ... existing code ...
+
+    /**
+     * Add a row to the current sheet
+     *
+     * @param array $Row The row data
+     */
+    public function addRow(array $Row)
+    {
+        $this -> Handle -> addRow($Row);
+    }
+
+    // ... remaining code ...
+}
 
 
 
