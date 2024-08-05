@@ -332,6 +332,22 @@ class SpreadsheetReader implements SeekableIterator, Countable
 
     // ... remaining code ...
 }
+class SpreadsheetReader implements SeekableIterator, Countable
+{
+    // ... existing code ...
+
+    /**
+     * Get the total number of sheets in the file
+     *
+     * @return int Total number of sheets
+     */
+    public function getTotalSheetsCount()
+    {
+        return count($this -> Sheets());
+    }
+
+    // ... remaining code ...
+}
 
 	}
 ?>
