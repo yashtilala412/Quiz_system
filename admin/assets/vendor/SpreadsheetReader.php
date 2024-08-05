@@ -5,179 +5,151 @@
  * @version 0.5.10
  * @author Martins Pilsetnieks
  */
-	class SpreadsheetReader implements SeekableIterator, Countable
-	{
-		const TYPE_XLSX = 'XLSX';
-		const TYPE_XLS = 'XLS';
-		const TYPE_CSV = 'CSV';
-		const TYPE_ODS = 'ODS';
+class SpreadsheetReader implements SeekableIterator, Countable
+{
+    // ... existing code ...
 
-		private $Options = array(
-			'Delimiter' => '',
-			'Enclosure' => '"'
-		);
+    public function __construct($Filepath, $OriginalFilename = false, $MimeType = false)
+    {
+        if (!is_readable($Filepath))
+        {
+            throw new Exception('SpreadsheetReader: File ('.$Filepath.') not readable');
+        }
 
-		/**
-		 * @var int Current row in the file
-		 */
-		private $Index = 0;
+        // To avoid timezone warnings and exceptions for formatting dates retrieved from files
+        $DefaultTZ = @date_default_timezone_get();
+        if ($DefaultTZ)
+        {
+            date_default_timezone_set($DefaultTZ);
+        }
 
-		/**
-		 * @var SpreadsheetReader_* Handle for the reader object
-		 */
-		private $Handle = array();
+        // Checking the other parameters for correctness
+        if (!empty($OriginalFilename) && !is_scalar($OriginalFilename))
+        {
+            throw new Exception('SpreadsheetReader: Original file (2nd parameter) path is not a string or a scalar value.');
+        }
+        if (!empty($MimeType) && !is_scalar($MimeType))
+        {
+            throw new Exception('SpreadsheetReader: Mime type (3nd parameter) path is not a string or a scalar value.');
+        }
 
-		/**
-		 * @var TYPE_* Type of the contained spreadsheet
-		 */
-		private $Type = false;
+        // 1. Determine type
+        if (!$OriginalFilename)
+        {
+            $OriginalFilename = $Filepath;
+        }
 
-		/**
-		 * @param string Path to file
-		 * @param string Original filename (in case of an uploaded file), used to determine file type, optional
-		 * @param string MIME type from an upload, used to determine file type, optional
-		 */
-		public function __construct($Filepath, $OriginalFilename = false, $MimeType = false)
-		{
-			if (!is_readable($Filepath))
-			{
-				throw new Exception('SpreadsheetReader: File ('.$Filepath.') not readable');
-			}
+        $Extension = strtolower(pathinfo($OriginalFilename, PATHINFO_EXTENSION));
 
-			// To avoid timezone warnings and exceptions for formatting dates retrieved from files
-			$DefaultTZ = @date_default_timezone_get();
-			if ($DefaultTZ)
-			{
-				date_default_timezone_set($DefaultTZ);
-			}
+        switch ($MimeType)
+        {
+            case 'text/csv':
+            case 'text/comma-separated-values':
+            case 'text/plain':
+                $this -> Type = self::TYPE_CSV;
+                break;
+            case 'application/vnd.ms-excel':
+            case 'application/msexcel':
+            case 'application/x-msexcel':
+            case 'application/x-ms-excel':
+            case 'application/vnd.ms-excel':
+            case 'application/x-excel':
+            case 'application/x-dos_ms_excel':
+            case 'application/xls':
+            case 'application/xlt':
+            case 'application/x-xls':
+                // Excel does weird stuff
+                if (in_array($Extension, array('csv', 'tsv', 'txt')))
+                {
+                    $this -> Type = self::TYPE_CSV;
+                }
+                else
+                {
+                    $this -> Type = self::TYPE_XLS;
+                }
+                break;
+            case 'application/vnd.oasis.opendocument.spreadsheet':
+            case 'application/vnd.oasis.opendocument.spreadsheet-template':
+                $this -> Type = self::TYPE_ODS;
+                break;
+            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.template':
+            case 'application/xlsx':
+            case 'application/xltx':
+                $this -> Type = self::TYPE_XLSX;
+                break;
+            case 'application/xml':
+                // Excel 2004 xml format uses this
+                break;
+            default:
+                // If MIME type is not recognized, fall back to extension-based detection
+                switch ($Extension)
+                {
+                    case 'xlsx':
+                    case 'xltx': // XLSX template
+                    case 'xlsm': // Macro-enabled XLSX
+                    case 'xltm': // Macro-enabled XLSX template
+                        $this -> Type = self::TYPE_XLSX;
+                        break;
+                    case 'xls':
+                    case 'xlt':
+                        $this -> Type = self::TYPE_XLS;
+                        break;
+                    case 'ods':
+                    case 'odt':
+                        $this -> Type = self::TYPE_ODS;
+                        break;
+                    default:
+                        $this -> Type = self::TYPE_CSV;
+                        break;
+                }
+                break;
+        }
 
-			// Checking the other parameters for correctness
+        // Pre-checking XLS files, in case they are renamed CSV or XLSX files
+        if ($this -> Type == self::TYPE_XLS)
+        {
+            self::Load(self::TYPE_XLS);
+            $this -> Handle = new SpreadsheetReader_XLS($Filepath);
+            if ($this -> Handle -> Error)
+            {
+                $this -> Handle -> __destruct();
 
-			// This should be a check for string but we're lenient
-			if (!empty($OriginalFilename) && !is_scalar($OriginalFilename))
-			{
-				throw new Exception('SpreadsheetReader: Original file (2nd parameter) path is not a string or a scalar value.');
-			}
-			if (!empty($MimeType) && !is_scalar($MimeType))
-			{
-				throw new Exception('SpreadsheetReader: Mime type (3nd parameter) path is not a string or a scalar value.');
-			}
+                if (is_resource($ZipHandle = zip_open($Filepath)))
+                {
+                    $this -> Type = self::TYPE_XLSX;
+                    zip_close($ZipHandle);
+                }
+                else
+                {
+                    $this -> Type = self::TYPE_CSV;
+                }
+            }
+        }
 
-			// 1. Determine type
-			if (!$OriginalFilename)
-			{
-				$OriginalFilename = $Filepath;
-			}
+        // 2. Create handle
+        switch ($this -> Type)
+        {
+            case self::TYPE_XLSX:
+                self::Load(self::TYPE_XLSX);
+                $this -> Handle = new SpreadsheetReader_XLSX($Filepath);
+                break;
+            case self::TYPE_CSV:
+                self::Load(self::TYPE_CSV);
+                $this -> Handle = new SpreadsheetReader_CSV($Filepath, $this -> Options);
+                break;
+            case self::TYPE_XLS:
+                // Everything already happens above
+                break;
+            case self::TYPE_ODS:
+                self::Load(self::TYPE_ODS);
+                $this -> Handle = new SpreadsheetReader_ODS($Filepath, $this -> Options);
+                break;
+        }
+    }
 
-			$Extension = strtolower(pathinfo($OriginalFilename, PATHINFO_EXTENSION));
-
-			switch ($MimeType)
-			{
-				case 'text/csv':
-				case 'text/comma-separated-values':
-				case 'text/plain':
-					$this -> Type = self::TYPE_CSV;
-					break;
-				case 'application/vnd.ms-excel':
-				case 'application/msexcel':
-				case 'application/x-msexcel':
-				case 'application/x-ms-excel':
-				case 'application/vnd.ms-excel':
-				case 'application/x-excel':
-				case 'application/x-dos_ms_excel':
-				case 'application/xls':
-				case 'application/xlt':
-				case 'application/x-xls':
-					// Excel does weird stuff
-					if (in_array($Extension, array('csv', 'tsv', 'txt')))
-					{
-						$this -> Type = self::TYPE_CSV;
-					}
-					else
-					{
-						$this -> Type = self::TYPE_XLS;
-					}
-					break;
-				case 'application/vnd.oasis.opendocument.spreadsheet':
-				case 'application/vnd.oasis.opendocument.spreadsheet-template':
-					$this -> Type = self::TYPE_ODS;
-					break;
-				case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-				case 'application/vnd.openxmlformats-officedocument.spreadsheetml.template':
-				case 'application/xlsx':
-				case 'application/xltx':
-					$this -> Type = self::TYPE_XLSX;
-					break;
-				case 'application/xml':
-					// Excel 2004 xml format uses this
-					break;
-			}
-
-			if (!$this -> Type)
-			{
-				switch ($Extension)
-				{
-					case 'xlsx':
-					case 'xltx': // XLSX template
-					case 'xlsm': // Macro-enabled XLSX
-					case 'xltm': // Macro-enabled XLSX template
-						$this -> Type = self::TYPE_XLSX;
-						break;
-					case 'xls':
-					case 'xlt':
-						$this -> Type = self::TYPE_XLS;
-						break;
-					case 'ods':
-					case 'odt':
-						$this -> Type = self::TYPE_ODS;
-						break;
-					default:
-						$this -> Type = self::TYPE_CSV;
-						break;
-				}
-			}
-
-			// Pre-checking XLS files, in case they are renamed CSV or XLSX files
-			if ($this -> Type == self::TYPE_XLS)
-			{
-				self::Load(self::TYPE_XLS);
-				$this -> Handle = new SpreadsheetReader_XLS($Filepath);
-				if ($this -> Handle -> Error)
-				{
-					$this -> Handle -> __destruct();
-
-					if (is_resource($ZipHandle = zip_open($Filepath)))
-					{
-						$this -> Type = self::TYPE_XLSX;
-						zip_close($ZipHandle);
-					}
-					else
-					{
-						$this -> Type = self::TYPE_CSV;
-					}
-				}
-			}
-
-			// 2. Create handle
-			switch ($this -> Type)
-			{
-				case self::TYPE_XLSX:
-					self::Load(self::TYPE_XLSX);
-					$this -> Handle = new SpreadsheetReader_XLSX($Filepath);
-					break;
-				case self::TYPE_CSV:
-					self::Load(self::TYPE_CSV);
-					$this -> Handle = new SpreadsheetReader_CSV($Filepath, $this -> Options);
-					break;
-				case self::TYPE_XLS:
-					// Everything already happens above
-					break;
-				case self::TYPE_ODS:
-					self::Load(self::TYPE_ODS);
-					$this -> Handle = new SpreadsheetReader_ODS($Filepath, $this -> Options);
-					break;
-			}
-		}
+    // ... remaining code ...
+}
 
 		/**
 		 * Gets information about separate sheets in the given file
