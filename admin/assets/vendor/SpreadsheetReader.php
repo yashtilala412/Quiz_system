@@ -470,14 +470,14 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Split merged cells in the current sheet
+     * Freeze panes in the current sheet
      *
-     * @param int $Row The row number of the merged cells
-     * @param int $Column The column number of the merged cells
+     * @param int $Row The row number to freeze panes at
+     * @param int $Column The column number to freeze panes at
      */
-    public function splitMergedCells($Row, $Column)
+    public function freezePanes($Row, $Column)
     {
-        $this -> Handle -> splitMergedCells($Row, $Column);
+        $this -> Handle -> freezePanes($Row, $Column);
     }
 
     // ... remaining code ...
