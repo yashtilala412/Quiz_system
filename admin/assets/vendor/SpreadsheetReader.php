@@ -348,6 +348,22 @@ class SpreadsheetReader implements SeekableIterator, Countable
 
     // ... remaining code ...
 }
+class SpreadsheetReader implements SeekableIterator, Countable
+{
+    // ... existing code ...
+
+    /**
+     * Check if the spreadsheet file is empty
+     *
+     * @return bool True if file is empty, False otherwise
+     */
+    public function isEmpty()
+    {
+        return $this -> count() == 0;
+    }
+
+    // ... remaining code ...
+}
 
 	}
 ?>
