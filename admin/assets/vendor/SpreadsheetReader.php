@@ -486,11 +486,13 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Unprotect the current sheet
+     * Set the visibility of the current sheet
+     *
+     * @param bool $Visible True to make the sheet visible, False to hide it
      */
-    public function unprotectSheet()
+    public function setSheetVisibility($Visible)
     {
-        $this -> Handle -> unprotectSheet();
+        $this -> Handle -> setSheetVisibility($Visible);
     }
 
     // ... remaining code ...
