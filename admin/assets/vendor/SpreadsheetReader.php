@@ -399,6 +399,24 @@ class SpreadsheetReader implements SeekableIterator, Countable
 
     // ... remaining code ...
 }
+class SpreadsheetReader implements SeekableIterator, Countable
+{
+    // ... existing code ...
+
+    /**
+     * Get a cell value by its coordinates
+     *
+     * @param int $Row The row number
+     * @param int $Column The column number
+     * @return mixed The cell value
+     */
+    public function getCell($Row, $Column)
+    {
+        return $this -> Handle -> getCell($Row, $Column);
+    }
+
+    // ... remaining code ...
+}
 
 	}
 ?>
