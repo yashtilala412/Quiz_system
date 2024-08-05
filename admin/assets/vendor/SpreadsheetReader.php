@@ -470,20 +470,19 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Merge cells in the current sheet
+     * Split merged cells in the current sheet
      *
-     * @param int $StartRow The starting row number
-     * @param int $StartColumn The starting column number
-     * @param int $EndRow The ending row number
-     * @param int $EndColumn The ending column number
+     * @param int $Row The row number of the merged cells
+     * @param int $Column The column number of the merged cells
      */
-    public function mergeCells($StartRow, $StartColumn, $EndRow, $EndColumn)
+    public function splitMergedCells($Row, $Column)
     {
-        $this -> Handle -> mergeCells($StartRow, $StartColumn, $EndRow, $EndColumn);
+        $this -> Handle -> splitMergedCells($Row, $Column);
     }
 
     // ... remaining code ...
 }
+
 
 
 
