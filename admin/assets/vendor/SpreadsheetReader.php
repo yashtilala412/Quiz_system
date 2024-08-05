@@ -470,15 +470,15 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Set the background color of a cell
+     * Set the font style of a cell
      *
      * @param int $Row The row number
      * @param int $Column The column number
-     * @param string $Color The background color (e.g., '#FF0000' for red)
+     * @param string $FontStyle The font style (e.g., 'bold', 'italic')
      */
-    public function setCellBackgroundColor($Row, $Column, $Color)
+    public function setCellFontStyle($Row, $Column, $FontStyle)
     {
-        $this -> Handle -> setCellBackgroundColor($Row, $Column, $Color);
+        $this -> Handle -> setCellFontStyle($Row, $Column, $FontStyle);
     }
 
     // ... remaining code ...
