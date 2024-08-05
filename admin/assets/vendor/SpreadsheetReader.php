@@ -470,18 +470,16 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Freeze panes in the current sheet
-     *
-     * @param int $Row The row number to freeze panes at
-     * @param int $Column The column number to freeze panes at
+     * Unfreeze panes in the current sheet
      */
-    public function freezePanes($Row, $Column)
+    public function unfreezePanes()
     {
-        $this -> Handle -> freezePanes($Row, $Column);
+        $this -> Handle -> unfreezePanes();
     }
 
     // ... remaining code ...
 }
+
 
 
 
