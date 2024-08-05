@@ -470,11 +470,13 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Unfreeze panes in the current sheet
+     * Protect the current sheet with a password
+     *
+     * @param string $Password The password to protect the sheet
      */
-    public function unfreezePanes()
+    public function protectSheet($Password)
     {
-        $this -> Handle -> unfreezePanes();
+        $this -> Handle -> protectSheet($Password);
     }
 
     // ... remaining code ...
