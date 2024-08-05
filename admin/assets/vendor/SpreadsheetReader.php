@@ -438,14 +438,13 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Get a column as an array
+     * Convert the entire sheet to a 2D array
      *
-     * @param int $Column The column number
-     * @return array The column values
+     * @return array The sheet data
      */
-    public function getColumn($Column)
+    public function toArray()
     {
-        return $this -> Handle -> getColumn($Column);
+        return $this -> Handle -> toArray();
     }
 
     // ... remaining code ...
