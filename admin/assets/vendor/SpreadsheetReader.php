@@ -364,6 +364,25 @@ class SpreadsheetReader implements SeekableIterator, Countable
 
     // ... remaining code ...
 }
+class SpreadsheetReader implements SeekableIterator, Countable
+{
+    // ... existing code ...
+
+    /**
+     * Set a custom date format for date cells
+     *
+     * @param string $DateFormat The date format
+     */
+    public function setDateFormat($DateFormat)
+    {
+        if ($this -> Handle)
+        {
+            $this -> Handle -> setDateFormat($DateFormat);
+        }
+    }
+
+    // ... remaining code ...
+}
 
 	}
 ?>
