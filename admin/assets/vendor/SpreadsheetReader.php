@@ -470,19 +470,21 @@ class SpreadsheetReader implements SeekableIterator, Countable
     // ... existing code ...
 
     /**
-     * Set the font style of a cell
+     * Merge cells in the current sheet
      *
-     * @param int $Row The row number
-     * @param int $Column The column number
-     * @param string $FontStyle The font style (e.g., 'bold', 'italic')
+     * @param int $StartRow The starting row number
+     * @param int $StartColumn The starting column number
+     * @param int $EndRow The ending row number
+     * @param int $EndColumn The ending column number
      */
-    public function setCellFontStyle($Row, $Column, $FontStyle)
+    public function mergeCells($StartRow, $StartColumn, $EndRow, $EndColumn)
     {
-        $this -> Handle -> setCellFontStyle($Row, $Column, $FontStyle);
+        $this -> Handle -> mergeCells($StartRow, $StartColumn, $EndRow, $EndColumn);
     }
 
     // ... remaining code ...
 }
+
 
 
 
