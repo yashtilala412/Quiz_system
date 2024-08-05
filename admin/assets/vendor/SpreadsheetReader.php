@@ -433,6 +433,22 @@ class SpreadsheetReader implements SeekableIterator, Countable
 
     // ... remaining code ...
 }
+class SpreadsheetReader implements SeekableIterator, Countable
+{
+    // ... existing code ...
+
+    /**
+     * Validate all cell values using custom validation rules
+     *
+     * @return array List of invalid cells
+     */
+    public function validate()
+    {
+        return $this -> Handle -> validate();
+    }
+
+    // ... remaining code ...
+}
 
 	}
 ?>
