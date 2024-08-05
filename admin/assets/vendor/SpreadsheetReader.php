@@ -465,6 +465,22 @@ class SpreadsheetReader implements SeekableIterator, Countable
 
     // ... remaining code ...
 }
+class SpreadsheetReader implements SeekableIterator, Countable
+{
+    // ... existing code ...
+
+    /**
+     * Add a column to the current sheet
+     *
+     * @param array $Column The column data
+     */
+    public function addColumn(array $Column)
+    {
+        $this -> Handle -> addColumn($Column);
+    }
+
+    // ... remaining code ...
+}
 
 
 
