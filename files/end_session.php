@@ -14,6 +14,12 @@ $stmt->bind_param("i", $student_id);
 $stmt->execute();
 $student_id = filter_var($obj->id, FILTER_VALIDATE_INT);
 $message = filter_input(INPUT_POST, 'message', FILTER_VALIDATE_INT);
+session_set_cookie_params([
+    'secure' => true,
+    'httponly' => true,
+    'samesite' => 'Strict'
+]);
+session_start();
 
 
     if($_POST['message'] == 1)
