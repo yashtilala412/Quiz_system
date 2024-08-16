@@ -1,44 +1,51 @@
 <?php
+    // Secure session handling settings
+    session_set_cookie_params([
+        'secure' => true,       // Only send cookies over HTTPS
+        'httponly' => true,     // Prevent JavaScript access to session cookies
+        'samesite' => 'Strict'  // Strict SameSite policy
+    ]);
     session_start();
     include '../database/config.php';
-    $temp = $_SESSION['student_details'];
+
+    // Validate and decode student details from session
+    $temp = $_SESSION['student_details'] ?? '';
     $student_data = json_decode($temp);
 
-    foreach($student_data as $obj){
-        $student_id = $obj->id;
-        $sql1 = "UPDATE students set status = 1 where id = '$student_id'";
-        mysqli_query($conn,$sql1); 
+    if ($student_data && is_array($student_data)) {
+        // Using prepared statements for secure database interaction
+        $stmt = $conn->prepare("UPDATE students SET status = 1 WHERE id = ?");
+        foreach($student_data as $obj) {
+            $student_id = filter_var($obj->id, FILTER_VALIDATE_INT);
+            if ($student_id) {
+                $stmt->bind_param("i", $student_id);
+                $stmt->execute();
+            }
+        }
+        $stmt->close();
     }
-    $stmt = $conn->prepare("UPDATE students SET status = 1 WHERE id = ?");
-$stmt->bind_param("i", $student_id);
-$stmt->execute();
-$student_id = filter_var($obj->id, FILTER_VALIDATE_INT);
-$message = filter_input(INPUT_POST, 'message', FILTER_VALIDATE_INT);
-session_set_cookie_params([
-    'secure' => true,
-    'httponly' => true,
-    'samesite' => 'Strict'
-]);
-session_start();
-echo htmlspecialchars("Aborted", ENT_QUOTES, 'UTF-8');
-echo htmlspecialchars("Completed", ENT_QUOTES, 'UTF-8');
-// Generate CSRF token
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
 
-/session_regenerate_id(true);
+    // CSRF protection: Generate and validate token
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
 
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
-ini_set('error_log', '/path/to/your/error.log');
-header("Content-Security-Policy: default-src 'self'; script-src 'self'");
+    // Validate CSRF token from POST request
+    $csrf_token_valid = hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ?? '');
 
+    // Input validation
+    $message = filter_input(INPUT_POST, 'message', FILTER_VALIDATE_INT);
 
-    if($_POST['message'] == 1)
-        echo "Aborted";
-    else
-        echo "Completed";   
+    // Conditional response based on validation
+    if ($message === 1 && $csrf_token_valid) {
+        echo htmlspecialchars("Aborted", ENT_QUOTES, 'UTF-8');
+    } else {
+        echo htmlspecialchars("Completed", ENT_QUOTES, 'UTF-8');
+    }
 
-    session_destroy();   
+    // Regenerate session ID to prevent session fixation
+    session_regenerate_id(true);
+
+    // Destroy session
+    session_destroy();
 ?>
