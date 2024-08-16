@@ -12,6 +12,8 @@
     $stmt = $conn->prepare("UPDATE students SET status = 1 WHERE id = ?");
 $stmt->bind_param("i", $student_id);
 $stmt->execute();
+$student_id = filter_var($obj->id, FILTER_VALIDATE_INT);
+$message = filter_input(INPUT_POST, 'message', FILTER_VALIDATE_INT);
 
 
     if($_POST['message'] == 1)
