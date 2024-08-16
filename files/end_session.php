@@ -9,6 +9,10 @@
         $sql1 = "UPDATE students set status = 1 where id = '$student_id'";
         mysqli_query($conn,$sql1); 
     }
+    $stmt = $conn->prepare("UPDATE students SET status = 1 WHERE id = ?");
+$stmt->bind_param("i", $student_id);
+$stmt->execute();
+
 
     if($_POST['message'] == 1)
         echo "Aborted";
