@@ -36,6 +36,9 @@ if (hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
 } else {
     // Token is invalid
 }
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', '/path/to/your/error.log');
 
 
     if($_POST['message'] == 1)
