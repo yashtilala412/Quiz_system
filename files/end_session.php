@@ -27,15 +27,8 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Include token in your forms
-<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+/session_regenerate_id(true);
 
-// Validate token on form submission
-if (hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-    // Token is valid
-} else {
-    // Token is invalid
-}
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 ini_set('error_log', '/path/to/your/error.log');
