@@ -20,6 +20,8 @@ session_set_cookie_params([
     'samesite' => 'Strict'
 ]);
 session_start();
+echo htmlspecialchars("Aborted", ENT_QUOTES, 'UTF-8');
+echo htmlspecialchars("Completed", ENT_QUOTES, 'UTF-8');
 
 
     if($_POST['message'] == 1)
