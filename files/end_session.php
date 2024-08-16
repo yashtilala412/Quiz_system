@@ -22,6 +22,20 @@ session_set_cookie_params([
 session_start();
 echo htmlspecialchars("Aborted", ENT_QUOTES, 'UTF-8');
 echo htmlspecialchars("Completed", ENT_QUOTES, 'UTF-8');
+// Generate CSRF token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// Include token in your forms
+<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+
+// Validate token on form submission
+if (hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+    // Token is valid
+} else {
+    // Token is invalid
+}
 
 
     if($_POST['message'] == 1)
