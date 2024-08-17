@@ -150,9 +150,12 @@ $(document).ready(function () {
 });
 
 function login() {
+	$('#loginFeedback').text('Logging in...').show();
+
 	var sessionExpired = checkSessionExpiration();
 	if (sessionExpired) {
 		alert("Session has expired. Please log in again.");
+		$('#loginFeedback').hide();
 		return;
 	}
 
@@ -206,6 +209,7 @@ function login() {
 				'captcha': captcha,
 			},
 			success: function (response) {
+				$('#loginFeedback').hide();
 				if(response == "STUDENT_RECORD_NOT_FOUND") {
 					loginAttempts++;
 					alert("Wrong Credentials entered. Attempt " + loginAttempts + " of " + maxAttempts);
@@ -215,16 +219,17 @@ function login() {
 				} else {
 					window.location.replace("files/dashboard.php");
 				}
+			},
+			error: function() {
+				$('#loginFeedback').hide();
+				alert("An error occurred during login. Please try again.");
 			}
 		});
+	} else {
+		$('#loginFeedback').hide();
 	}
 }
 
-function checkSessionExpiration() {
-	// Assume some logic here that checks session expiration
-	// Return true if session expired, false otherwise
-	return false; // Example implementation
-}
 
 
 
