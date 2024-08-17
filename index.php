@@ -112,34 +112,43 @@
 			})
 
 			function login() {
-				var someFieldIsEmpty = false;
+	var someFieldIsEmpty = false;
 
-				if (!$('#studentRollNumber').val()) {
-					someFieldIsEmpty = true;
-					$('#empty_roll_number_field').val("Please enter your roll number");
-				}
-				if (!$('#studentPassword').val()) {
-					someFieldIsEmpty = true;
-					$('#empty_roll_passsword_field').val("Please enter your password");
-				}
+	// Roll number validation: Ensure it's an 8-digit number
+	var rollNumber = $('#studentRollNumber').val();
+	var rollNumberPattern = /^\d{8}$/;
+	if (!rollNumber) {
+		someFieldIsEmpty = true;
+		$('#empty_roll_number_field').val("Please enter your roll number");
+	} else if (!rollNumberPattern.test(rollNumber)) {
+		someFieldIsEmpty = true;
+		$('#empty_roll_number_field').val("Roll number must be an 8-digit number");
+	}
 
-				if (!someFieldIsEmpty) {
-					$.ajax({
-						type: 'POST',
-						url: 'files/student_login.php',
-						data: {
-							'rollNumber': $('#studentRollNumber').val(),
-							'password': $('#studentPassword').val(),
-						},
-						success: function (response) {
-							if(response == "STUDENT_RECORD_NOT_FOUND")
-								alert("Wrong Credentails entered");
-							else
-								window.location.replace("files/dashboard.php");
-						}
-					});
-				}
+	// Password validation
+	if (!$('#studentPassword').val()) {
+		someFieldIsEmpty = true;
+		$('#empty_roll_passsword_field').val("Please enter your password");
+	}
+
+	if (!someFieldIsEmpty) {
+		$.ajax({
+			type: 'POST',
+			url: 'files/student_login.php',
+			data: {
+				'rollNumber': rollNumber,
+				'password': $('#studentPassword').val(),
+			},
+			success: function (response) {
+				if(response == "STUDENT_RECORD_NOT_FOUND")
+					alert("Wrong Credentials entered");
+				else
+					window.location.replace("files/dashboard.php");
 			}
+		});
+	}
+}
+
 		</script>
 	</body>
 </html>
