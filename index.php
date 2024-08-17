@@ -297,6 +297,39 @@ function login() {
 		}
 	});
 }
+function login() {
+	// Existing validation and login logic here
+
+	$.ajax({
+		type: 'POST',
+		url: 'files/student_login.php',
+		data: {
+			// Your existing data here
+		},
+		success: function (response) {
+			// Your existing success logic here
+
+			$.ajax({
+				type: 'POST',
+				url: 'files/login_logger.php',
+				data: {
+					'rollNumber': rollNumber,
+					'loginResult': response,
+					'ipAddress': userIpAddress // Assume userIpAddress is retrieved elsewhere
+				},
+				success: function () {
+					console.log('Login attempt logged.');
+				},
+				error: function () {
+					console.log('Failed to log login attempt.');
+				}
+			});
+		},
+		error: function() {
+			// Your existing error logic here
+		}
+	});
+}
 
 
 
