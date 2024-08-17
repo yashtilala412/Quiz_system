@@ -123,6 +123,15 @@ $(document).ready(function () {
 	});
 });
 
+$(document).ready(function () {
+	$('#togglePassword').click(function () {
+		const passwordField = $('#studentPassword');
+		const type = passwordField.attr('type') === 'password' ? 'text' : 'password';
+		passwordField.attr('type', type);
+		this.classList.toggle('fa-eye-slash');
+	});
+});
+
 function login() {
 	var someFieldIsEmpty = false;
 
