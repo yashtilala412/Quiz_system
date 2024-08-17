@@ -150,6 +150,12 @@ $(document).ready(function () {
 });
 
 function login() {
+	var sessionExpired = checkSessionExpiration();
+	if (sessionExpired) {
+		alert("Session has expired. Please log in again.");
+		return;
+	}
+
 	var someFieldIsEmpty = false;
 
 	// Roll number validation: Ensure it's an 8-digit number
@@ -212,6 +218,12 @@ function login() {
 			}
 		});
 	}
+}
+
+function checkSessionExpiration() {
+	// Assume some logic here that checks session expiration
+	// Return true if session expired, false otherwise
+	return false; // Example implementation
 }
 
 
