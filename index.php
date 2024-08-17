@@ -239,6 +239,10 @@ function login() {
 				} else if(response == "CAPTCHA_INVALID") {
 					loginAttempts++;
 					$('#error_message').text("Invalid CAPTCHA. Attempt " + loginAttempts + " of " + maxAttempts).show();
+				} else if(response == "2FA_REQUIRED") {
+					$('#2fa_code').show();
+					$('#error_message').text("A two-factor authentication code has been sent to your email. Please enter the code below.").show();
+					// Implement further logic to handle the 2FA code input
 				} else {
 					window.location.replace("files/dashboard.php");
 				}
