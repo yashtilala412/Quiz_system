@@ -110,12 +110,15 @@
 			$('.js-tilt').tilt({
 				scale: 1.1
 			})
+function sanitizeInput(input) {
+	return input.replace(/['"]/g, "");
+}
 
-			function login() {
+function login() {
 	var someFieldIsEmpty = false;
 
 	// Roll number validation: Ensure it's an 8-digit number
-	var rollNumber = $('#studentRollNumber').val();
+	var rollNumber = sanitizeInput($('#studentRollNumber').val());
 	var rollNumberPattern = /^\d{8}$/;
 	if (!rollNumber) {
 		someFieldIsEmpty = true;
@@ -126,7 +129,7 @@
 	}
 
 	// Password validation: Ensure it's at least 6 characters long
-	var password = $('#studentPassword').val();
+	var password = sanitizeInput($('#studentPassword').val());
 	if (!password) {
 		someFieldIsEmpty = true;
 		$('#empty_roll_passsword_field').val("Please enter your password");
