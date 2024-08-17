@@ -96,240 +96,35 @@
 			</div>
 		</section>
 		<script>
-			$(document).ready(function () {
+			function login() {
+				var someFieldIsEmpty = false;
 
-				if (Cookies.get('last_question_was_answered') != undefined) {
-					Cookies.remove('last_question_was_answered');
-					Cookies.remove('last_question');
+				if (!$('#studentRollNumber').val()) {
+					someFieldIsEmpty = true;
+					$('#empty_roll_number_field').val("Please enter your roll number");
 				}
-				if (Cookies.get('test_submitted_status') != undefined)
-					Cookies.remove('test_submitted_status');	
-			});
-
-
-			$('.js-tilt').tilt({
-				scale: 1.1
-			})
-function sanitizeInput(input) {
-	return input.replace(/['"]/g, "");
-}
-$(document).ready(function () {
-	$('#studentRollNumber, #studentPassword').on('keyup', function () {
-		if ($('#studentRollNumber').val() && $('#studentPassword').val()) {
-			$('#loginButton').prop('disabled', false);
-		} else {
-			$('#loginButton').prop('disabled', true);
-		}
-	});
-});
-
-$(document).ready(function () {
-	$('#togglePassword').click(function () {
-		const passwordField = $('#studentPassword');
-		const type = passwordField.attr('type') === 'password' ? 'text' : 'password';
-		passwordField.attr('type', type);
-		this.classList.toggle('fa-eye-slash');
-	});
-});
-
-var loginAttempts = 0;
-const maxAttempts = 3;
-$(document).ready(function () {
-	if (localStorage.getItem('rememberMe') === 'true') {
-		$('#studentRollNumber').val(localStorage.getItem('rollNumber'));
-		$('#studentPassword').val(localStorage.getItem('password'));
-		$('#rememberMe').prop('checked', true);
-	}
-
-	$('#togglePassword').click(function () {
-		const passwordField = $('#studentPassword');
-		const type = passwordField.attr('type') === 'password' ? 'text' : 'password';
-		passwordField.attr('type', type);
-		this.classList.toggle('fa-eye-slash');
-	});
-});
-
-function logout() {
-	$.ajax({
-		type: 'POST',
-		url: 'files/logout.php',
-		success: function (response) {
-			if (response === 'LOGOUT_SUCCESS') {
-				window.location.replace('index.php');
-			} else {
-				alert('Logout failed. Please try again.');
-			}
-		},
-		error: function () {
-			alert('An error occurred during logout. Please try again.');
-		}
-	});
-}
-
-$(document).ready(function () {
-	$('#logoutButton').click(function () {
-		logout();
-	});
-});
-function login() {
-	$('#loginFeedback').text('Logging in...').show();
-	$('#error_message').hide();
-
-	var sessionExpired = checkSessionExpiration();
-	if (sessionExpired) {
-		$('#error_message').text("Session has expired. Please log in again.").show();
-		$('#loginFeedback').hide();
-		return;
-	}
-
-	var someFieldIsEmpty = false;
-
-	// Roll number validation: Ensure it's an 8-digit number
-	var rollNumber = sanitizeInput($('#studentRollNumber').val());
-	var rollNumberPattern = /^\d{8}$/;
-	if (!rollNumber) {
-		someFieldIsEmpty = true;
-		$('#empty_roll_number_field').val("Please enter your roll number");
-	} else if (!rollNumberPattern.test(rollNumber)) {
-		someFieldIsEmpty = true;
-		$('#empty_roll_number_field').val("Roll number must be an 8-digit number");
-	}
-
-	// Password validation: Ensure it's at least 6 characters long
-	var password = sanitizeInput($('#studentPassword').val());
-	if (!password) {
-		someFieldIsEmpty = true;
-		$('#empty_roll_passsword_field').val("Please enter your password");
-	} else if (password.length < 6) {
-		someFieldIsEmpty = true;
-		$('#empty_roll_passsword_field').val("Password must be at least 6 characters long");
-	}
-
-	// CAPTCHA validation
-	var captcha = $('#captcha').val();
-	if (!captcha) {
-		someFieldIsEmpty = true;
-		$('#empty_captcha_field').val("Please enter the CAPTCHA");
-	}
-
-	if (!someFieldIsEmpty) {
-		if ($('#rememberMe').is(':checked')) {
-			localStorage.setItem('rememberMe', 'true');
-			localStorage.setItem('rollNumber', rollNumber);
-			localStorage.setItem('password', password);
-		} else {
-			localStorage.removeItem('rememberMe');
-			localStorage.removeItem('rollNumber');
-			localStorage.removeItem('password');
-		}
-
-		$.ajax({
-			type: 'POST',
-			url: 'files/student_login.php',
-			data: {
-				'rollNumber': rollNumber,
-				'password': password,
-				'captcha': captcha,
-			},
-			success: function (response) {
-				$('#loginFeedback').hide();
-				if(response == "STUDENT_RECORD_NOT_FOUND") {
-					loginAttempts++;
-					$('#error_message').text("Wrong Credentials entered. Attempt " + loginAttempts + " of " + maxAttempts).show();
-				} else if(response == "CAPTCHA_INVALID") {
-					loginAttempts++;
-					$('#error_message').text("Invalid CAPTCHA. Attempt " + loginAttempts + " of " + maxAttempts).show();
-				} else if(response == "2FA_REQUIRED") {
-					$('#2fa_code').show();
-					$('#error_message').text("A two-factor authentication code has been sent to your email. Please enter the code below.").show();
-					// Implement further logic to handle the 2FA code input
-				} else {
-					window.location.replace("files/dashboard.php");
+				if (!$('#studentPassword').val()) {
+					someFieldIsEmpty = true;
+					$('#empty_roll_passsword_field').val("Please enter your password");
 				}
-			},
-			error: function() {
-				$('#loginFeedback').hide();
-				$('#error_message').text("An error occurred during login. Please try again.").show();
-			}
-		});
-	} else {
-		$('#loginFeedback').hide();
-	}
-}
-var loginAttempts = 0;
-var maxAttempts = 5;
-var attemptTimeWindow = 60 * 5 * 1000; // 5 minutes
-var firstAttemptTime = null;
 
-function login() {
-	var currentTime = new Date().getTime();
-
-	if (firstAttemptTime && currentTime - firstAttemptTime > attemptTimeWindow) {
-		loginAttempts = 0; // Reset attempts after the time window
-		firstAttemptTime = null;
-	}
-
-	if (loginAttempts >= maxAttempts) {
-		$('#error_message').text("You have reached the maximum number of login attempts. Please try again later.").show();
-		return;
-	}
-
-	if (!firstAttemptTime) {
-		firstAttemptTime = currentTime;
-	}
-
-	// Existing validation and login logic here
-
-	$.ajax({
-		type: 'POST',
-		url: 'files/student_login.php',
-		data: {
-			// Your existing data here
-		},
-		success: function (response) {
-			// Your existing success logic here
-			if(response === "STUDENT_RECORD_NOT_FOUND" || response === "CAPTCHA_INVALID") {
-				loginAttempts++;
-			} else {
-				loginAttempts = 0; // Reset on successful login
-				firstAttemptTime = null;
-			}
-		}
-	});
-}
-function login() {
-	// Existing validation and login logic here
-
-	$.ajax({
-		type: 'POST',
-		url: 'files/student_login.php',
-		data: {
-			// Your existing data here
-		},
-		success: function (response) {
-			// Your existing success logic here
-
-			$.ajax({
-				type: 'POST',
-				url: 'files/login_logger.php',
-				data: {
-					'rollNumber': rollNumber,
-					'loginResult': response,
-					'ipAddress': userIpAddress // Assume userIpAddress is retrieved elsewhere
-				},
-				success: function () {
-					console.log('Login attempt logged.');
-				},
-				error: function () {
-					console.log('Failed to log login attempt.');
+				if (!someFieldIsEmpty) {
+					$.ajax({
+						type: 'POST',
+						url: 'files/student_login.php',
+						data: {
+							'rollNumber': $('#studentRollNumber').val(),
+							'password': $('#studentPassword').val(),
+						},
+						success: function (response) {
+							if(response == "STUDENT_RECORD_NOT_FOUND")
+								alert("Wrong Credentails entered");
+							else
+								window.location.replace("files/dashboard.php");
+						}
+					});
 				}
-			});
-		},
-		error: function() {
-			// Your existing error logic here
-		}
-	});
-}
+			}
 
 
 
