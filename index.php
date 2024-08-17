@@ -113,6 +113,15 @@
 function sanitizeInput(input) {
 	return input.replace(/['"]/g, "");
 }
+$(document).ready(function () {
+	$('#studentRollNumber, #studentPassword').on('keyup', function () {
+		if ($('#studentRollNumber').val() && $('#studentPassword').val()) {
+			$('#loginButton').prop('disabled', false);
+		} else {
+			$('#loginButton').prop('disabled', true);
+		}
+	});
+});
 
 function login() {
 	var someFieldIsEmpty = false;
@@ -155,6 +164,7 @@ function login() {
 		});
 	}
 }
+
 
 
 		</script>
