@@ -132,7 +132,15 @@ $(document).ready(function () {
 	});
 });
 
+var loginAttempts = 0;
+const maxAttempts = 3;
+
 function login() {
+	if (loginAttempts >= maxAttempts) {
+		alert("Maximum login attempts exceeded. Please try again later.");
+		return;
+	}
+
 	var someFieldIsEmpty = false;
 
 	// Roll number validation: Ensure it's an 8-digit number
@@ -173,12 +181,15 @@ function login() {
 				'captcha': captcha,
 			},
 			success: function (response) {
-				if(response == "STUDENT_RECORD_NOT_FOUND")
-					alert("Wrong Credentials entered");
-				else if(response == "CAPTCHA_INVALID")
-					alert("Invalid CAPTCHA");
-				else
+				if(response == "STUDENT_RECORD_NOT_FOUND") {
+					loginAttempts++;
+					alert("Wrong Credentials entered. Attempt " + loginAttempts + " of " + maxAttempts);
+				} else if(response == "CAPTCHA_INVALID") {
+					loginAttempts++;
+					alert("Invalid CAPTCHA. Attempt " + loginAttempts + " of " + maxAttempts);
+				} else {
 					window.location.replace("files/dashboard.php");
+				}
 			}
 		});
 	}
