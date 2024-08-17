@@ -149,86 +149,29 @@ $(document).ready(function () {
 	});
 });
 
-function login() {
-	$('#loginFeedback').text('Logging in...').show();
-
-	var sessionExpired = checkSessionExpiration();
-	if (sessionExpired) {
-		alert("Session has expired. Please log in again.");
-		$('#loginFeedback').hide();
-		return;
-	}
-
-	var someFieldIsEmpty = false;
-
-	// Roll number validation: Ensure it's an 8-digit number
-	var rollNumber = sanitizeInput($('#studentRollNumber').val());
-	var rollNumberPattern = /^\d{8}$/;
-	if (!rollNumber) {
-		someFieldIsEmpty = true;
-		$('#empty_roll_number_field').val("Please enter your roll number");
-	} else if (!rollNumberPattern.test(rollNumber)) {
-		someFieldIsEmpty = true;
-		$('#empty_roll_number_field').val("Roll number must be an 8-digit number");
-	}
-
-	// Password validation: Ensure it's at least 6 characters long
-	var password = sanitizeInput($('#studentPassword').val());
-	if (!password) {
-		someFieldIsEmpty = true;
-		$('#empty_roll_passsword_field').val("Please enter your password");
-	} else if (password.length < 6) {
-		someFieldIsEmpty = true;
-		$('#empty_roll_passsword_field').val("Password must be at least 6 characters long");
-	}
-
-	// CAPTCHA validation
-	var captcha = $('#captcha').val();
-	if (!captcha) {
-		someFieldIsEmpty = true;
-		$('#empty_captcha_field').val("Please enter the CAPTCHA");
-	}
-
-	if (!someFieldIsEmpty) {
-		if ($('#rememberMe').is(':checked')) {
-			localStorage.setItem('rememberMe', 'true');
-			localStorage.setItem('rollNumber', rollNumber);
-			localStorage.setItem('password', password);
-		} else {
-			localStorage.removeItem('rememberMe');
-			localStorage.removeItem('rollNumber');
-			localStorage.removeItem('password');
-		}
-
-		$.ajax({
-			type: 'POST',
-			url: 'files/student_login.php',
-			data: {
-				'rollNumber': rollNumber,
-				'password': password,
-				'captcha': captcha,
-			},
-			success: function (response) {
-				$('#loginFeedback').hide();
-				if(response == "STUDENT_RECORD_NOT_FOUND") {
-					loginAttempts++;
-					alert("Wrong Credentials entered. Attempt " + loginAttempts + " of " + maxAttempts);
-				} else if(response == "CAPTCHA_INVALID") {
-					loginAttempts++;
-					alert("Invalid CAPTCHA. Attempt " + loginAttempts + " of " + maxAttempts);
-				} else {
-					window.location.replace("files/dashboard.php");
-				}
-			},
-			error: function() {
-				$('#loginFeedback').hide();
-				alert("An error occurred during login. Please try again.");
+function logout() {
+	$.ajax({
+		type: 'POST',
+		url: 'files/logout.php',
+		success: function (response) {
+			if (response === 'LOGOUT_SUCCESS') {
+				window.location.replace('index.php');
+			} else {
+				alert('Logout failed. Please try again.');
 			}
-		});
-	} else {
-		$('#loginFeedback').hide();
-	}
+		},
+		error: function () {
+			alert('An error occurred during logout. Please try again.');
+		}
+	});
 }
+
+$(document).ready(function () {
+	$('#logoutButton').click(function () {
+		logout();
+	});
+});
+
 
 
 
