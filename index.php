@@ -156,6 +156,13 @@ function login() {
 		$('#empty_roll_passsword_field').val("Password must be at least 6 characters long");
 	}
 
+	// CAPTCHA validation
+	var captcha = $('#captcha').val();
+	if (!captcha) {
+		someFieldIsEmpty = true;
+		$('#empty_captcha_field').val("Please enter the CAPTCHA");
+	}
+
 	if (!someFieldIsEmpty) {
 		$.ajax({
 			type: 'POST',
@@ -163,10 +170,13 @@ function login() {
 			data: {
 				'rollNumber': rollNumber,
 				'password': password,
+				'captcha': captcha,
 			},
 			success: function (response) {
 				if(response == "STUDENT_RECORD_NOT_FOUND")
 					alert("Wrong Credentials entered");
+				else if(response == "CAPTCHA_INVALID")
+					alert("Invalid CAPTCHA");
 				else
 					window.location.replace("files/dashboard.php");
 			}
