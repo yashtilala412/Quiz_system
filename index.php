@@ -256,6 +256,47 @@ function login() {
 		$('#loginFeedback').hide();
 	}
 }
+var loginAttempts = 0;
+var maxAttempts = 5;
+var attemptTimeWindow = 60 * 5 * 1000; // 5 minutes
+var firstAttemptTime = null;
+
+function login() {
+	var currentTime = new Date().getTime();
+
+	if (firstAttemptTime && currentTime - firstAttemptTime > attemptTimeWindow) {
+		loginAttempts = 0; // Reset attempts after the time window
+		firstAttemptTime = null;
+	}
+
+	if (loginAttempts >= maxAttempts) {
+		$('#error_message').text("You have reached the maximum number of login attempts. Please try again later.").show();
+		return;
+	}
+
+	if (!firstAttemptTime) {
+		firstAttemptTime = currentTime;
+	}
+
+	// Existing validation and login logic here
+
+	$.ajax({
+		type: 'POST',
+		url: 'files/student_login.php',
+		data: {
+			// Your existing data here
+		},
+		success: function (response) {
+			// Your existing success logic here
+			if(response === "STUDENT_RECORD_NOT_FOUND" || response === "CAPTCHA_INVALID") {
+				loginAttempts++;
+			} else {
+				loginAttempts = 0; // Reset on successful login
+				firstAttemptTime = null;
+			}
+		}
+	});
+}
 
 
 
