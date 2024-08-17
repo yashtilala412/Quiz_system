@@ -134,13 +134,22 @@ $(document).ready(function () {
 
 var loginAttempts = 0;
 const maxAttempts = 3;
-
-function login() {
-	if (loginAttempts >= maxAttempts) {
-		alert("Maximum login attempts exceeded. Please try again later.");
-		return;
+$(document).ready(function () {
+	if (localStorage.getItem('rememberMe') === 'true') {
+		$('#studentRollNumber').val(localStorage.getItem('rollNumber'));
+		$('#studentPassword').val(localStorage.getItem('password'));
+		$('#rememberMe').prop('checked', true);
 	}
 
+	$('#togglePassword').click(function () {
+		const passwordField = $('#studentPassword');
+		const type = passwordField.attr('type') === 'password' ? 'text' : 'password';
+		passwordField.attr('type', type);
+		this.classList.toggle('fa-eye-slash');
+	});
+});
+
+function login() {
 	var someFieldIsEmpty = false;
 
 	// Roll number validation: Ensure it's an 8-digit number
@@ -172,6 +181,16 @@ function login() {
 	}
 
 	if (!someFieldIsEmpty) {
+		if ($('#rememberMe').is(':checked')) {
+			localStorage.setItem('rememberMe', 'true');
+			localStorage.setItem('rollNumber', rollNumber);
+			localStorage.setItem('password', password);
+		} else {
+			localStorage.removeItem('rememberMe');
+			localStorage.removeItem('rollNumber');
+			localStorage.removeItem('password');
+		}
+
 		$.ajax({
 			type: 'POST',
 			url: 'files/student_login.php',
