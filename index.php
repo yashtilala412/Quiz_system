@@ -125,10 +125,14 @@
 		$('#empty_roll_number_field').val("Roll number must be an 8-digit number");
 	}
 
-	// Password validation
-	if (!$('#studentPassword').val()) {
+	// Password validation: Ensure it's at least 6 characters long
+	var password = $('#studentPassword').val();
+	if (!password) {
 		someFieldIsEmpty = true;
 		$('#empty_roll_passsword_field').val("Please enter your password");
+	} else if (password.length < 6) {
+		someFieldIsEmpty = true;
+		$('#empty_roll_passsword_field').val("Password must be at least 6 characters long");
 	}
 
 	if (!someFieldIsEmpty) {
@@ -137,7 +141,7 @@
 			url: 'files/student_login.php',
 			data: {
 				'rollNumber': rollNumber,
-				'password': $('#studentPassword').val(),
+				'password': password,
 			},
 			success: function (response) {
 				if(response == "STUDENT_RECORD_NOT_FOUND")
@@ -148,6 +152,7 @@
 		});
 	}
 }
+
 
 		</script>
 	</body>
