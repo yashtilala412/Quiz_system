@@ -52,6 +52,7 @@ if(!isset($_SESSION["user_id"]))
     $sql = $conn->prepare("INSERT INTO student_data(rollno,class_id) VALUES (?, NULL)");
 $sql->bind_param("s", $student_roll_no);
 $result = $sql->execute();
+mysqli_begin_transaction($conn);
 
     $temp = 8 - strlen($test_id);
     $random = generateRandomString($temp);
