@@ -53,6 +53,9 @@ if(!isset($_SESSION["user_id"]))
 $sql->bind_param("s", $student_roll_no);
 $result = $sql->execute();
 mysqli_begin_transaction($conn);
+if(empty($test_id) || empty($student_roll_no)) {
+  die("Test ID and Student Roll Number are required.");
+}
 
     $temp = 8 - strlen($test_id);
     $random = generateRandomString($temp);
