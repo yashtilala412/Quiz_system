@@ -72,6 +72,10 @@ if(!$roll_no_id) {
     mysqli_rollback($conn);
     exit;
 }
+if(!$result1) {
+  mysqli_rollback($conn);
+  die("Error inserting into students table.");
+}
 
     $temp = 8 - strlen($test_id);
     $random = generateRandomString($temp);
