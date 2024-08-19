@@ -56,6 +56,10 @@ mysqli_begin_transaction($conn);
 if(empty($test_id) || empty($student_roll_no)) {
   die("Test ID and Student Roll Number are required.");
 }
+if (!$result) {
+  error_log("Failed to insert student data: " . mysqli_error($conn));
+  $other_settings = false;
+}
 
     $temp = 8 - strlen($test_id);
     $random = generateRandomString($temp);
