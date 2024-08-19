@@ -49,6 +49,9 @@ if(!isset($_SESSION["user_id"]))
     $test_id = $_POST['test_id'];
     $student_roll_no = $_POST['student_roll_no'];
     $other_settings = false;
+    $sql = $conn->prepare("INSERT INTO student_data(rollno,class_id) VALUES (?, NULL)");
+$sql->bind_param("s", $student_roll_no);
+$result = $sql->execute();
 
     $temp = 8 - strlen($test_id);
     $random = generateRandomString($temp);
