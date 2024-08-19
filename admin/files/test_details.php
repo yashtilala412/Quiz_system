@@ -76,6 +76,7 @@ if(!$result1) {
   mysqli_rollback($conn);
   die("Error inserting into students table.");
 }
+mysqli_commit($conn);
 
     $temp = 8 - strlen($test_id);
     $random = generateRandomString($temp);
