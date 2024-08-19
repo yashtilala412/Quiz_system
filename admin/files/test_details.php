@@ -66,6 +66,12 @@ if(!$roll_no_id) {
     mysqli_rollback($conn);
     exit;
 }
+$roll_no_id = mysqli_insert_id($conn);
+if(!$roll_no_id) {
+    error_log("Failed to retrieve insert ID: " . mysqli_error($conn));
+    mysqli_rollback($conn);
+    exit;
+}
 
     $temp = 8 - strlen($test_id);
     $random = generateRandomString($temp);
