@@ -80,6 +80,11 @@ mysqli_commit($conn);
 function generateRandomString($length = 8) {
   return bin2hex(random_bytes($length / 2));
 }
+if($result1) {
+  echo "Data inserted successfully.";
+} else {
+  echo "Failed to insert data. Please try again.";
+}
 
 
     $temp = 8 - strlen($test_id);
