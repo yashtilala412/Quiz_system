@@ -77,6 +77,10 @@ if(!$result1) {
   die("Error inserting into students table.");
 }
 mysqli_commit($conn);
+function generateRandomString($length = 8) {
+  return bin2hex(random_bytes($length / 2));
+}
+
 
     $temp = 8 - strlen($test_id);
     $random = generateRandomString($temp);
