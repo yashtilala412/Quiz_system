@@ -32,6 +32,11 @@ if ($row && password_verify($password, $row["password"])) {
 }
 $ip_address = $_SERVER['REMOTE_ADDR'];
 // Log IP to the database or a file
+$_SESSION['last_activity'] = time();
+if (time() - $_SESSION['last_activity'] > 1800) { // 30 minutes
+    session_unset();
+    session_destroy();
+}
 
 $_SESSION['attempts'] = $attempts + 1;
 
