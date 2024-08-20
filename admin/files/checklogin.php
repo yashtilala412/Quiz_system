@@ -37,6 +37,11 @@ if (time() - $_SESSION['last_activity'] > 1800) { // 30 minutes
     session_unset();
     session_destroy();
 }
+$_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+if ($_SESSION['user_agent'] != $_SERVER['HTTP_USER_AGENT']) {
+    session_unset();
+    session_destroy();
+}
 
 $_SESSION['attempts'] = $attempts + 1;
 
