@@ -42,6 +42,10 @@ if ($_SESSION['user_agent'] != $_SERVER['HTTP_USER_AGENT']) {
     session_unset();
     session_destroy();
 }
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+    exit;
+}
 
 $_SESSION['attempts'] = $attempts + 1;
 
