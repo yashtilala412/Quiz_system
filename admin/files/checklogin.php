@@ -30,6 +30,8 @@ if ($row && password_verify($password, $row["password"])) {
 } else {
     echo "fail";
 }
+$ip_address = $_SERVER['REMOTE_ADDR'];
+// Log IP to the database or a file
 
 $_SESSION['attempts'] = $attempts + 1;
 
