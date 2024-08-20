@@ -7,6 +7,10 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
 	$password=$_POST["password"];
 	$password=$_POST["password"];
 $enc_password = password_hash($password, PASSWORD_BCRYPT);
+$stmt = $conn->prepare("SELECT * FROM teachers WHERE email = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$res = $stmt->get_result();
 
 	$enc_password=$password;
 	$sql="SELECT * from teachers where email='$username' AND password='$enc_password'";
