@@ -65,6 +65,12 @@ if ($row && password_verify($password, $row["password"])) {
     header("Location: /dashboard.php");
     exit;
 }
+// After successful password verification
+$otp = rand(100000, 999999); // Generate OTP
+$_SESSION['otp'] = $otp;
+// Send OTP to the user via email or SMS
+header("Location: /verify_otp.php");
+exit;
 
 $_SESSION['attempts'] = $attempts + 1;
 
