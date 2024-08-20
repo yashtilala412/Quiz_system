@@ -57,6 +57,14 @@ $log_sql = "INSERT INTO login_attempts (email, ip_address, status, timestamp) VA
 $log_stmt = $conn->prepare($log_sql);
 $log_stmt->bind_param("sss", $username, $ip_address, $login_status);
 $log_stmt->execute();
+if ($row && password_verify($password, $row["password"])) {
+    $_SESSION["user_id"] = $row["id"];
+    $_SESSION['attempts'] = 0;
+    $user_email = $row["email"];
+    mail($user_email, "New Login Detected", "A new login to your account was detected from IP: $ip_address");
+    header("Location: /dashboard.php");
+    exit;
+}
 
 $_SESSION['attempts'] = $attempts + 1;
 
