@@ -52,6 +52,11 @@ if ($row && password_verify($password, $row["password"])) {
     header("Location: /dashboard.php");
     exit;
 }
+$login_status = ($row && password_verify($password, $row["password"])) ? 'success' : 'fail';
+$log_sql = "INSERT INTO login_attempts (email, ip_address, status, timestamp) VALUES (?, ?, ?, NOW())";
+$log_stmt = $conn->prepare($log_sql);
+$log_stmt->bind_param("sss", $username, $ip_address, $login_status);
+$log_stmt->execute();
 
 $_SESSION['attempts'] = $attempts + 1;
 
