@@ -11,6 +11,13 @@ $stmt = $conn->prepare("SELECT * FROM teachers WHERE email = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $res = $stmt->get_result();
+$row = mysqli_fetch_assoc($res);
+if ($row && password_verify($password, $row["password"])) {
+    echo "success";
+    $_SESSION["user_id"] = $row["id"];
+} else {
+    echo "fail";
+}
 
 	$enc_password=$password;
 	$sql="SELECT * from teachers where email='$username' AND password='$enc_password'";
