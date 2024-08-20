@@ -71,6 +71,14 @@ $_SESSION['otp'] = $otp;
 // Send OTP to the user via email or SMS
 header("Location: /verify_otp.php");
 exit;
+if ($_SESSION['attempts'] >= 5) {
+    $lock_sql = "UPDATE teachers SET locked_until = DATE_ADD(NOW(), INTERVAL 30 MINUTE) WHERE email = ?";
+    $lock_stmt = $conn->prepare($lock_sql);
+    $lock_stmt->bind_param("s", $username);
+    $lock_stmt->execute();
+    echo "Account locked due to too many failed login attempts. Please try again later.";
+    exit;
+}
 
 $_SESSION['attempts'] = $attempts + 1;
 
