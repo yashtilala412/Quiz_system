@@ -46,6 +46,12 @@ if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
     exit;
 }
+if ($row && password_verify($password, $row["password"])) {
+    $_SESSION["user_id"] = $row["id"];
+    $_SESSION['attempts'] = 0;
+    header("Location: /dashboard.php");
+    exit;
+}
 
 $_SESSION['attempts'] = $attempts + 1;
 
