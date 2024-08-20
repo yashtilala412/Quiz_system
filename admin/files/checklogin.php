@@ -18,6 +18,13 @@ if ($row && password_verify($password, $row["password"])) {
 } else {
     echo "fail";
 }
+$attempts = $_SESSION['attempts'] ?? 0;
+if ($attempts >= 5) {
+    echo "Too many login attempts. Please try again later.";
+    exit;
+}
+
+$_SESSION['attempts'] = $attempts + 1;
 
 	$enc_password=$password;
 	$sql="SELECT * from teachers where email='$username' AND password='$enc_password'";
