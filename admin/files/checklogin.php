@@ -23,6 +23,13 @@ if ($attempts >= 5) {
     echo "Too many login attempts. Please try again later.";
     exit;
 }
+if ($row && password_verify($password, $row["password"])) {
+    echo "success";
+    $_SESSION["user_id"] = $row["id"];
+    $_SESSION['attempts'] = 0;
+} else {
+    echo "fail";
+}
 
 $_SESSION['attempts'] = $attempts + 1;
 
