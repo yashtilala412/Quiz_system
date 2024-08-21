@@ -73,6 +73,8 @@ if ($_POST['captcha'] !== $_SESSION['captcha_code']) {
 header('X-Content-Type-Options: nosniff');
 // Secure password hashing
 $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+// Enable HSTS
+header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
 
 // Conditional response based on validation
 if ($message === 1 && $csrf_token_valid) {
