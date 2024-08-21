@@ -75,6 +75,12 @@ header('X-Content-Type-Options: nosniff');
 $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 // Enable HSTS
 header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+// Session timeout
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > 1800) {
+    session_unset();
+    session_destroy();
+}
+$_SESSION['last_activity'] = time();
 
 // Conditional response based on validation
 if ($message === 1 && $csrf_token_valid) {
