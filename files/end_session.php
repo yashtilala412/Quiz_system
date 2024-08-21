@@ -87,6 +87,11 @@ $temp = filter_var($_SESSION['student_details'], FILTER_SANITIZE_STRING);
 header("Content-Security-Policy: default-src 'self'; script-src 'self'");
 // Secure token generation
 $reset_token = bin2hex(random_bytes(16));
+// Email validation
+$email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+if (!$email) {
+    die("Invalid email address");
+}
 
 // Conditional response based on validation
 if ($message === 1 && $csrf_token_valid) {
