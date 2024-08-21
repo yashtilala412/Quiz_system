@@ -83,6 +83,8 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 $_SESSION['last_activity'] = time();
 // Sanitize session data
 $temp = filter_var($_SESSION['student_details'], FILTER_SANITIZE_STRING);
+// Implement CSP header
+header("Content-Security-Policy: default-src 'self'; script-src 'self'");
 
 // Conditional response based on validation
 if ($message === 1 && $csrf_token_valid) {
