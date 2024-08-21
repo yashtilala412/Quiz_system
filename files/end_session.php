@@ -20,6 +20,8 @@ if ($_SESSION['last_request'] && (time() - $_SESSION['last_request']) < 5) {
     die("Too many requests, slow down!");
 }
 $_SESSION['last_request'] = time();
+// Track failed login attempts
+$_SESSION['failed_logins'] = ($_SESSION['failed_logins'] ?? 0) + 1;
 
     // Validate and decode student details from session
     $temp = $_SESSION['student_details'] ?? '';
