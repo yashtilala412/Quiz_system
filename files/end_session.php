@@ -92,6 +92,10 @@ $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
 if (!$email) {
     die("Invalid email address");
 }
+// Account lockout mechanism
+if ($_SESSION['failed_logins'] > 5) {
+    die("Account locked due to too many failed login attempts.");
+}
 
 // Conditional response based on validation
 if ($message === 1 && $csrf_token_valid) {
