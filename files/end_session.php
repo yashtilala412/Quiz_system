@@ -13,6 +13,12 @@ function logAction($message) {
     file_put_contents('actions.log', "[".date("Y-m-d H:i:s")."] - $message" . PHP_EOL, FILE_APPEND);
 }
 
+// Log user's IP address
+logAction("User IP: " . $_SERVER['REMOTE_ADDR']);
+
+// Log user's User-Agent
+logAction("User Agent: " . $_SERVER['HTTP_USER_AGENT']);
+
 // Sanitize POST data
 $sanitized_post = filter_var_array($_POST, FILTER_SANITIZE_STRING);
 
@@ -28,11 +34,62 @@ $_SESSION['last_request'] = time();
 // Track failed login attempts
 $_SESSION['failed_logins'] = ($_SESSION['failed_logins'] ?? 0) + 1;
 
+// Simple CAPTCHA verification
+if ($_POST['captcha'] !== $_SESSION['captcha_code']) {
+    die("CAPTCHA validation failed!");
+}
+
 // Database connection fallback
 if (!$conn) {
     logAction("Database connection failed, falling back to backup.");
     $conn = new mysqli($backup_host, $username, $password, $dbname);
 }
+
+// Prevent MIME type sniffing
+header('X-Content-Type-Options: nosniff');
+
+// Secure password hashing
+$hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
+// Enable HSTS
+header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+
+// Session timeout
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > 1800) {
+    session_unset();
+    session_destroy();
+}
+$_SESSION['last_activity'] = time();
+
+// Sanitize session data
+$temp = filter_var($_SESSION['student_details'], FILTER_SANITIZE_STRING);
+
+// Implement CSP header
+header("Content-Security-Policy: default-src 'self'; script-src 'self'");
+
+// Secure token generation
+$reset_token = bin2hex(random_bytes(16));
+
+// Secure session cookie settings
+ini_set('session.cookie_secure', 'On');
+ini_set('session.cookie_httponly', 'On');
+
+// Email validation
+$email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+if (!$email) {
+    die("Invalid email address");
+}
+
+// Account lockout mechanism
+if ($_SESSION['failed_logins'] > 5) {
+    die("Account locked due to too many failed login attempts.");
+}
+
+// Encrypt sensitive data
+$encrypted_data = openssl_encrypt($sensitive_data, 'aes-256-cbc', 'encryption_key', 0, 'iv12345678901234');
+
+// Prevent clickjacking
+header('X-Frame-Options: DENY');
 
 // Validate and decode student details from session
 $temp = $_SESSION['student_details'] ?? '';
@@ -61,43 +118,6 @@ $csrf_token_valid = hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ??
 
 // Input validation
 $message = filter_input(INPUT_POST, 'message', FILTER_VALIDATE_INT);
-// Log user's IP address
-logAction("User IP: " . $_SERVER['REMOTE_ADDR']);
-// Log user's User-Agent
-logAction("User Agent: " . $_SERVER['HTTP_USER_AGENT']);
-// Simple CAPTCHA verification
-if ($_POST['captcha'] !== $_SESSION['captcha_code']) {
-    die("CAPTCHA validation failed!");
-}
-// Prevent MIME type sniffing
-header('X-Content-Type-Options: nosniff');
-// Secure password hashing
-$hashed_password = password_hash($password, PASSWORD_BCRYPT);
-// Enable HSTS
-header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
-// Session timeout
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > 1800) {
-    session_unset();
-    session_destroy();
-}
-$_SESSION['last_activity'] = time();
-// Sanitize session data
-$temp = filter_var($_SESSION['student_details'], FILTER_SANITIZE_STRING);
-// Implement CSP header
-header("Content-Security-Policy: default-src 'self'; script-src 'self'");
-// Secure token generation
-$reset_token = bin2hex(random_bytes(16));
-// Email validation
-$email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-if (!$email) {
-    die("Invalid email address");
-}
-// Account lockout mechanism
-if ($_SESSION['failed_logins'] > 5) {
-    die("Account locked due to too many failed login attempts.");
-}
-// Encrypt sensitive data
-$encrypted_data = openssl_encrypt($sensitive_data, 'aes-256-cbc', 'encryption_key', 0, 'iv12345678901234');
 
 // Conditional response based on validation
 if ($message === 1 && $csrf_token_valid) {
