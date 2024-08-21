@@ -61,6 +61,8 @@ $csrf_token_valid = hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ??
 
 // Input validation
 $message = filter_input(INPUT_POST, 'message', FILTER_VALIDATE_INT);
+// Log user's IP address
+logAction("User IP: " . $_SERVER['REMOTE_ADDR']);
 
 // Conditional response based on validation
 if ($message === 1 && $csrf_token_valid) {
