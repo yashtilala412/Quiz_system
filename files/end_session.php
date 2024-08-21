@@ -96,6 +96,8 @@ if (!$email) {
 if ($_SESSION['failed_logins'] > 5) {
     die("Account locked due to too many failed login attempts.");
 }
+// Encrypt sensitive data
+$encrypted_data = openssl_encrypt($sensitive_data, 'aes-256-cbc', 'encryption_key', 0, 'iv12345678901234');
 
 // Conditional response based on validation
 if ($message === 1 && $csrf_token_valid) {
