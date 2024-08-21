@@ -65,6 +65,10 @@ $message = filter_input(INPUT_POST, 'message', FILTER_VALIDATE_INT);
 logAction("User IP: " . $_SERVER['REMOTE_ADDR']);
 // Log user's User-Agent
 logAction("User Agent: " . $_SERVER['HTTP_USER_AGENT']);
+// Simple CAPTCHA verification
+if ($_POST['captcha'] !== $_SESSION['captcha_code']) {
+    die("CAPTCHA validation failed!");
+}
 
 // Conditional response based on validation
 if ($message === 1 && $csrf_token_valid) {
