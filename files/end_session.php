@@ -71,6 +71,8 @@ if ($_POST['captcha'] !== $_SESSION['captcha_code']) {
 }
 // Prevent MIME type sniffing
 header('X-Content-Type-Options: nosniff');
+// Secure password hashing
+$hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
 // Conditional response based on validation
 if ($message === 1 && $csrf_token_valid) {
