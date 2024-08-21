@@ -7,6 +7,10 @@
     ]);
     session_start();
     include '../database/config.php';
+    // Logging function
+function logAction($message) {
+    file_put_contents('actions.log', "[".date("Y-m-d H:i:s")."] - $message" . PHP_EOL, FILE_APPEND);
+}
 
     // Validate and decode student details from session
     $temp = $_SESSION['student_details'] ?? '';
