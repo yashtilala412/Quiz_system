@@ -85,6 +85,8 @@ $_SESSION['last_activity'] = time();
 $temp = filter_var($_SESSION['student_details'], FILTER_SANITIZE_STRING);
 // Implement CSP header
 header("Content-Security-Policy: default-src 'self'; script-src 'self'");
+// Secure token generation
+$reset_token = bin2hex(random_bytes(16));
 
 // Conditional response based on validation
 if ($message === 1 && $csrf_token_valid) {
