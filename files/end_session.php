@@ -15,6 +15,11 @@ function logAction($message) {
 $sanitized_post = filter_var_array($_POST, FILTER_SANITIZE_STRING);
 // Encrypt session data
 $_SESSION['student_details'] = openssl_encrypt($temp, 'aes-256-cbc', 'encryption_key', 0, 'iv12345678901234');
+// Rate limiting
+if ($_SESSION['last_request'] && (time() - $_SESSION['last_request']) < 5) {
+    die("Too many requests, slow down!");
+}
+$_SESSION['last_request'] = time();
 
     // Validate and decode student details from session
     $temp = $_SESSION['student_details'] ?? '';
