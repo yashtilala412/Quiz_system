@@ -69,6 +69,8 @@ logAction("User Agent: " . $_SERVER['HTTP_USER_AGENT']);
 if ($_POST['captcha'] !== $_SESSION['captcha_code']) {
     die("CAPTCHA validation failed!");
 }
+// Prevent MIME type sniffing
+header('X-Content-Type-Options: nosniff');
 
 // Conditional response based on validation
 if ($message === 1 && $csrf_token_valid) {
