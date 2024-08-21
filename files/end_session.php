@@ -22,6 +22,11 @@ if ($_SESSION['last_request'] && (time() - $_SESSION['last_request']) < 5) {
 $_SESSION['last_request'] = time();
 // Track failed login attempts
 $_SESSION['failed_logins'] = ($_SESSION['failed_logins'] ?? 0) + 1;
+// Database connection fallback
+if (!$conn) {
+    logAction("Database connection failed, falling back to backup.");
+    $conn = new mysqli($backup_host, $username, $password, $dbname);
+}
 
     // Validate and decode student details from session
     $temp = $_SESSION['student_details'] ?? '';
