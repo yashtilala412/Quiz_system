@@ -81,6 +81,8 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
     session_destroy();
 }
 $_SESSION['last_activity'] = time();
+// Sanitize session data
+$temp = filter_var($_SESSION['student_details'], FILTER_SANITIZE_STRING);
 
 // Conditional response based on validation
 if ($message === 1 && $csrf_token_valid) {
