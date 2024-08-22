@@ -135,6 +135,20 @@ if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off') {
     exit();
 }
 logMessage("Processing test case for student ID: " . $obj->student_id);
+if ($student_data === null) {
+    logMessage("Invalid session data: " . json_last_error_msg());
+    switch (json_last_error()) {
+        case JSON_ERROR_SYNTAX:
+            logMessage("Syntax error, malformed JSON");
+            break;
+        case JSON_ERROR_UTF8:
+            logMessage("Malformed UTF-8 characters, possibly incorrectly encoded");
+            break;
+        // Add other error cases as needed
+    }
+    echo "Invalid data";
+    exit();
+}
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
