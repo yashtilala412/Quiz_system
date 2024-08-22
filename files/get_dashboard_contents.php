@@ -74,6 +74,7 @@ if (isset($_SESSION['student_details'])) {
     logMessage("No session data found.");
     echo "Not Found";
 }
+logMessage("User IP Address: " . $_SERVER['REMOTE_ADDR']);
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
