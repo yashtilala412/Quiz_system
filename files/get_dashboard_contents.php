@@ -113,6 +113,11 @@ function debugLog($message) {
 }
 
 debugLog("Debugging mode enabled.");
+if (empty($student_data)) {
+    logMessage("No student data found in session.");
+    echo "No data available";
+    exit();
+}
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
