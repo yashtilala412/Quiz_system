@@ -124,6 +124,11 @@ if ($stmt === false) {
     echo "Database error";
     exit();
 }
+if ($stmt === false) {
+    logMessage("SQL error: " . $conn->error);
+    header("Location: error.php");
+    exit();
+}
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
