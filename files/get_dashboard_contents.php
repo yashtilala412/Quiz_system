@@ -85,6 +85,11 @@ if (!isset($_SESSION['last_activity']) || (time() - $_SESSION['last_activity']) 
 $_SESSION['last_activity'] = time();
 $data = htmlspecialchars($_SESSION['student_details'], ENT_QUOTES, 'UTF-8');
 logMessage("Sanitized session data: " . $data);
+if (!isset($_SESSION['created']) || (time() - $_SESSION['created']) > 300) {
+    session_regenerate_id(true);
+    $_SESSION['created'] = time();
+    logMessage("Session ID regenerated.");
+}
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
