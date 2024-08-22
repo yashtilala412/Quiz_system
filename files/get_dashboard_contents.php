@@ -149,6 +149,10 @@ if ($student_data === null) {
     echo "Invalid data";
     exit();
 }
+$queryStartTime = microtime(true);
+$stmt->execute();
+$queryEndTime = microtime(true);
+logMessage("Query execution time: " . ($queryEndTime - $queryStartTime) . " seconds.");
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
