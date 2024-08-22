@@ -118,6 +118,12 @@ if (empty($student_data)) {
     echo "No data available";
     exit();
 }
+$stmt = $conn->prepare($query);
+if ($stmt === false) {
+    logMessage("SQL error: " . $conn->error);
+    echo "Database error";
+    exit();
+}
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
