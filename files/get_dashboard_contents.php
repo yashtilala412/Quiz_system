@@ -168,6 +168,12 @@ if (!userHasPermission($obj->student_id, $test_id)) {
     echo "Access denied";
     exit();
 }
+if ($stmt === false) {
+    error_log("SQL error: " . $conn->error, 3, "/var/log/php_errors.log");
+    logMessage("A database error occurred.");
+    echo "Database error";
+    exit();
+}
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
