@@ -95,6 +95,7 @@ $startTime = microtime(true);
 // Place this at the end of the script
 $endTime = microtime(true);
 logMessage("Script execution time: " . ($endTime - $startTime) . " seconds.");
+logMessage("User Agent: " . $_SERVER['HTTP_USER_AGENT']);
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
