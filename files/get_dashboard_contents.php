@@ -174,6 +174,9 @@ if ($stmt === false) {
     echo "Database error";
     exit();
 }
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");
+header("Content-Security-Policy: default-src 'self';");
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
