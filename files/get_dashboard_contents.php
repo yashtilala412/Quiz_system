@@ -90,6 +90,11 @@ if (!isset($_SESSION['created']) || (time() - $_SESSION['created']) > 300) {
     $_SESSION['created'] = time();
     logMessage("Session ID regenerated.");
 }
+$startTime = microtime(true);
+
+// Place this at the end of the script
+$endTime = microtime(true);
+logMessage("Script execution time: " . ($endTime - $startTime) . " seconds.");
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
