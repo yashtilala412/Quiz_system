@@ -163,6 +163,11 @@ if (empty($testName)) {
     echo "Test not found";
     exit();
 }
+if (!userHasPermission($obj->student_id, $test_id)) {
+    logMessage("Access denied for student ID: " . $obj->student_id . " and test ID: " . $test_id);
+    echo "Access denied";
+    exit();
+}
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
