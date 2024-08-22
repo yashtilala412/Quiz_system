@@ -134,6 +134,7 @@ if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off') {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
     exit();
 }
+logMessage("Processing test case for student ID: " . $obj->student_id);
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
