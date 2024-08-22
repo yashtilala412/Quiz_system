@@ -96,6 +96,13 @@ $startTime = microtime(true);
 $endTime = microtime(true);
 logMessage("Script execution time: " . ($endTime - $startTime) . " seconds.");
 logMessage("User Agent: " . $_SERVER['HTTP_USER_AGENT']);
+$conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
+$conn->set_charset("utf8mb4");
+if ($conn->connect_error) {
+    logMessage("Database connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
+}
+logMessage("Database connection established.");
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
