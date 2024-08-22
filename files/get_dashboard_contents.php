@@ -129,6 +129,11 @@ if ($stmt === false) {
     header("Location: error.php");
     exit();
 }
+if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off') {
+    logMessage("Insecure connection detected. Redirecting to HTTPS.");
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+    exit();
+}
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
