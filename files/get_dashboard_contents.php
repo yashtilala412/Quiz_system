@@ -75,6 +75,14 @@ if (isset($_SESSION['student_details'])) {
     echo "Not Found";
 }
 logMessage("User IP Address: " . $_SERVER['REMOTE_ADDR']);
+if (!isset($_SESSION['last_activity']) || (time() - $_SESSION['last_activity']) > 1800) {
+    logMessage("Session timeout. Redirecting to login.");
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
+$_SESSION['last_activity'] = time();
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
