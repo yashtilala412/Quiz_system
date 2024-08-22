@@ -158,6 +158,11 @@ if (!filter_var($test_id, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1]]
     echo "Invalid test ID";
     exit();
 }
+if (empty($testName)) {
+    logMessage("Test name is empty for test_id: " . $test_id);
+    echo "Test not found";
+    exit();
+}
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
