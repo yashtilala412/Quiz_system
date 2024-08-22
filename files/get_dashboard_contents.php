@@ -103,6 +103,16 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 logMessage("Database connection established.");
+$debugging = true; // Set to false in production
+
+function debugLog($message) {
+    global $debugging;
+    if ($debugging) {
+        logMessage($message);
+    }
+}
+
+debugLog("Debugging mode enabled.");
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
