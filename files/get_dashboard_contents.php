@@ -153,6 +153,11 @@ $queryStartTime = microtime(true);
 $stmt->execute();
 $queryEndTime = microtime(true);
 logMessage("Query execution time: " . ($queryEndTime - $queryStartTime) . " seconds.");
+if (!filter_var($test_id, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1]])) {
+    logMessage("Invalid test ID: " . $test_id);
+    echo "Invalid test ID";
+    exit();
+}
 
 mysqli_close($conn);
 logMessage("Script execution ended.");
