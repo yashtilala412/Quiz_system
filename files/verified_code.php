@@ -4,7 +4,11 @@ header("X-Frame-Options: SAMEORIGIN"); // Prevent clickjacking
 header("X-Content-Type-Options: nosniff"); // Prevent MIME-sniffing
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains"); // Enforce HTTPS
 header("Content-Security-Policy: default-src 'self'; script-src 'self'"); // Basic CSP
-
+session_start([
+    'cookie_httponly' => true, // Prevent access via JavaScript
+    'cookie_secure' => true, // Only send cookies over HTTPS
+    'cookie_samesite' => 'Strict' // Restrict cross-site sending
+]);
 // Initialize the attempt counter if not already set
 if (!isset($_SESSION['attempt_count'])) {
     $_SESSION['attempt_count'] = 0;
