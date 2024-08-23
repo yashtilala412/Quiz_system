@@ -28,6 +28,12 @@ try {
     log_error($e->getMessage());
     echo json_encode(['error' => 'An internal error occurred.']);
 }
+function sanitize_output($data) {
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+}
+
+// Example usage
+echo sanitize_output($user_input);
 // Initialize the attempt counter if not already set
 if (!isset($_SESSION['attempt_count'])) {
     $_SESSION['attempt_count'] = 0;
