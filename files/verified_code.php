@@ -22,6 +22,11 @@ function log_attempt($message) {
     file_put_contents($log_file, "[$timestamp] $message\n", FILE_APPEND);
 }
 
+// Generate CSRF token if not already set
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 // Check if the user is currently locked out
 if (isset($_SESSION['lockout_time']) && time() < $_SESSION['lockout_time']) {
     log_attempt('Attempt during lockout period.');
@@ -37,6 +42,11 @@ if (isset($_SESSION['verification_time']) && (time() - $_SESSION['verification_t
 }
 
 try {
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        log_attempt('CSRF token missing or invalid.');
+        throw new Exception('Invalid request.');
+    }
+
     if (!isset($_POST['verification_code'])) {
         log_attempt('Verification code missing.');
         throw new Exception('Verification code is missing.');
