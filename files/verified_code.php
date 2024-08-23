@@ -34,6 +34,18 @@ function sanitize_output($data) {
 
 // Example usage
 echo sanitize_output($user_input);
+$allowed_referer = 'https://yourdomain.com';
+$allowed_origin = 'https://yourdomain.com';
+
+if (isset($_SERVER['HTTP_REFERER']) && parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) !== parse_url($allowed_referer, PHP_URL_HOST)) {
+    echo json_encode(['error' => 'Invalid request source.']);
+    exit;
+}
+
+if (isset($_SERVER['HTTP_ORIGIN']) && $_SERVER['HTTP_ORIGIN'] !== $allowed_origin) {
+    echo json_encode(['error' => 'Invalid request origin.']);
+    exit;
+}
 // Initialize the attempt counter if not already set
 if (!isset($_SESSION['attempt_count'])) {
     $_SESSION['attempt_count'] = 0;
