@@ -9,6 +9,13 @@ session_start([
     'cookie_secure' => true, // Only send cookies over HTTPS
     'cookie_samesite' => 'Strict' // Restrict cross-site sending
 ]);
+function fetchUserData($pdo, $username) {
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE username = :username');
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 // Initialize the attempt counter if not already set
 if (!isset($_SESSION['attempt_count'])) {
     $_SESSION['attempt_count'] = 0;
