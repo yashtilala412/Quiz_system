@@ -12,6 +12,9 @@ $max_attempts = 5;
 // Define the lockout duration in seconds (e.g., 60 seconds)
 $lockout_duration = 60;
 
+// Verification code validity duration in seconds (e.g., 300 seconds = 5 minutes)
+$code_validity_duration = 300;
+
 // Function to log attempts
 function log_attempt($message) {
     $log_file = 'verification_attempts.log';
@@ -23,6 +26,13 @@ function log_attempt($message) {
 if (isset($_SESSION['lockout_time']) && time() < $_SESSION['lockout_time']) {
     log_attempt('Attempt during lockout period.');
     echo json_encode(['error' => 'Too many attempts. Please try again later.']);
+    exit;
+}
+
+// Check if the verification code has expired
+if (isset($_SESSION['verification_time']) && (time() - $_SESSION['verification_time']) > $code_validity_duration) {
+    log_attempt('Verification code expired.');
+    echo json_encode(['error' => 'Verification code has expired.']);
     exit;
 }
 
