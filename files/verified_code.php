@@ -15,7 +15,19 @@ function fetchUserData($pdo, $username) {
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+function log_error($message) {
+    $log_file = 'error_log.log';
+    $timestamp = date('Y-m-d H:i:s');
+    error_log("[$timestamp] $message\n", 3, $log_file);
+}
 
+// Example usage
+try {
+    // Some code that could throw an exception
+} catch (Exception $e) {
+    log_error($e->getMessage());
+    echo json_encode(['error' => 'An internal error occurred.']);
+}
 // Initialize the attempt counter if not already set
 if (!isset($_SESSION['attempt_count'])) {
     $_SESSION['attempt_count'] = 0;
