@@ -67,6 +67,9 @@ try {
         
         // Reset attempt count on successful verification
         $_SESSION['attempt_count'] = 0;
+
+        // Regenerate session ID to prevent session fixation attacks
+        session_regenerate_id(true);
         
         // Proceed with granting access or finalizing the login
     } else {
