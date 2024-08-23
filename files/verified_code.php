@@ -46,6 +46,12 @@ if (isset($_SERVER['HTTP_ORIGIN']) && $_SERVER['HTTP_ORIGIN'] !== $allowed_origi
     echo json_encode(['error' => 'Invalid request origin.']);
     exit;
 }
+function sanitize_input($input) {
+    return filter_var($input, FILTER_SANITIZE_STRING);
+}
+
+// Example usage
+$cleaned_input = sanitize_input($_POST['user_input']);
 // Initialize the attempt counter if not already set
 if (!isset($_SESSION['attempt_count'])) {
     $_SESSION['attempt_count'] = 0;
