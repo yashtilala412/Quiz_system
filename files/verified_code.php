@@ -27,6 +27,26 @@ if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
+// Function to encrypt and decrypt session data
+function encrypt_session_data($data, $key) {
+    $iv = random_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+    $encrypted = openssl_encrypt($data, 'aes-256-cbc', $key, 0, $iv);
+    return base64_encode($encrypted . '::' . $iv);
+}
+
+function decrypt_session_data($data, $key) {
+    list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
+    return openssl_decrypt($encrypted_data, 'aes-256-cbc', $key, 0, $iv);
+}
+
+// Encryption key for session data (ensure to keep this key secure and confidential)
+$encryption_key = 'your_secret_key';
+
+// Encrypt verification code before storing in session
+if (isset($_SESSION['verification_code'])) {
+    $_SESSION['verification_code'] = encrypt_session_data($_SESSION['verification_code'], $encryption_key);
+}
+
 // Check if the user is currently locked out
 if (isset($_SESSION['lockout_time']) && time() < $_SESSION['lockout_time']) {
     log_attempt('Attempt during lockout period.');
@@ -59,7 +79,8 @@ try {
         throw new Exception('Invalid verification code format.');
     }
 
-    $session_code = $_SESSION['verification_code'];
+    // Decrypt session verification code for comparison
+    $session_code = decrypt_session_data($_SESSION['verification_code'], $encryption_key);
 
     if ($entered_code === $session_code) {
         log_attempt('Verification successful.');
