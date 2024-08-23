@@ -42,10 +42,16 @@ try {
         throw new Exception('Verification code is missing.');
     }
 
-    $entered_code = $_POST['verification_code'];
+    // Validate the input
+    $entered_code = trim($_POST['verification_code']);
+    if (!preg_match('/^[A-Za-z0-9]{6,10}$/', $entered_code)) {  // Example regex for alphanumeric code
+        log_attempt('Invalid input format.');
+        throw new Exception('Invalid verification code format.');
+    }
+
     $session_code = $_SESSION['verification_code'];
 
-    if ($entered_code == $session_code) {
+    if ($entered_code === $session_code) {
         log_attempt('Verification successful.');
         echo 'VERIFICATION_SUCCESS';
         
