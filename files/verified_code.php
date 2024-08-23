@@ -1,5 +1,9 @@
 <?php
 session_start();
+header("X-Frame-Options: SAMEORIGIN"); // Prevent clickjacking
+header("X-Content-Type-Options: nosniff"); // Prevent MIME-sniffing
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains"); // Enforce HTTPS
+header("Content-Security-Policy: default-src 'self'; script-src 'self'"); // Basic CSP
 
 // Initialize the attempt counter if not already set
 if (!isset($_SESSION['attempt_count'])) {
