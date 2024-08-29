@@ -102,6 +102,13 @@ function provideFeedback($isCorrect) {
 function saveAnswer() {
     // Save answer logic
 }
+// Feature 5: Auto-save user progress every 30 seconds
+echo '<script>
+    setInterval(function() {
+        // AJAX call to save progress
+        fetch("save_progress.php");
+    }, 30000); // 30 seconds
+</script>';
 
 function reviewAnswers() {
     // Review answers logic
