@@ -90,6 +90,14 @@ if (!isset($_SESSION['reviewed_questions'])) {
 if (isset($_POST['mark_for_review'])) {
     $_SESSION['reviewed_questions'][] = $_SESSION['question_IDS_fetched'][$_SESSION['question_counter'] - 1]['question_id'];
 }
+// Feature 4: Provide feedback messages for answers
+function provideFeedback($isCorrect) {
+    if ($isCorrect) {
+        echo '<div class="feedback success">Correct Answer!</div>';
+    } else {
+        echo '<div class="feedback error">Incorrect Answer. Try again!</div>';
+    }
+}
 
 function saveAnswer() {
     // Save answer logic
