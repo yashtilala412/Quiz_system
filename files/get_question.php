@@ -158,6 +158,12 @@ $ipAddress = $_SERVER['REMOTE_ADDR'];
 file_put_contents('user_actions.log', "User IP: $ipAddress - Action Time: " . date("Y-m-d H:i:s") . "\n", FILE_APPEND);
 $ipAddress = $_SERVER['REMOTE_ADDR'];
 file_put_contents('user_actions.log', "User IP: $ipAddress - Action Time: " . date("Y-m-d H:i:s") . "\n", FILE_APPEND);
+if (!isset($_SESSION['user_answers'])) {
+    $_SESSION['user_answers'] = [];
+}
+if (isset($_POST['answer'])) {
+    $_SESSION['user_answers'][$_SESSION['question_IDS_fetched'][$_SESSION['question_counter'] - 1]['question_id']] = $_POST['answer'];
+}
 
 
 
