@@ -142,6 +142,10 @@ if ($_SESSION['hints_shown'] < 3) {
     echo '<button onclick="showHint()">Show Hint</button>';
     $_SESSION['hints_shown']++;
 }
+// Feature 12: Show progress as a percentage
+$totalQuestions = sizeof($_SESSION['question_IDS_fetched']);
+$progressPercentage = ($_SESSION['question_counter'] / $totalQuestions) * 100;
+echo '<div>Progress: ' . round($progressPercentage) . '%</div>';
 
 
 
