@@ -125,6 +125,15 @@ if (isset($_POST['save_answer'])) {
 header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
+// Feature 10: Auto-logout after inactivity
+if (!isset($_SESSION['LAST_ACTIVITY'])) {
+    $_SESSION['LAST_ACTIVITY'] = time();
+} else if (time() - $_SESSION['LAST_ACTIVITY'] > 1800) { // 30 minutes
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+}
+$_SESSION['LAST_ACTIVITY'] = time();
 
 
 
