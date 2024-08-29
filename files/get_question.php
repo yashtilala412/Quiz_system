@@ -121,6 +121,10 @@ if (!isset($_SESSION['answers'])) {
 if (isset($_POST['save_answer'])) {
     $_SESSION['answers'][$_SESSION['question_IDS_fetched'][$_SESSION['question_counter'] - 1]['question_id']] = $_POST['answer'];
 }
+// Feature 9: Add security headers
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");
+header("X-XSS-Protection: 1; mode=block");
 
 
 
