@@ -114,14 +114,13 @@ if ($_SESSION['skip_count'] >= 3) {
     // Logic to skip the question
 }
 // Feature 7: Display remaining time
-echo '<script>
-    var remainingTime = 60000; // Example: 60 seconds
-    setInterval(function() {
-        remainingTime -= 1000;
-        document.getElementById("timerDisplay").innerText = Math.floor(remainingTime / 1000) + " seconds left";
-    }, 1000);
-</script>';
-echo '<div id="timerDisplay">60 seconds left</div>';
+// Feature 8: Temporarily store answers in session
+if (!isset($_SESSION['answers'])) {
+    $_SESSION['answers'] = [];
+}
+if (isset($_POST['save_answer'])) {
+    $_SESSION['answers'][$_SESSION['question_IDS_fetched'][$_SESSION['question_counter'] - 1]['question_id']] = $_POST['answer'];
+}
 
 
 
