@@ -82,6 +82,15 @@ if (!isset($_SESSION['csrf_token'])) {
 }
 echo '<input type="hidden" name="csrf_token" value="' . $_SESSION['csrf_token'] . '">';
 
+
+// Feature 3: Allow users to mark questions for review
+if (!isset($_SESSION['reviewed_questions'])) {
+    $_SESSION['reviewed_questions'] = [];
+}
+if (isset($_POST['mark_for_review'])) {
+    $_SESSION['reviewed_questions'][] = $_SESSION['question_IDS_fetched'][$_SESSION['question_counter'] - 1]['question_id'];
+}
+
 function saveAnswer() {
     // Save answer logic
 }
