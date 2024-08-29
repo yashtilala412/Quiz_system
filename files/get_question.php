@@ -152,6 +152,14 @@ if (isset($_POST['reset_quiz'])) {
     header("Location: start_quiz.php");
 }
 echo '<button onclick="resetQuiz()">Reset Quiz</button>';
+// Feature 14: AJAX-based question loading
+echo '<script>
+    function loadNextQuestion() {
+        fetch("fetch_question.php").then(response => response.json()).then(data => {
+            document.getElementById("questionContainer").innerHTML = data.question;
+        });
+    }
+</script>';
 
 
 
