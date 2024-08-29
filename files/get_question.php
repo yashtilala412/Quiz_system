@@ -68,104 +68,10 @@ var timer = setTimeout(function(){
     alert("Time up!"); 
     window.location.href = "results.php"; 
 }, 60000); // 60 seconds for example
-// Feature 1: Log timestamp when each question is fetched
-if (!isset($_SESSION['question_fetch_log'])) {
-    $_SESSION['question_fetch_log'] = [];
-}
-$_SESSION['question_fetch_log'][] = [
-    'question_id' => $_SESSION['question_IDS_fetched'][$_SESSION['question_counter']]['question_id'],
-    'timestamp' => time()
-];
-// Feature 2: Implement CSRF token
-if (!isset($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-echo '<input type="hidden" name="csrf_token" value="' . $_SESSION['csrf_token'] . '">';
-
-
-// Feature 3: Allow users to mark questions for review
-if (!isset($_SESSION['reviewed_questions'])) {
-    $_SESSION['reviewed_questions'] = [];
-}
-if (isset($_POST['mark_for_review'])) {
-    $_SESSION['reviewed_questions'][] = $_SESSION['question_IDS_fetched'][$_SESSION['question_counter'] - 1]['question_id'];
-}
-// Feature 4: Provide feedback messages for answers
-function provideFeedback($isCorrect) {
-    if ($isCorrect) {
-        echo '<div class="feedback success">Correct Answer!</div>';
-    } else {
-        echo '<div class="feedback error">Incorrect Answer. Try again!</div>';
-    }
-}
 
 function saveAnswer() {
     // Save answer logic
 }
-// Feature 5: Auto-save user progress every 30 seconds
-// Feature 6: Limit the number of skips
-if (!isset($_SESSION['skip_count'])) {
-    $_SESSION['skip_count'] = 0;
-}
-if ($_SESSION['skip_count'] >= 3) {
-    echo '<div class="error">Skip limit reached!</div>';
-} else if (isset($_POST['skip_question'])) {
-    $_SESSION['skip_count']++;
-    // Logic to skip the question
-}
-// Feature 7: Display remaining time
-// Feature 8: Temporarily store answers in session
-if (!isset($_SESSION['answers'])) {
-    $_SESSION['answers'] = [];
-}
-if (isset($_POST['save_answer'])) {
-    $_SESSION['answers'][$_SESSION['question_IDS_fetched'][$_SESSION['question_counter'] - 1]['question_id']] = $_POST['answer'];
-}
-// Feature 9: Add security headers
-header("X-Content-Type-Options: nosniff");
-header("X-Frame-Options: DENY");
-header("X-XSS-Protection: 1; mode=block");
-// Feature 10: Auto-logout after inactivity
-if (!isset($_SESSION['LAST_ACTIVITY'])) {
-    $_SESSION['LAST_ACTIVITY'] = time();
-} else if (time() - $_SESSION['LAST_ACTIVITY'] > 1800) { // 30 minutes
-    session_unset();
-    session_destroy();
-    header("Location: login.php");
-}
-$_SESSION['LAST_ACTIVITY'] = time();
-// Feature 11: Add hints for questions
-if (!isset($_SESSION['hints_shown'])) {
-    $_SESSION['hints_shown'] = 0;
-}
-if ($_SESSION['hints_shown'] < 3) {
-    echo '<button onclick="showHint()">Show Hint</button>';
-    $_SESSION['hints_shown']++;
-}
-// Feature 12: Show progress as a percentage
-$totalQuestions = sizeof($_SESSION['question_IDS_fetched']);
-$progressPercentage = ($_SESSION['question_counter'] / $totalQuestions) * 100;
-echo '<div>Progress: ' . round($progressPercentage) . '%</div>';
-// Feature 13: Reset quiz option
-if (isset($_POST['reset_quiz'])) {
-    session_unset();
-    header("Location: start_quiz.php");
-}
-echo '<button onclick="resetQuiz()">Reset Quiz</button>';
-// Feature 14: AJAX-based question loading
-// Feature 15: Log IP address for each user action
-$ipAddress = $_SERVER['REMOTE_ADDR'];
-file_put_contents('user_actions.log', "User IP: $ipAddress - Action Time: " . date("Y-m-d H:i:s") . "\n", FILE_APPEND);
-$ipAddress = $_SERVER['REMOTE_ADDR'];
-file_put_contents('user_actions.log', "User IP: $ipAddress - Action Time: " . date("Y-m-d H:i:s") . "\n", FILE_APPEND);
-if (!isset($_SESSION['user_answers'])) {
-    $_SESSION['user_answers'] = [];
-}
-if (isset($_POST['answer'])) {
-    $_SESSION['user_answers'][$_SESSION['question_IDS_fetched'][$_SESSION['question_counter'] - 1]['question_id']] = $_POST['answer'];
-}
-
-
 
 function reviewAnswers() {
     // Review answers logic
