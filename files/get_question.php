@@ -156,6 +156,8 @@ echo '<button onclick="resetQuiz()">Reset Quiz</button>';
 // Feature 15: Log IP address for each user action
 $ipAddress = $_SERVER['REMOTE_ADDR'];
 file_put_contents('user_actions.log', "User IP: $ipAddress - Action Time: " . date("Y-m-d H:i:s") . "\n", FILE_APPEND);
+$ipAddress = $_SERVER['REMOTE_ADDR'];
+file_put_contents('user_actions.log', "User IP: $ipAddress - Action Time: " . date("Y-m-d H:i:s") . "\n", FILE_APPEND);
 
 
 
