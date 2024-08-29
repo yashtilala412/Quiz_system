@@ -68,6 +68,14 @@ var timer = setTimeout(function(){
     alert("Time up!"); 
     window.location.href = "results.php"; 
 }, 60000); // 60 seconds for example
+// Feature 1: Log timestamp when each question is fetched
+if (!isset($_SESSION['question_fetch_log'])) {
+    $_SESSION['question_fetch_log'] = [];
+}
+$_SESSION['question_fetch_log'][] = [
+    'question_id' => $_SESSION['question_IDS_fetched'][$_SESSION['question_counter']]['question_id'],
+    'timestamp' => time()
+];
 
 function saveAnswer() {
     // Save answer logic
