@@ -113,6 +113,16 @@ if ($_SESSION['skip_count'] >= 3) {
     $_SESSION['skip_count']++;
     // Logic to skip the question
 }
+// Feature 7: Display remaining time
+echo '<script>
+    var remainingTime = 60000; // Example: 60 seconds
+    setInterval(function() {
+        remainingTime -= 1000;
+        document.getElementById("timerDisplay").innerText = Math.floor(remainingTime / 1000) + " seconds left";
+    }, 1000);
+</script>';
+echo '<div id="timerDisplay">60 seconds left</div>';
+
 
 
 function reviewAnswers() {
