@@ -146,6 +146,12 @@ if ($_SESSION['hints_shown'] < 3) {
 $totalQuestions = sizeof($_SESSION['question_IDS_fetched']);
 $progressPercentage = ($_SESSION['question_counter'] / $totalQuestions) * 100;
 echo '<div>Progress: ' . round($progressPercentage) . '%</div>';
+// Feature 13: Reset quiz option
+if (isset($_POST['reset_quiz'])) {
+    session_unset();
+    header("Location: start_quiz.php");
+}
+echo '<button onclick="resetQuiz()">Reset Quiz</button>';
 
 
 
