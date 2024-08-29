@@ -76,6 +76,11 @@ $_SESSION['question_fetch_log'][] = [
     'question_id' => $_SESSION['question_IDS_fetched'][$_SESSION['question_counter']]['question_id'],
     'timestamp' => time()
 ];
+// Feature 2: Implement CSRF token
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+echo '<input type="hidden" name="csrf_token" value="' . $_SESSION['csrf_token'] . '">';
 
 function saveAnswer() {
     // Save answer logic
