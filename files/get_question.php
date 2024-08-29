@@ -134,6 +134,14 @@ if (!isset($_SESSION['LAST_ACTIVITY'])) {
     header("Location: login.php");
 }
 $_SESSION['LAST_ACTIVITY'] = time();
+// Feature 11: Add hints for questions
+if (!isset($_SESSION['hints_shown'])) {
+    $_SESSION['hints_shown'] = 0;
+}
+if ($_SESSION['hints_shown'] < 3) {
+    echo '<button onclick="showHint()">Show Hint</button>';
+    $_SESSION['hints_shown']++;
+}
 
 
 
