@@ -103,12 +103,17 @@ function saveAnswer() {
     // Save answer logic
 }
 // Feature 5: Auto-save user progress every 30 seconds
-echo '<script>
-    setInterval(function() {
-        // AJAX call to save progress
-        fetch("save_progress.php");
-    }, 30000); // 30 seconds
-</script>';
+// Feature 6: Limit the number of skips
+if (!isset($_SESSION['skip_count'])) {
+    $_SESSION['skip_count'] = 0;
+}
+if ($_SESSION['skip_count'] >= 3) {
+    echo '<div class="error">Skip limit reached!</div>';
+} else if (isset($_POST['skip_question'])) {
+    $_SESSION['skip_count']++;
+    // Logic to skip the question
+}
+
 
 function reviewAnswers() {
     // Review answers logic
