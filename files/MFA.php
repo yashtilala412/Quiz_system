@@ -67,6 +67,7 @@ $stmt = $conn->prepare("SELECT id, test_id, rollno, password, score, status FROM
 if (password_verify($student_password, $row2['password'])) {
     // proceed with login
 }
+error_log(date('Y-m-d H:i:s') . " - Error for user with Roll Number: $student_roll_number from IP: $user_ip - " . $e->getMessage());
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
