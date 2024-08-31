@@ -89,6 +89,9 @@ session_set_cookie_params([
     'samesite' => 'Strict' // Protect against CSRF
 ]);
 session_start();
+if ($conn === false) {
+    throw new Exception('Database connection failed: ' . mysqli_connect_error());
+}
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
