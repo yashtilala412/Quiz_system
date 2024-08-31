@@ -64,34 +64,6 @@
 $student_password = trim($_POST['password']);
 $email = filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL);
 $stmt = $conn->prepare("SELECT id, test_id, rollno, password, score, status FROM students WHERE rollno = ? AND status = 0");
-if (password_verify($student_password, $row2['password'])) {
-    // proceed with login
-}
-error_log(date('Y-m-d H:i:s') . " - Error for user with Roll Number: $student_roll_number from IP: $user_ip - " . $e->getMessage());
-$_SESSION['student_details'] = $row2;
-finally {
-    if (isset($stmt2)) {
-        mysqli_stmt_close($stmt2);
-    }
-    if (isset($conn)) {
-        mysqli_close($conn);
-    }
-}
-if ($_SESSION['failed_attempts'] > 5 && $_SESSION['last_attempt_time'] > time() - 900) { // 15 minutes
-    throw new Exception('Too many failed login attempts. Please try again later.');
-}
-session_set_cookie_params([
-    'lifetime' => 86400, // 1 day
-    'path' => '/',
-    'domain' => $_SERVER['HTTP_HOST'],
-    'secure' => true, // Only send cookies over HTTPS
-    'httponly' => true, // Only accessible via HTTP(S)
-    'samesite' => 'Strict' // Protect against CSRF
-]);
-session_start();
-if ($conn === false) {
-    throw new Exception('Database connection failed: ' . mysqli_connect_error());
-}
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
