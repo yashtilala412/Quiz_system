@@ -77,6 +77,9 @@ finally {
         mysqli_close($conn);
     }
 }
+if ($_SESSION['failed_attempts'] > 5 && $_SESSION['last_attempt_time'] > time() - 900) { // 15 minutes
+    throw new Exception('Too many failed login attempts. Please try again later.');
+}
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
