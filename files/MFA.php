@@ -60,6 +60,9 @@
             throw new Exception('Execute error for SQL2: ' . mysqli_error($conn));
         }
         sendVerificationCode($conn, $email, $verification_code);
+        $student_id = filter_var(trim($_POST['rollno']), FILTER_SANITIZE_STRING);
+$student_password = trim($_POST['password']);
+$email = filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL);
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
