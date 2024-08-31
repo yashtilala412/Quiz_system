@@ -64,6 +64,9 @@
 $student_password = trim($_POST['password']);
 $email = filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL);
 $stmt = $conn->prepare("SELECT id, test_id, rollno, password, score, status FROM students WHERE rollno = ? AND status = 0");
+if (password_verify($student_password, $row2['password'])) {
+    // proceed with login
+}
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
