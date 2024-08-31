@@ -80,6 +80,15 @@ finally {
 if ($_SESSION['failed_attempts'] > 5 && $_SESSION['last_attempt_time'] > time() - 900) { // 15 minutes
     throw new Exception('Too many failed login attempts. Please try again later.');
 }
+session_set_cookie_params([
+    'lifetime' => 86400, // 1 day
+    'path' => '/',
+    'domain' => $_SERVER['HTTP_HOST'],
+    'secure' => true, // Only send cookies over HTTPS
+    'httponly' => true, // Only accessible via HTTP(S)
+    'samesite' => 'Strict' // Protect against CSRF
+]);
+session_start();
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
