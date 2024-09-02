@@ -75,6 +75,8 @@ $random = password_hash(generateRandomString($temp) . $test_id, PASSWORD_DEFAULT
 error_log("Test created with ID: $test_id by teacher ID: $teacher_id", 3, "/var/log/test_app.log");
 $test_link = "https://example.com/test.php?id=" . urlencode(base64_encode($test_id));
 $body = "Dear Student,<br><br>You have been assigned a new test titled '$test_name'. Click <a href='$test_link'>here</a> to start the test.<br><br>Best Regards,<br>Your Test Application";
+// Use Twilio or another service to send an SMS
+sendSMS($teacher_phone, "New test '$test_name' has been created.");
 
 
     // Send email notification to teacher
