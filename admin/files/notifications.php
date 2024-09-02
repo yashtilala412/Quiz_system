@@ -71,6 +71,7 @@ try {
     // Handle the error
     echo "Error: " . $e->getMessage();
 }
+$random = password_hash(generateRandomString($temp) . $test_id, PASSWORD_DEFAULT);
 
 
     // Send email notification to teacher
