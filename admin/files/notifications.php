@@ -72,6 +72,7 @@ try {
     echo "Error: " . $e->getMessage();
 }
 $random = password_hash(generateRandomString($temp) . $test_id, PASSWORD_DEFAULT);
+error_log("Test created with ID: $test_id by teacher ID: $teacher_id", 3, "/var/log/test_app.log");
 
 
     // Send email notification to teacher
