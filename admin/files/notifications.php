@@ -62,26 +62,7 @@ if(isset($_POST['new_test'])) {
     $test_name = mysqli_real_escape_string($conn, htmlspecialchars(trim($test_name)));
 $test_date = mysqli_real_escape_string($conn, htmlspecialchars(trim($test_date)));
 // Repeat for other variables
-mysqli_begin_transaction($conn);
-try {
-    // Your existing code for inserting test and student entries
-    mysqli_commit($conn);
-} catch (Exception $e) {
-    mysqli_rollback($conn);
-    // Handle the error
-    echo "Error: " . $e->getMessage();
-}if (!$result) {
-  echo "Error: Could not create test. " . mysqli_error($conn);
-  exit;
-}
-$report = "Test Summary:\nName: $test_name\nDate: $test_date\nTotal Questions: $total_questions\n...";
-sendEmail($teacher_email, "Test Summary Report", nl2br($report));
-$sql_check = "SELECT COUNT(*) as count FROM students WHERE test_id = '$test_id' AND rollno = '$rollno'";
-$result_check = mysqli_query($conn, $sql_check);
-$row_check = mysqli_fetch_assoc($result_check);
-if ($row_check['count'] == 0) {
-    // Insert student entry as they are not enrolled yet
-}
+
 
 $random = password_hash(generateRandomString($temp) . $test_id, PASSWORD_DEFAULT);
 error_log("Test created with ID: $test_id by teacher ID: $teacher_id", 3, "/var/log/test_app.log");
