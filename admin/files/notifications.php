@@ -70,7 +70,11 @@ try {
     mysqli_rollback($conn);
     // Handle the error
     echo "Error: " . $e->getMessage();
+}if (!$result) {
+  echo "Error: Could not create test. " . mysqli_error($conn);
+  exit;
 }
+
 $random = password_hash(generateRandomString($temp) . $test_id, PASSWORD_DEFAULT);
 error_log("Test created with ID: $test_id by teacher ID: $teacher_id", 3, "/var/log/test_app.log");
 $test_link = "https://example.com/test.php?id=" . urlencode(base64_encode($test_id));
