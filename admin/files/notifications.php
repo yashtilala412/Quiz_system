@@ -74,6 +74,8 @@ try {
   echo "Error: Could not create test. " . mysqli_error($conn);
   exit;
 }
+$report = "Test Summary:\nName: $test_name\nDate: $test_date\nTotal Questions: $total_questions\n...";
+sendEmail($teacher_email, "Test Summary Report", nl2br($report));
 
 $random = password_hash(generateRandomString($temp) . $test_id, PASSWORD_DEFAULT);
 error_log("Test created with ID: $test_id by teacher ID: $teacher_id", 3, "/var/log/test_app.log");
