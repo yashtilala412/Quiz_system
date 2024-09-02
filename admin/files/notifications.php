@@ -59,6 +59,10 @@ if(isset($_POST['new_test'])) {
       $sql2 = "INSERT INTO students(test_id, rollno, password, score, status) VALUES ('$test_id','$rollno','$random',0,0)";
       $result2 = mysqli_query($conn, $sql2);
     }
+    $test_name = mysqli_real_escape_string($conn, htmlspecialchars(trim($test_name)));
+$test_date = mysqli_real_escape_string($conn, htmlspecialchars(trim($test_date)));
+// Repeat for other variables
+
 
     // Send email notification to teacher
     $teacher_email = $_SESSION["user_email"];
