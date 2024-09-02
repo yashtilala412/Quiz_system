@@ -62,6 +62,15 @@ if(isset($_POST['new_test'])) {
     $test_name = mysqli_real_escape_string($conn, htmlspecialchars(trim($test_name)));
 $test_date = mysqli_real_escape_string($conn, htmlspecialchars(trim($test_date)));
 // Repeat for other variables
+mysqli_begin_transaction($conn);
+try {
+    // Your existing code for inserting test and student entries
+    mysqli_commit($conn);
+} catch (Exception $e) {
+    mysqli_rollback($conn);
+    // Handle the error
+    echo "Error: " . $e->getMessage();
+}
 
 
     // Send email notification to teacher
