@@ -612,6 +612,50 @@ function delete_question(temp, testid) {
     });
   }
 }
+function showSuccessMessage(message) {
+  var successMsgElement = document.getElementById("success-message");
+  successMsgElement.innerText = message;
+  successMsgElement.style.display = "block";
+}
+
+function completed() {
+  if (confirm("Are you sure you want to mark this as completed?")) {
+    document.getElementById("completed-btn").disabled = true;
+    showLoadingSpinner();
+    document.getElementById("form-completed").submit();
+    clearFormFields("form-completed");
+    showSuccessMessage("Form marked as completed successfully!"); // Show success message
+  }
+}
+
+// Similar changes for other functions...
+
+function delete_question(temp, testid) {
+  var temp1 = document.getElementById(temp);
+  if (confirm("Are you sure you want to delete this question?")) {
+    document.getElementById("delete-question-btn").disabled = true;
+    showLoadingSpinner();
+    temp1.style.display = 'none';
+    $.ajax({
+      type: 'POST',
+      url: 'delete_question.php',
+      data: {
+        'question_id': temp,
+        'test_id': testid,
+      },
+      success: function (response) {
+        hideLoadingSpinner();
+        clearFormFields("form-deleted");
+        showSuccessMessage("Question deleted successfully!"); // Show success message
+        // Additional success handling can be added here
+      },
+      error: function (xhr, status, error) {
+        hideLoadingSpinner();
+        alert("An error occurred while deleting the question: " + error);
+      }
+    });
+  }
+}
 
 
 </script>
