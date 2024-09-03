@@ -666,6 +666,28 @@ function delete_question(temp, testid) {
     });
   }
 }
+function handleSubmit(event, formId) {
+  event.preventDefault(); // Prevent default form submission
+  if (confirm("Are you sure you want to submit this form?")) {
+    document.getElementById(formId).submit();
+  }
+}
+
+document.getElementById("form-completed").addEventListener("submit", function(event) {
+  handleSubmit(event, "form-completed");
+});
+
+document.getElementById("form-deleted").addEventListener("submit", function(event) {
+  handleSubmit(event, "form-deleted");
+});
+
+document.getElementById("form-student-data").addEventListener("submit", function(event) {
+  handleSubmit(event, "form-student-data");
+});
+
+document.getElementById("form-file-upload").addEventListener("submit", function(event) {
+  handleSubmit(event, "form-file-upload");
+});
 
 
 </script>
