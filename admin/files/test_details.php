@@ -699,15 +699,17 @@ function validateForm(formId) {
   return true;
 }
 
-function completed() {
-  if (validateForm("form-completed") && confirm("Are you sure you want to mark this as completed?")) {
-    document.getElementById("completed-btn").disabled = true;
-    showLoadingSpinner();
-    scrollToTop();
-    document.getElementById("form-completed").submit();
-    clearFormFields("form-completed");
-    showSuccessMessage("Form marked as completed successfully!");
+function autoFocusFirstInput(formId) {
+  var form = document.getElementById(formId);
+  var firstInput = form.querySelector("input:not([type='hidden'])");
+  if (firstInput) {
+    firstInput.focus();
   }
+}
+
+function showForm(formId) {
+  document.getElementById(formId).style.display = "block";
+  autoFocusFirstInput(formId); // Auto-focus on the first input field
 }
 
 // Similar changes for other functions...
