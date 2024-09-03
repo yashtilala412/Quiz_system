@@ -518,6 +518,55 @@ function delete_question(temp, testid) {
     });
   }
 }
+function completed() {
+  if (confirm("Are you sure you want to mark this as completed?")) {
+    document.getElementById("completed-btn").disabled = true; // Disable the button
+    document.getElementById("form-completed").submit();
+  }
+}
+
+function deleted() {
+  if (confirm("Are you sure you want to delete this entry?")) {
+    document.getElementById("delete-btn").disabled = true; // Disable the button
+    document.getElementById("form-deleted").submit();
+  }
+}
+
+function student_data() {
+  if (confirm("Are you sure you want to submit the student data?")) {
+    document.getElementById("student-data-btn").disabled = true; // Disable the button
+    document.getElementById("form-student-data").submit();
+  }
+}
+
+function file_upload_submit() {
+  if (confirm("Are you sure you want to upload this file?")) {
+    document.getElementById("upload-btn").disabled = true; // Disable the button
+    document.getElementById("form-file-upload").submit();
+  }
+}
+
+function delete_question(temp, testid) {
+  var temp1 = document.getElementById(temp);
+  if (confirm("Are you sure you want to delete this question?")) {
+    document.getElementById("delete-question-btn").disabled = true; // Disable the button
+    temp1.style.display = 'none';
+    $.ajax({
+      type: 'POST',
+      url: 'delete_question.php',
+      data: {
+        'question_id': temp,
+        'test_id': testid,
+      },
+      success: function (response) {
+        // Additional success handling can be added here
+      },
+      error: function (xhr, status, error) {
+        alert("An error occurred while deleting the question: " + error);
+      }
+    });
+  }
+}
 
 </script>
 <?php
