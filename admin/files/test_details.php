@@ -475,35 +475,49 @@ if($result1) {
     });
 
     function completed() {
-      document.getElementById("form-completed").submit();
-    }
+  if (confirm("Are you sure you want to mark this as completed?")) {
+    document.getElementById("form-completed").submit();
+  }
+}
 
-    function deleted() {
-      document.getElementById("form-deleted").submit();
-    }
+function deleted() {
+  if (confirm("Are you sure you want to delete this entry?")) {
+    document.getElementById("form-deleted").submit();
+  }
+}
 
-    function student_data() {
-      document.getElementById("form-student-data").submit();
-    }
+function student_data() {
+  if (confirm("Are you sure you want to submit the student data?")) {
+    document.getElementById("form-student-data").submit();
+  }
+}
 
-    function file_upload_submit() {
-      document.getElementById("form-file-upload").submit();
-    }
+function file_upload_submit() {
+  if (confirm("Are you sure you want to upload this file?")) {
+    document.getElementById("form-file-upload").submit();
+  }
+}
 
-    function delete_question(temp,testid) {
-      var temp1 = document.getElementById(temp);
-      temp1.style.display = 'none';
-      $.ajax({
-          type: 'POST',
-          url: 'delete_question.php',
-          data: {
-            'question_id': temp,
-            'test_id': testid,
-          },
-          success: function (response) {
-          }
-      });
-    }
+function delete_question(temp, testid) {
+  var temp1 = document.getElementById(temp);
+  if (confirm("Are you sure you want to delete this question?")) {
+    temp1.style.display = 'none';
+    $.ajax({
+      type: 'POST',
+      url: 'delete_question.php',
+      data: {
+        'question_id': temp,
+        'test_id': testid,
+      },
+      success: function (response) {
+        // Additional success handling can be added here
+      },
+      error: function (xhr, status, error) {
+        alert("An error occurred while deleting the question: " + error);
+      }
+    });
+  }
+}
 
 </script>
 <?php
