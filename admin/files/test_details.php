@@ -630,11 +630,20 @@ function completed() {
 
 // Similar changes for other functions...
 
+function showAjaxLoading() {
+  document.getElementById("ajax-loading").style.display = "block";
+}
+
+function hideAjaxLoading() {
+  document.getElementById("ajax-loading").style.display = "none";
+}
+
 function delete_question(temp, testid) {
   var temp1 = document.getElementById(temp);
   if (confirm("Are you sure you want to delete this question?")) {
     document.getElementById("delete-question-btn").disabled = true;
     showLoadingSpinner();
+    showAjaxLoading(); // Show AJAX loading
     temp1.style.display = 'none';
     $.ajax({
       type: 'POST',
@@ -645,12 +654,13 @@ function delete_question(temp, testid) {
       },
       success: function (response) {
         hideLoadingSpinner();
+        hideAjaxLoading(); // Hide AJAX loading
         clearFormFields("form-deleted");
-        showSuccessMessage("Question deleted successfully!"); // Show success message
-        // Additional success handling can be added here
+        showSuccessMessage("Question deleted successfully!");
       },
       error: function (xhr, status, error) {
         hideLoadingSpinner();
+        hideAjaxLoading(); // Hide AJAX loading
         alert("An error occurred while deleting the question: " + error);
       }
     });
