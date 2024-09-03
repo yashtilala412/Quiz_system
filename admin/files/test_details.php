@@ -713,6 +713,23 @@ function disableFieldsForRole(role) {
 }
 
 disableFieldsForRole("viewer"); // Example usage
+function logSubmissionAttempt(formId) {
+  console.log("Form submission attempt: " + formId);
+}
+
+function completed() {
+  logSubmissionAttempt("form-completed"); // Log submission attempt
+  if (validateForm("form-completed") && confirm("Are you sure you want to mark this as completed?")) {
+    document.getElementById("completed-btn").disabled = true;
+    showLoadingSpinner();
+    scrollToTop();
+    document.getElementById("form-completed").submit();
+    clearFormFields("form-completed");
+    showSuccessMessage("Form marked as completed successfully!");
+  }
+}
+
+// Similar changes for other functions...
 
 // Similar changes for other functions...
 
