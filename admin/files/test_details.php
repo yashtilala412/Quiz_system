@@ -666,28 +666,41 @@ function delete_question(temp, testid) {
     });
   }
 }
-function handleSubmit(event, formId) {
-  event.preventDefault(); // Prevent default form submission
-  if (confirm("Are you sure you want to submit this form?")) {
-    document.getElementById(formId).submit();
+function highlightFieldWithError(fieldId) {
+  var field = document.getElementById(fieldId);
+  field.style.border = "2px solid red";
+}
+
+function delete_question(temp, testid) {
+  var temp1 = document.getElementById(temp);
+  if (confirm("Are you sure you want to delete this question?")) {
+    document.getElementById("delete-question-btn").disabled = true;
+    showLoadingSpinner();
+    showAjaxLoading();
+    temp1.style.display = 'none';
+    $.ajax({
+      type: 'POST',
+      url: 'delete_question.php',
+      data: {
+        'question_id': temp,
+        'test_id': testid,
+      },
+      success: function (response) {
+        hideLoadingSpinner();
+        hideAjaxLoading();
+        clearFormFields("form-deleted");
+        showSuccessMessage("Question deleted successfully!");
+      },
+      error: function (xhr, status, error) {
+        hideLoadingSpinner();
+        hideAjaxLoading();
+        alert("An error occurred while deleting the question: " + error);
+        highlightFieldWithError(temp); // Highlight field with error
+      }
+    });
   }
 }
 
-document.getElementById("form-completed").addEventListener("submit", function(event) {
-  handleSubmit(event, "form-completed");
-});
-
-document.getElementById("form-deleted").addEventListener("submit", function(event) {
-  handleSubmit(event, "form-deleted");
-});
-
-document.getElementById("form-student-data").addEventListener("submit", function(event) {
-  handleSubmit(event, "form-student-data");
-});
-
-document.getElementById("form-file-upload").addEventListener("submit", function(event) {
-  handleSubmit(event, "form-file-upload");
-});
 
 
 </script>
