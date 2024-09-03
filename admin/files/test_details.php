@@ -671,35 +671,23 @@ function highlightFieldWithError(fieldId) {
   field.style.border = "2px solid red";
 }
 
-function delete_question(temp, testid) {
-  var temp1 = document.getElementById(temp);
-  if (confirm("Are you sure you want to delete this question?")) {
-    document.getElementById("delete-question-btn").disabled = true;
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function completed() {
+  if (confirm("Are you sure you want to mark this as completed?")) {
+    document.getElementById("completed-btn").disabled = true;
     showLoadingSpinner();
-    showAjaxLoading();
-    temp1.style.display = 'none';
-    $.ajax({
-      type: 'POST',
-      url: 'delete_question.php',
-      data: {
-        'question_id': temp,
-        'test_id': testid,
-      },
-      success: function (response) {
-        hideLoadingSpinner();
-        hideAjaxLoading();
-        clearFormFields("form-deleted");
-        showSuccessMessage("Question deleted successfully!");
-      },
-      error: function (xhr, status, error) {
-        hideLoadingSpinner();
-        hideAjaxLoading();
-        alert("An error occurred while deleting the question: " + error);
-        highlightFieldWithError(temp); // Highlight field with error
-      }
-    });
+    scrollToTop(); // Scroll to top
+    document.getElementById("form-completed").submit();
+    clearFormFields("form-completed");
+    showSuccessMessage("Form marked as completed successfully!");
   }
 }
+
+// Similar changes for other functions...
+
 
 
 
