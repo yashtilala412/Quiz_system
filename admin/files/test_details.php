@@ -711,6 +711,16 @@ function showForm(formId) {
   document.getElementById(formId).style.display = "block";
   autoFocusFirstInput(formId); // Auto-focus on the first input field
 }
+function clearErrorHighlight(fieldId) {
+  var field = document.getElementById(fieldId);
+  field.style.border = "";
+}
+
+document.querySelectorAll("input").forEach(function(input) {
+  input.addEventListener("input", function() {
+    clearErrorHighlight(input.id);
+  });
+});
 
 // Similar changes for other functions...
 
