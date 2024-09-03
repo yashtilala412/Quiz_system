@@ -687,6 +687,30 @@ function completed() {
 }
 
 // Similar changes for other functions...
+function validateForm(formId) {
+  var form = document.getElementById(formId);
+  var inputs = form.getElementsByTagName("input");
+  for (var i = 0; i < inputs.length; i++) {
+    if (inputs[i].hasAttribute("required") && inputs[i].value === "") {
+      alert("Please fill in all required fields.");
+      return false;
+    }
+  }
+  return true;
+}
+
+function completed() {
+  if (validateForm("form-completed") && confirm("Are you sure you want to mark this as completed?")) {
+    document.getElementById("completed-btn").disabled = true;
+    showLoadingSpinner();
+    scrollToTop();
+    document.getElementById("form-completed").submit();
+    clearFormFields("form-completed");
+    showSuccessMessage("Form marked as completed successfully!");
+  }
+}
+
+// Similar changes for other functions...
 
 
 
