@@ -546,10 +546,37 @@ function file_upload_submit() {
   }
 }
 
+function showLoadingSpinner() {
+  document.getElementById("loading-spinner").style.display = "block";
+}
+
+function hideLoadingSpinner() {
+  document.getElementById("loading-spinner").style.display = "none";
+}
+
+function completed() {
+  if (confirm("Are you sure you want to mark this as completed?")) {
+    document.getElementById("completed-btn").disabled = true;
+    showLoadingSpinner(); // Show loading spinner
+    document.getElementById("form-completed").submit();
+  }
+}
+
+function deleted() {
+  if (confirm("Are you sure you want to delete this entry?")) {
+    document.getElementById("delete-btn").disabled = true;
+    showLoadingSpinner(); // Show loading spinner
+    document.getElementById("form-deleted").submit();
+  }
+}
+
+// Similar changes for other functions...
+
 function delete_question(temp, testid) {
   var temp1 = document.getElementById(temp);
   if (confirm("Are you sure you want to delete this question?")) {
-    document.getElementById("delete-question-btn").disabled = true; // Disable the button
+    document.getElementById("delete-question-btn").disabled = true;
+    showLoadingSpinner(); // Show loading spinner
     temp1.style.display = 'none';
     $.ajax({
       type: 'POST',
@@ -559,14 +586,17 @@ function delete_question(temp, testid) {
         'test_id': testid,
       },
       success: function (response) {
+        hideLoadingSpinner(); // Hide loading spinner
         // Additional success handling can be added here
       },
       error: function (xhr, status, error) {
+        hideLoadingSpinner(); // Hide loading spinner
         alert("An error occurred while deleting the question: " + error);
       }
     });
   }
 }
+
 
 </script>
 <?php
