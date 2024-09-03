@@ -706,21 +706,13 @@ function autoFocusFirstInput(formId) {
     firstInput.focus();
   }
 }
-
-function showForm(formId) {
-  document.getElementById(formId).style.display = "block";
-  autoFocusFirstInput(formId); // Auto-focus on the first input field
-}
-function clearErrorHighlight(fieldId) {
-  var field = document.getElementById(fieldId);
-  field.style.border = "";
+function disableFieldsForRole(role) {
+  if (role === "viewer") {
+    document.getElementById("editable-field").disabled = true; // Disable specific field
+  }
 }
 
-document.querySelectorAll("input").forEach(function(input) {
-  input.addEventListener("input", function() {
-    clearErrorHighlight(input.id);
-  });
-});
+disableFieldsForRole("viewer"); // Example usage
 
 // Similar changes for other functions...
 
