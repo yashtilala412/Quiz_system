@@ -107,14 +107,7 @@ setcookie('session', $session_id, [
     'httponly' => true // Prevent JavaScript from accessing the cookie
 ]);
 // Add Content Security Policy header
-header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none';");
-// Session expiry after 30 minutes of inactivity
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 1800)) {
-    session_unset(); // Unset session variables
-    session_destroy(); // Destroy the session
-    die("Session expired. Please log in again.");
-}
-$_SESSION['last_activity'] = time();
+
 
 // Prevent clickjacking
 header('X-Frame-Options: DENY');
