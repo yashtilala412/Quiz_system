@@ -92,6 +92,10 @@ if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
     exit();
 }
+// Time-based failed login limit
+if (isset($_SESSION['failed_logins']) && $_SESSION['failed_logins'] > 5 && time() - $_SESSION['last_attempt_time'] < 900) {
+    die("Account locked due to too many failed login attempts. Try again later.");
+}
 
 // Prevent clickjacking
 header('X-Frame-Options: DENY');
