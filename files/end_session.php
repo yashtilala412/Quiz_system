@@ -106,6 +106,8 @@ setcookie('session', $session_id, [
     'secure' => true,  // Ensure cookie is sent over HTTPS only
     'httponly' => true // Prevent JavaScript from accessing the cookie
 ]);
+// Add Content Security Policy header
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none';");
 
 // Prevent clickjacking
 header('X-Frame-Options: DENY');
