@@ -96,6 +96,8 @@ if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
 if (isset($_SESSION['failed_logins']) && $_SESSION['failed_logins'] > 5 && time() - $_SESSION['last_attempt_time'] < 900) {
     die("Account locked due to too many failed login attempts. Try again later.");
 }
+// Sanitize email input for database query
+$email_sanitized = mysqli_real_escape_string($conn, $email);
 
 // Prevent clickjacking
 header('X-Frame-Options: DENY');
