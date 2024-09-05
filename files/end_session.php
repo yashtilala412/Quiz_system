@@ -87,6 +87,11 @@ if ($_SESSION['failed_logins'] > 5) {
 
 // Encrypt sensitive data
 $encrypted_data = openssl_encrypt($sensitive_data, 'aes-256-cbc', 'encryption_key', 0, 'iv12345678901234');
+// Force HTTPS
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+    exit();
+}
 
 // Prevent clickjacking
 header('X-Frame-Options: DENY');
