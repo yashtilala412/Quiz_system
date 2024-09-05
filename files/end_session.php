@@ -98,6 +98,14 @@ if (isset($_SESSION['failed_logins']) && $_SESSION['failed_logins'] > 5 && time(
 }
 // Sanitize email input for database query
 $email_sanitized = mysqli_real_escape_string($conn, $email);
+// Set secure cookie flags
+setcookie('session', $session_id, [
+    'expires' => time() + 3600,
+    'path' => '/',
+    'domain' => $_SERVER['HTTP_HOST'],
+    'secure' => true,  // Ensure cookie is sent over HTTPS only
+    'httponly' => true // Prevent JavaScript from accessing the cookie
+]);
 
 // Prevent clickjacking
 header('X-Frame-Options: DENY');
