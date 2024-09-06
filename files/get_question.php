@@ -57,8 +57,11 @@ function fetchAndReturnQuestion($question)
             $fetched_question = $row;
         }
         echo json_encode($fetched_question);
+    } else {
+        echo json_encode(["error" => "No questions found"]);
     }
 }
+
 
 mysqli_close($conn);
 ?>
