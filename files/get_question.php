@@ -52,7 +52,15 @@ function getQuestion($conn, $isFirst)
 
 function fetchAndReturnQuestion($question, $limit = 1, $offset = 0)
 {
+    $cache_file = 'question_cache.json'; // Cache file path
     $log_file = 'question_log.txt'; // Log file path
+    if (file_exists($cache_file)) {
+        // Return cached data if available
+        $cached_data = file_get_contents($cache_file);
+        echo $cached_data;
+        return;
+    }
+    
     $fetched_questions = [];
     if (mysqli_num_rows($question) > 0) {
         $count = 0;
@@ -73,7 +81,10 @@ function fetchAndReturnQuestion($question, $limit = 1, $offset = 0)
                 "offset" => $offset,
             ]
         ];
-        echo json_encode($response); // Return questions and metadata
+        $json_response = json_encode($response);
+        // Cache the response
+        file_put_contents($cache_file, $json_response);
+        echo $json_response; // Return questions and metadata
     } else {
         echo json_encode(["error" => "No questions found"]);
     }
