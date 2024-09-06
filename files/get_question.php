@@ -50,13 +50,16 @@ function getQuestion($conn, $isFirst)
     }
 }
 
-function fetchAndReturnQuestion($question, $limit = 1, $offset = 0)
+function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = false)
 {
     $cache_file = 'question_cache.json'; // Cache file path
     $log_file = 'question_log.txt'; // Log file path
     if (file_exists($cache_file)) {
         // Return cached data if available
         $cached_data = file_get_contents($cache_file);
+        if ($debug) {
+            echo "Returning from cache: ";
+        }
         echo $cached_data;
         return;
     }
@@ -84,6 +87,9 @@ function fetchAndReturnQuestion($question, $limit = 1, $offset = 0)
         $json_response = json_encode($response);
         // Cache the response
         file_put_contents($cache_file, $json_response);
+        if ($debug) {
+            echo "Returning fetched questions: ";
+        }
         echo $json_response; // Return questions and metadata
     } else {
         echo json_encode(["error" => "No questions found"]);
