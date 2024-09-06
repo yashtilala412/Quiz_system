@@ -52,9 +52,12 @@ function getQuestion($conn, $isFirst)
 
 function fetchAndReturnQuestion($question)
 {
+    $log_file = 'question_log.txt'; // Log file path
     if (mysqli_num_rows($question) > 0) {
         while ($row = mysqli_fetch_assoc($question)) {
             $fetched_question = $row;
+            // Log the fetched question
+            file_put_contents($log_file, json_encode($fetched_question) . PHP_EOL, FILE_APPEND);
         }
         echo json_encode($fetched_question);
     } else {
