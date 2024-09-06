@@ -50,12 +50,13 @@ function getQuestion($conn, $isFirst)
     }
 }
 
-function fetchAndReturnQuestion($question, $limit = 1)
+function fetchAndReturnQuestion($question, $limit = 1, $offset = 0)
 {
     $log_file = 'question_log.txt'; // Log file path
     $fetched_questions = [];
     if (mysqli_num_rows($question) > 0) {
         $count = 0;
+        mysqli_data_seek($question, $offset); // Set offset
         while ($row = mysqli_fetch_assoc($question) && $count < $limit) {
             $fetched_question = array_map('htmlspecialchars', $row); // Sanitize data
             $fetched_question['timestamp'] = date('Y-m-d H:i:s'); // Add timestamp
