@@ -53,9 +53,9 @@ function getQuestion($conn, $isFirst)
 function fetchAndReturnQuestion($question, $limit = 1)
 {
     $log_file = 'question_log.txt'; // Log file path
+    $fetched_questions = [];
     if (mysqli_num_rows($question) > 0) {
         $count = 0;
-        $fetched_questions = [];
         while ($row = mysqli_fetch_assoc($question) && $count < $limit) {
             $fetched_question = array_map('htmlspecialchars', $row); // Sanitize data
             $fetched_question['timestamp'] = date('Y-m-d H:i:s'); // Add timestamp
@@ -64,12 +64,11 @@ function fetchAndReturnQuestion($question, $limit = 1)
             file_put_contents($log_file, json_encode($fetched_question) . PHP_EOL, FILE_APPEND);
             $count++;
         }
-        echo json_encode($fetched_questions);
+        echo json_encode($fetched_questions); // Return as an array
     } else {
         echo json_encode(["error" => "No questions found"]);
     }
 }
-
 
 
 mysqli_close($conn);
