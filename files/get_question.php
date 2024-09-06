@@ -65,7 +65,15 @@ function fetchAndReturnQuestion($question, $limit = 1, $offset = 0)
             file_put_contents($log_file, json_encode($fetched_question) . PHP_EOL, FILE_APPEND);
             $count++;
         }
-        echo json_encode($fetched_questions); // Return as an array
+        $response = [
+            "questions" => $fetched_questions,
+            "metadata" => [
+                "total_questions" => mysqli_num_rows($question),
+                "limit" => $limit,
+                "offset" => $offset,
+            ]
+        ];
+        echo json_encode($response); // Return questions and metadata
     } else {
         echo json_encode(["error" => "No questions found"]);
     }
