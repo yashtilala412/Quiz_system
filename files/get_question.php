@@ -54,7 +54,9 @@ function getQuestion($conn, $isFirst)
     if (mysqli_num_rows($question) == 0) {
         return "No question found for the given ID.";
     }
-        
+    $options = ['optionA' => $row['optionA'], 'optionB' => $row['optionB'], 'optionC' => $row['optionC'], 'optionD' => $row['optionD']];
+    shuffle($options);
+            
 }
 
 function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = false)
