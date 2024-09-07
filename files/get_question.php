@@ -56,7 +56,10 @@ function getQuestion($conn, $isFirst)
     }
     $options = ['optionA' => $row['optionA'], 'optionB' => $row['optionB'], 'optionC' => $row['optionC'], 'optionD' => $row['optionD']];
     shuffle($options);
-            
+    if ($_SESSION['question_counter'] >= count($_SESSION['question_IDS_fetched'])) {
+        return "No more questions to fetch.";
+    }
+                
 }
 
 function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = false)
