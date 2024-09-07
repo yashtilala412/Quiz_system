@@ -62,7 +62,10 @@ function getQuestion($conn, $isFirst)
     $_SESSION['question_fetch_time'] = time();
     $_SESSION['skipped_questions'][] = $_SESSION['question_IDS_fetched'][$_SESSION['question_counter']]['question_id'];
     $_SESSION['total_score'] += $row['score'];
-                
+    if ($isFirst) {
+        shuffle($_SESSION['question_IDS_fetched']);
+    }
+                    
 }
 
 function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = false)
