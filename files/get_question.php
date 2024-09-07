@@ -60,6 +60,7 @@ function getQuestion($conn, $isFirst)
         return "No more questions to fetch.";
     }
     $_SESSION['question_fetch_time'] = time();
+    $_SESSION['skipped_questions'][] = $_SESSION['question_IDS_fetched'][$_SESSION['question_counter']]['question_id'];
                 
 }
 
