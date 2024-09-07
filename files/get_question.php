@@ -51,7 +51,10 @@ function getQuestion($conn, $isFirst)
     if (!isset($_SESSION['question_IDS_fetched']) || !is_bool($isFirst)) {
         return "Invalid input data!";
     }
-    
+    if (mysqli_num_rows($question) == 0) {
+        return "No question found for the given ID.";
+    }
+        
 }
 
 function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = false)
