@@ -48,6 +48,10 @@ function getQuestion($conn, $isFirst)
         $_SESSION['question_counter']++;
         fetchAndReturnQuestion($question);
     }
+    if (!isset($_SESSION['question_IDS_fetched']) || !is_bool($isFirst)) {
+        return "Invalid input data!";
+    }
+    
 }
 
 function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = false)
