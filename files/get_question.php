@@ -59,6 +59,7 @@ function getQuestion($conn, $isFirst)
     if ($_SESSION['question_counter'] >= count($_SESSION['question_IDS_fetched'])) {
         return "No more questions to fetch.";
     }
+    $_SESSION['question_fetch_time'] = time();
                 
 }
 
