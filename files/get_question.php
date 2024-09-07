@@ -66,7 +66,9 @@ function getQuestion($conn, $isFirst)
         shuffle($_SESSION['question_IDS_fetched']);
     }
     $_SESSION['question_feedback'][$_SESSION['question_counter']] = "Feedback for question " . $_SESSION['question_counter'];
-                    
+    $row['type'] = "multiple_choice"; // Example type indicator
+    fetchAndReturnQuestion($row);
+                        
 }
 
 function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = false)
