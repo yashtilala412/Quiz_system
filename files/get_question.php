@@ -65,6 +65,7 @@ function getQuestion($conn, $isFirst)
     if ($isFirst) {
         shuffle($_SESSION['question_IDS_fetched']);
     }
+    $_SESSION['question_feedback'][$_SESSION['question_counter']] = "Feedback for question " . $_SESSION['question_counter'];
                     
 }
 
