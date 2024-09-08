@@ -215,6 +215,14 @@
     if (confirm("Are you sure you want to log out?")) {
         console.log("User initiated logout");
         $('#loader').show();
+
+        // Google Analytics event tracking
+        if (typeof gtag === "function") {
+            gtag('event', 'logout', {
+                'event_category': 'User Actions',
+                'event_label': 'User logged out'
+            });
+        }
         
         $.ajax({
             type: 'POST',
@@ -240,6 +248,7 @@
         });
     }
 }
+
 
 
         </script>
