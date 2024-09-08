@@ -213,6 +213,9 @@
 
             function logout(){
     if (confirm("Are you sure you want to log out?")) {
+        // Show loading animation
+        $('#loader').show();
+        
         $.ajax({
             type: 'POST',
             url: 'end_session.php',
@@ -225,10 +228,15 @@
                 Cookies.remove('last_question');
                 Cookies.set('test_submitted_status', msg.toString());
                 window.location.replace("test_finished.php");
+            },
+            complete: function() {
+                // Hide loading animation
+                $('#loader').hide();
             }
         });
     }
 }
+
 
         </script>
     </body>
