@@ -212,21 +212,24 @@
             }
 
             function logout(){
-                $.ajax({
-                        type: 'POST',
-                        url: 'end_session.php',
-                        data: { 
-                            'message': '1',
-                        },
-                        success: function(msg){
-                            alert(msg);
-                            Cookies.remove('last_question_was_answered');
-                            Cookies.remove('last_question');
-                            Cookies.set('test_submitted_status', msg.toString());
-                            window.location.replace("test_finished.php");
-                        }
-                });
+    if (confirm("Are you sure you want to log out?")) {
+        $.ajax({
+            type: 'POST',
+            url: 'end_session.php',
+            data: { 
+                'message': '1',
+            },
+            success: function(msg){
+                alert(msg);
+                Cookies.remove('last_question_was_answered');
+                Cookies.remove('last_question');
+                Cookies.set('test_submitted_status', msg.toString());
+                window.location.replace("test_finished.php");
             }
+        });
+    }
+}
+
         </script>
     </body>
 </html>
