@@ -213,7 +213,6 @@
 
             function logout(){
     if (confirm("Are you sure you want to log out?")) {
-        // Show loading animation
         $('#loader').show();
         
         $.ajax({
@@ -229,14 +228,15 @@
                 Cookies.set('test_submitted_status', msg.toString());
                 window.location.replace("test_finished.php");
             },
+            error: function(xhr, status, error){
+                alert("Error occurred during logout. Please try again.");
+            },
             complete: function() {
-                // Hide loading animation
                 $('#loader').hide();
             }
         });
     }
 }
-
 
         </script>
     </body>
