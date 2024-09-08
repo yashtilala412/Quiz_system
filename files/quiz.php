@@ -213,6 +213,7 @@
 
             function logout(){
     if (confirm("Are you sure you want to log out?")) {
+        console.log("User initiated logout");
         $('#loader').show();
         
         $.ajax({
@@ -226,9 +227,11 @@
                 Cookies.remove('last_question_was_answered');
                 Cookies.remove('last_question');
                 Cookies.set('test_submitted_status', msg.toString());
+                console.log("Logout successful");
                 window.location.replace("test_finished.php");
             },
             error: function(xhr, status, error){
+                console.error("Error during logout: " + error);
                 alert("Error occurred during logout. Please try again.");
             },
             complete: function() {
@@ -237,6 +240,7 @@
         });
     }
 }
+
 
         </script>
     </body>
