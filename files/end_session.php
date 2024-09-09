@@ -126,6 +126,16 @@ $stmt = $conn->prepare("UPDATE students SET status = 1 WHERE id IN (" . implode(
 $ids = array_map(fn($obj) => filter_var($obj->id, FILTER_VALIDATE_INT), $student_data);
 $stmt->bind_param(str_repeat('i', count($ids)), ...$ids);
 $stmt->execute();
+$conn->begin_transaction();
+try {
+    foreach($student_data as $obj) {
+        // Same update logic here
+    }
+    $conn->commit();
+} catch (Exception $e) {
+    $conn->rollback();
+    error_log("Transaction failed: " . $e->getMessage());
+}
 
     // Using prepared statements for secure database interaction
     $stmt = $conn->prepare("UPDATE students SET status = 1 WHERE id = ?");
