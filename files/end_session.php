@@ -136,6 +136,12 @@ try {
     $conn->rollback();
     error_log("Transaction failed: " . $e->getMessage());
 }
+if (!isset($_SESSION['last_activity']) || (time() - $_SESSION['last_activity'] > 1800)) {
+    session_unset();
+    session_destroy();
+    die("Session timed out.");
+}
+$_SESSION['last_activity'] = time();
 
     // Using prepared statements for secure database interaction
     $stmt = $conn->prepare("UPDATE students SET status = 1 WHERE id = ?");
