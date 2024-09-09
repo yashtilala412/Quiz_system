@@ -122,6 +122,10 @@ file_put_contents($log_file, "Updated student ID: $student_id\n", FILE_APPEND);
 if (!$stmt->execute()) {
     error_log("Error updating student ID $student_id: " . $stmt->error);
 }
+$stmt = $conn->prepare("UPDATE students SET status = 1 WHERE id IN (" . implode(',', array_fill(0, count($student_data), '?')) . ")");
+$ids = array_map(fn($obj) => filter_var($obj->id, FILTER_VALIDATE_INT), $student_data);
+$stmt->bind_param(str_repeat('i', count($ids)), ...$ids);
+$stmt->execute();
 
     // Using prepared statements for secure database interaction
     $stmt = $conn->prepare("UPDATE students SET status = 1 WHERE id = ?");
