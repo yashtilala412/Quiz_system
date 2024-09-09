@@ -117,6 +117,9 @@ $temp = $_SESSION['student_details'] ?? '';
 $student_data = json_decode($temp);
 
 if ($student_data && is_array($student_data)) {
+    $log_file = 'student_updates.log';
+file_put_contents($log_file, "Updated student ID: $student_id\n", FILE_APPEND);
+
     // Using prepared statements for secure database interaction
     $stmt = $conn->prepare("UPDATE students SET status = 1 WHERE id = ?");
     foreach($student_data as $obj) {
