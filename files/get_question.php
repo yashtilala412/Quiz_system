@@ -35,6 +35,12 @@ if (mysqli_num_rows($result) == 0) {
     exit();
 }
 mysqli_query($conn, "INSERT INTO user_test_data (user_id, test_id, question_id, start_time) VALUES ('" . $_SESSION['user_id'] . "', '" . $test_id . "', '" . $current_question_id . "', NOW())");
+if (isset($_GET['restart_test']) && $_GET['restart_test'] == 1) {
+    unset($_SESSION['question_IDS_fetched']);
+    unset($_SESSION['question_counter']);
+    unset($_SESSION['answered_questions']);
+    echo 'Test restarted.';
+}
 
 // Check connection
 if (!$conn) {
