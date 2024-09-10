@@ -18,6 +18,10 @@ if (!isset($_SESSION['answered_questions'])) {
 }
 // After getting the question
 $_SESSION['answered_questions'][] = $current_question_id;
+if (!isset($_SESSION['questions_shuffled'])) {
+    shuffle($question_ids); // Shuffle only once
+    $_SESSION['questions_shuffled'] = true;
+}
 
 // Check connection
 if (!$conn) {
