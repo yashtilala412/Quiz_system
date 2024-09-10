@@ -34,6 +34,7 @@ if (mysqli_num_rows($result) == 0) {
     echo 'No questions found for this test.';
     exit();
 }
+mysqli_query($conn, "INSERT INTO user_test_data (user_id, test_id, question_id, start_time) VALUES ('" . $_SESSION['user_id'] . "', '" . $test_id . "', '" . $current_question_id . "', NOW())");
 
 // Check connection
 if (!$conn) {
