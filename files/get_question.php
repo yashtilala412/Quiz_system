@@ -11,10 +11,14 @@ if(!isset($_SESSION['test_id'])){
 }
 
 $test_id = $_SESSION['test_id'];
-
+$limit = 10; // Example limit
+$result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '" . $test_id . "' LIMIT " . $limit);
 // Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
+    $limit = 10; // Example limit
+$result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '" . $test_id . "' LIMIT " . $limit);
+
 } else {
     if (!isset($_SESSION['question_IDS_fetched'])) {
         $result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '" . $test_id . "' ");
