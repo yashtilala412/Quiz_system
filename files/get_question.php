@@ -30,6 +30,10 @@ if (time() > $_SESSION['time_limit']) {
 }
 $difficulty = 'easy'; // Determine dynamically based on user performance
 $result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '" . $test_id . "' AND difficulty = '" . $difficulty . "'");
+if (mysqli_num_rows($result) == 0) {
+    echo 'No questions found for this test.';
+    exit();
+}
 
 // Check connection
 if (!$conn) {
