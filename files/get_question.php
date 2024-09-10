@@ -28,6 +28,8 @@ if (time() > $_SESSION['time_limit']) {
     $_SESSION['question_counter']++;
     getQuestion($conn, false);
 }
+$difficulty = 'easy'; // Determine dynamically based on user performance
+$result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '" . $test_id . "' AND difficulty = '" . $difficulty . "'");
 
 // Check connection
 if (!$conn) {
