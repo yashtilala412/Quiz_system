@@ -22,6 +22,12 @@ if (!isset($_SESSION['questions_shuffled'])) {
     shuffle($question_ids); // Shuffle only once
     $_SESSION['questions_shuffled'] = true;
 }
+$_SESSION['time_limit'] = time() + 30; // 30 seconds for the question
+if (time() > $_SESSION['time_limit']) {
+    echo 'Time expired for this question.';
+    $_SESSION['question_counter']++;
+    getQuestion($conn, false);
+}
 
 // Check connection
 if (!$conn) {
