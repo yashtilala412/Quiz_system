@@ -27,6 +27,12 @@ if(isset($_POST['new_test'])) {
   // getting class id
   $class_sql = "SELECT id FROM classes WHERE name LIKE '%$test_class%'";
   $class_result = mysqli_query($conn, $class_sql);
+  $stmt = $conn->prepare("SELECT id FROM classes WHERE name LIKE ?");
+$test_class_param = "%{$test_class}%";
+$stmt->bind_param("s", $test_class_param);
+$stmt->execute();
+$class_result = $stmt->get_result();
+
   if (mysqli_num_rows($class_result) > 0) {
     $class_row = mysqli_fetch_assoc($class_result);
     $class_id = $class_row["id"];
