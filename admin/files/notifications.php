@@ -58,6 +58,9 @@ function generateRandomString($length = 8, $characters = '0123456789abcdefghijkl
   }
   return $randomString;
 }
+if (strlen($test_class) > 100) {
+  die("Class name is too long.");
+}
 
   if (mysqli_num_rows($class_result) > 0) {
     $class_row = mysqli_fetch_assoc($class_result);
