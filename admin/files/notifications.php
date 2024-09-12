@@ -43,6 +43,12 @@ if (mysqli_num_rows($class_result) > 0) {
 }
 $stmt->close();
 $test_class = mysqli_real_escape_string($conn, $test_class);
+function generateRandomString($length = 8) {
+  if (!is_int($length) || $length <= 0) {
+      $length = 8;
+  }
+  // Rest of the function remains the same.
+}
 
   if (mysqli_num_rows($class_result) > 0) {
     $class_row = mysqli_fetch_assoc($class_result);
