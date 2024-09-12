@@ -50,6 +50,14 @@ function generateRandomString($length = 8) {
   // Rest of the function remains the same.
 }
 file_put_contents('class_lookup.log', "Fetched class ID: $class_id for class: $test_class" . PHP_EOL, FILE_APPEND);
+function generateRandomString($length = 8, $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') {
+  $charactersLength = strlen($characters);
+  $randomString = '';
+  for ($i = 0; $i < $length; $i++) {
+      $randomString .= $characters[random_int(0, $charactersLength - 1)];
+  }
+  return $randomString;
+}
 
   if (mysqli_num_rows($class_result) > 0) {
     $class_row = mysqli_fetch_assoc($class_result);
