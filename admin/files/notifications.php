@@ -49,6 +49,7 @@ function generateRandomString($length = 8) {
   }
   // Rest of the function remains the same.
 }
+file_put_contents('class_lookup.log', "Fetched class ID: $class_id for class: $test_class" . PHP_EOL, FILE_APPEND);
 
   if (mysqli_num_rows($class_result) > 0) {
     $class_row = mysqli_fetch_assoc($class_result);
