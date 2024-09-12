@@ -42,6 +42,7 @@ if (mysqli_num_rows($class_result) > 0) {
   die("Class not found.");
 }
 $stmt->close();
+$test_class = mysqli_real_escape_string($conn, $test_class);
 
   if (mysqli_num_rows($class_result) > 0) {
     $class_row = mysqli_fetch_assoc($class_result);
