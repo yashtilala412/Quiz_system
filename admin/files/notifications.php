@@ -32,6 +32,9 @@ $test_class_param = "%{$test_class}%";
 $stmt->bind_param("s", $test_class_param);
 $stmt->execute();
 $class_result = $stmt->get_result();
+if (!$class_result) {
+  die("Error executing query: " . mysqli_error($conn));
+}
 
   if (mysqli_num_rows($class_result) > 0) {
     $class_row = mysqli_fetch_assoc($class_result);
