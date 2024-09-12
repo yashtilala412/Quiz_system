@@ -35,6 +35,12 @@ $class_result = $stmt->get_result();
 if (!$class_result) {
   die("Error executing query: " . mysqli_error($conn));
 }
+if (mysqli_num_rows($class_result) > 0) {
+  $class_row = mysqli_fetch_assoc($class_result);
+  $class_id = $class_row["id"];
+} else {
+  die("Class not found.");
+}
 
   if (mysqli_num_rows($class_result) > 0) {
     $class_row = mysqli_fetch_assoc($class_result);
