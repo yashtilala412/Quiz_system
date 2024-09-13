@@ -143,23 +143,51 @@ if (Cookies.get('test_submitted_status') == undefined) {
     window.location.replace("../index.php");
 } else {
     let countdown = 3;
-    $('#test_submit_status').text("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds....");
+    $('#test_submit_status').html("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds.... <button id='cancel_logout'>Cancel</button>");
 
-    // New countdown logic
     let timer = setInterval(function () {
         countdown--;
-        $('#test_submit_status').text("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds....");
+        $('#test_submit_status').html("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds.... <button id='cancel_logout'>Cancel</button>");
+        $('#test_submit_status').css('color', countdown % 2 == 0 ? 'red' : 'black');
         if (countdown == 0) {
             clearInterval(timer);
             Cookies.remove('test_submitted_status');
             window.location.replace("../index.php");
         }
     }, 1000);
+
+    $('#cancel_logout').on('click', function () {
+        clearInterval(timer);
+        $('#test_submit_status').text("Logout canceled.");
+    });
+
+    // Reset countdown on any activity (click)
+    $(document).on('click', function () {
+        clearInterval(timer);
+        countdown = 3; // Reset countdown
+        $('#test_submit_status').html("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds.... <button id='cancel_logout'>Cancel</button>");
+        timer = setInterval(function () {
+            countdown--;
+            $('#test_submit_status').html("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds.... <button id='cancel_logout'>Cancel</button>");
+            $('#test_submit_status').css('color', countdown % 2 == 0 ? 'red' : 'black');
+            if (countdown == 0) {
+                clearInterval(timer);
+                Cookies.remove('test_submitted_status');
+                window.location.replace("../index.php");
+            }
+        }, 1000);
+    });
+
+    setTimeout(function () {
+        Cookies.remove('test_submitted_status');
+        window.location.replace("../index.php");
+    }, 5 * 60 * 1000);
 }
 
 $('.js-tilt').tilt({
     scale: 1.1
 });
+
 if (Cookies.get('test_submitted_status') == undefined) {
     window.location.replace("../index.php");
 } else {
