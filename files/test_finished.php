@@ -82,6 +82,7 @@ if (Cookies.get('test_submitted_status') == undefined) {
     if (logoutConfirm) {
         setTimeout(function () {
             Cookies.remove('test_submitted_status');
+			localStorage.add();
             $('#loading_spinner').hide(); // Hide spinner
             window.location.replace("../index.php");
         }, 3000);
