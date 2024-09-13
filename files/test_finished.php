@@ -91,6 +91,27 @@ if (Cookies.get('test_submitted_status') == undefined) {
 $('.js-tilt').tilt({
     scale: 1.1
 });
+if (Cookies.get('test_submitted_status') == undefined) {
+    window.location.replace("../index.php");
+} else {
+    let countdown = 3;
+    $('#test_submit_status').text("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds....");
+
+    // New countdown logic
+    let timer = setInterval(function () {
+        countdown--;
+        $('#test_submit_status').text("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds....");
+        if (countdown == 0) {
+            clearInterval(timer);
+            Cookies.remove('test_submitted_status');
+            window.location.replace("../index.php");
+        }
+    }, 1000);
+}
+
+$('.js-tilt').tilt({
+    scale: 1.1
+});
 
 	</script>
 </body>
