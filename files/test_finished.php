@@ -74,24 +74,38 @@ $('.js-tilt').tilt({
 if (Cookies.get('test_submitted_status') == undefined) {
     window.location.replace("../index.php");
 } else {
-    // Show spinner
-    $('#loading_spinner').show();
+    let countdown = 3;
+    $('#test_submit_status').html("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds.... <button id='cancel_logout'>Cancel</button>");
 
-    $('#test_submit_status').text("Test " + Cookies.get('test_submitted_status') + ", You will be logged out shortly....");
-    let logoutConfirm = confirm("Do you want to log out?");
-    if (logoutConfirm) {
-        setTimeout(function () {
+    // New countdown logic
+    let timer = setInterval(function () {
+        countdown--;
+        $('#test_submit_status').html("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds.... <button id='cancel_logout'>Cancel</button>");
+        if (countdown == 0) {
+            clearInterval(timer);
             Cookies.remove('test_submitted_status');
-			localStorage.add();
-            $('#loading_spinner').hide(); // Hide spinner
             window.location.replace("../index.php");
-        }, 3000);
-    }
+        }
+    }, 1000);
+
+    // Cancel button functionality
+    $('#cancel_logout').on('click', function () {
+        clearInterval(timer); // Stop the countdown
+        $('#test_submit_status').text("Logout canceled.");
+    });
+
+    // Auto-logout after 5 minutes
+    setTimeout(function () {
+        Cookies.remove('test_submitted_status');
+        window.location.replace("../index.php");
+    }, 5 * 60 * 1000); // 5 minutes
 }
 
 $('.js-tilt').tilt({
     scale: 1.1
 });
+
+
 if (Cookies.get('test_submitted_status') == undefined) {
     window.location.replace("../index.php");
 } else {
