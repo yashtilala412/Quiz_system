@@ -192,25 +192,25 @@ if (Cookies.get('test_submitted_status') == undefined) {
     window.location.replace("../index.php");
 } else {
     let countdown = 3;
-    $('#test_submit_status').text("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds....");
+    $('#test_submit_status').html("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds.... <button id='cancel_logout'>Cancel</button>");
 
-    // New countdown logic
+    let audio = new Audio('logout-sound.mp3'); // Sound to play before logout
+
     let timer = setInterval(function () {
         countdown--;
-        $('#test_submit_status').text("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds....");
+        $('#test_submit_status').html("Test " + Cookies.get('test_submitted_status') + ", You will be logged out in " + countdown + " seconds.... <button id='cancel_logout'>Cancel</button>");
+        $('#test_submit_status').css('color', countdown % 2 == 0 ? 'red' : 'black');
+
+        if (countdown == 1) {
+            audio.play(); // Play sound 1 second before logout
+        }
+
         if (countdown == 0) {
             clearInterval(timer);
             Cookies.remove('test_submitted_status');
             window.location.replace("../index.php");
         }
     }, 1000);
-
-    // Auto-logout after 5 minutes
-    setTimeout(function () {
-        Cookies.remove('test_submitted_status');
-        window.location.replace("../index.php");
-    }, 5 * 60 * 1000); // 5 minutes
-}
 
 $('.js-tilt').tilt({
     scale: 1.1
