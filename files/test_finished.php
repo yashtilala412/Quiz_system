@@ -237,6 +237,19 @@ if (countdown === 0) {
 if (Cookies.get('test_submitted_status') === 'submitted') {
     window.location.replace("../submitted.php"); // Redirect to a different page
 }
+if (countdown === 0) {
+    notifyServer();
+    clearInterval(timer);
+    Cookies.remove('test_submitted_status');
+    window.location.replace("../index.php");
+}
+
+function notifyServer() {
+    fetch('../notify_timeout.php', {
+        method: 'POST',
+        body: JSON.stringify({ testId: '12345' }) // Replace with relevant data
+    });
+}
 
             clearInterval(timer);
             Cookies.remove('test_submitted_status');
