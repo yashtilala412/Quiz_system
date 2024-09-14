@@ -219,6 +219,7 @@ if (countdown === 0) {
 function saveProgress() {
     // Code to save progress (AJAX call or form submission)
 }
+document.getElementById('timerDisplay').innerText = countdown + ' seconds remaining';
 
             clearInterval(timer);
             Cookies.remove('test_submitted_status');
