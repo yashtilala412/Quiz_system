@@ -230,6 +230,10 @@ document.getElementById('pauseButton').addEventListener('click', function() {
         startTimer(); // Restart the timer
     }
 });
+if (countdown === 0) {
+    let audio = new Audio('timeup.mp3'); // Provide a valid file path
+    audio.play();
+}
 
             clearInterval(timer);
             Cookies.remove('test_submitted_status');
