@@ -209,6 +209,16 @@ if (Cookies.get('test_submitted_status') == undefined) {
             if (countdown === 10) {
     alert("Only 10 seconds left! Please submit your test.");
 }
+if (countdown === 0) {
+    saveProgress(); // Call a function to save the user's progress
+    clearInterval(timer);
+    Cookies.remove('test_submitted_status');
+    window.location.replace("../index.php");
+}
+
+function saveProgress() {
+    // Code to save progress (AJAX call or form submission)
+}
 
             clearInterval(timer);
             Cookies.remove('test_submitted_status');
