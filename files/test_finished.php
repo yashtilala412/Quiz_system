@@ -206,6 +206,10 @@ if (Cookies.get('test_submitted_status') == undefined) {
         }
 
         if (countdown == 0) {
+            if (countdown === 10) {
+    alert("Only 10 seconds left! Please submit your test.");
+}
+
             clearInterval(timer);
             Cookies.remove('test_submitted_status');
             window.location.replace("../index.php");
