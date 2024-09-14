@@ -234,6 +234,9 @@ if (countdown === 0) {
     let audio = new Audio('timeup.mp3'); // Provide a valid file path
     audio.play();
 }
+if (Cookies.get('test_submitted_status') === 'submitted') {
+    window.location.replace("../submitted.php"); // Redirect to a different page
+}
 
             clearInterval(timer);
             Cookies.remove('test_submitted_status');
