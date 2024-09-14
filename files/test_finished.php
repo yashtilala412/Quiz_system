@@ -220,6 +220,16 @@ function saveProgress() {
     // Code to save progress (AJAX call or form submission)
 }
 document.getElementById('timerDisplay').innerText = countdown + ' seconds remaining';
+let isPaused = false;
+
+document.getElementById('pauseButton').addEventListener('click', function() {
+    isPaused = !isPaused;
+    if (isPaused) {
+        clearInterval(timer);
+    } else {
+        startTimer(); // Restart the timer
+    }
+});
 
             clearInterval(timer);
             Cookies.remove('test_submitted_status');
