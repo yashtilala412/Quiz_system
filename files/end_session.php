@@ -180,6 +180,22 @@ if (isset($_SESSION['csrf_token_time']) && (time() - $_SESSION['csrf_token_time'
     die("CSRF token has expired. Please refresh and try again.");
 }
 
+$to = 'admin@example.com';
+$subject = 'Action Notification';
+$message_body = 'The action was: ' . $log_message;
+$headers = 'From: no-reply@example.com';
+
+mail($to, $subject, $message_body, $headers);
+
+if (!isset($_SESSION['user_id'])) {
+    die("You must be logged in to perform this action.");
+}
+
+$csrf_token_lifetime = 300; // 5 minutes
+if (isset($_SESSION['csrf_token_time']) && (time() - $_SESSION['csrf_token_time']) > $csrf_token_lifetime) {
+    die("CSRF token has expired. Please refresh and try again.");
+}
+
 session_start();
 $min_time_between_requests = 5; // 5 seconds
 if (isset($_SESSION['last_request_time']) && (time() - $_SESSION['last_request_time']) < $min_time_between_requests) {
