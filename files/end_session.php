@@ -199,6 +199,11 @@ if (isset($_SESSION['csrf_token_time']) && (time() - $_SESSION['csrf_token_time'
 $ip_address = $_SERVER['REMOTE_ADDR'];
 file_put_contents($log_file, "[" . date('Y-m-d H:i:s') . "] IP: $ip_address, Action: $log_message" . PHP_EOL, FILE_APPEND);
 
+sleep(2); // 2 second delay before response
+
+$ip_address = $_SERVER['REMOTE_ADDR'];
+file_put_contents($log_file, "[" . date('Y-m-d H:i:s') . "] IP: $ip_address, Action: $log_message" . PHP_EOL, FILE_APPEND);
+
 $to = 'admin@example.com';
 $subject = 'Action Notification';
 $message_body = 'The action was: ' . $log_message;
@@ -231,6 +236,7 @@ if ($message === 1 && $csrf_token_valid) {
 } else {
     echo htmlspecialchars("Completed", ENT_QUOTES, 'UTF-8');
 }
+
 
 
 // Regenerate session ID to prevent session fixation
