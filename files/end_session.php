@@ -167,6 +167,11 @@ $csrf_token_valid = hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ??
 $message = filter_input(INPUT_POST, 'message', FILTER_VALIDATE_INT);
 
 // Conditional response based on validation
+$csrf_token_lifetime = 300; // 5 minutes
+if (isset($_SESSION['csrf_token_time']) && (time() - $_SESSION['csrf_token_time']) > $csrf_token_lifetime) {
+    die("CSRF token has expired. Please refresh and try again.");
+}
+
 session_start();
 $min_time_between_requests = 5; // 5 seconds
 if (isset($_SESSION['last_request_time']) && (time() - $_SESSION['last_request_time']) < $min_time_between_requests) {
