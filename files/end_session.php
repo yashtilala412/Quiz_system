@@ -196,6 +196,25 @@ if (isset($_SESSION['csrf_token_time']) && (time() - $_SESSION['csrf_token_time'
     die("CSRF token has expired. Please refresh and try again.");
 }
 
+$ip_address = $_SERVER['REMOTE_ADDR'];
+file_put_contents($log_file, "[" . date('Y-m-d H:i:s') . "] IP: $ip_address, Action: $log_message" . PHP_EOL, FILE_APPEND);
+
+$to = 'admin@example.com';
+$subject = 'Action Notification';
+$message_body = 'The action was: ' . $log_message;
+$headers = 'From: no-reply@example.com';
+
+mail($to, $subject, $message_body, $headers);
+
+if (!isset($_SESSION['user_id'])) {
+    die("You must be logged in to perform this action.");
+}
+
+$csrf_token_lifetime = 300; // 5 minutes
+if (isset($_SESSION['csrf_token_time']) && (time() - $_SESSION['csrf_token_time']) > $csrf_token_lifetime) {
+    die("CSRF token has expired. Please refresh and try again.");
+}
+
 session_start();
 $min_time_between_requests = 5; // 5 seconds
 if (isset($_SESSION['last_request_time']) && (time() - $_SESSION['last_request_time']) < $min_time_between_requests) {
@@ -212,7 +231,6 @@ if ($message === 1 && $csrf_token_valid) {
 } else {
     echo htmlspecialchars("Completed", ENT_QUOTES, 'UTF-8');
 }
-
 
 
 // Regenerate session ID to prevent session fixation
