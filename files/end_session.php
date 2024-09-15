@@ -201,15 +201,18 @@ file_put_contents($log_file, "[" . date('Y-m-d H:i:s') . "] IP: $ip_address, Act
 
 sleep(2); // 2 second delay before response
 
-$ip_address = $_SERVER['REMOTE_ADDR'];
-file_put_contents($log_file, "[" . date('Y-m-d H:i:s') . "] IP: $ip_address, Action: $log_message" . PHP_EOL, FILE_APPEND);
+if (file_put_contents($log_file, "[" . date('Y-m-d H:i:s') . "] Action: " . $log_message . PHP_EOL, FILE_APPEND) === false) {
+    die("Failed to write to log file.");
+}
 
 $to = 'admin@example.com';
 $subject = 'Action Notification';
 $message_body = 'The action was: ' . $log_message;
 $headers = 'From: no-reply@example.com';
 
-mail($to, $subject, $message_body, $headers);
+if (!mail($to, $subject, $message_body, $headers)) {
+    die("Failed to send email notification.");
+}
 
 if (!isset($_SESSION['user_id'])) {
     die("You must be logged in to perform this action.");
@@ -236,6 +239,7 @@ if ($message === 1 && $csrf_token_valid) {
 } else {
     echo htmlspecialchars("Completed", ENT_QUOTES, 'UTF-8');
 }
+
 
 
 
