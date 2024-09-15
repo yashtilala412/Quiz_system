@@ -167,11 +167,16 @@ $csrf_token_valid = hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ??
 $message = filter_input(INPUT_POST, 'message', FILTER_VALIDATE_INT);
 
 // Conditional response based on validation
+$log_file = 'log.txt';
+$log_message = $message === 1 ? 'Aborted' : 'Completed';
+file_put_contents($log_file, "[" . date('Y-m-d H:i:s') . "] Action: " . $log_message . PHP_EOL, FILE_APPEND);
+
 if ($message === 1 && $csrf_token_valid) {
     echo htmlspecialchars("Aborted", ENT_QUOTES, 'UTF-8');
 } else {
     echo htmlspecialchars("Completed", ENT_QUOTES, 'UTF-8');
 }
+
 
 // Regenerate session ID to prevent session fixation
 session_regenerate_id(true);
