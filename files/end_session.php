@@ -167,6 +167,13 @@ $csrf_token_valid = hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ??
 $message = filter_input(INPUT_POST, 'message', FILTER_VALIDATE_INT);
 
 // Conditional response based on validation
+session_start();
+$min_time_between_requests = 5; // 5 seconds
+if (isset($_SESSION['last_request_time']) && (time() - $_SESSION['last_request_time']) < $min_time_between_requests) {
+    die("Too many requests. Please wait before trying again.");
+}
+$_SESSION['last_request_time'] = time();
+
 $log_file = 'log.txt';
 $log_message = $message === 1 ? 'Aborted' : 'Completed';
 file_put_contents($log_file, "[" . date('Y-m-d H:i:s') . "] Action: " . $log_message . PHP_EOL, FILE_APPEND);
