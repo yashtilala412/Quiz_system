@@ -213,6 +213,18 @@ if (file_put_contents($log_file, "[" . date('Y-m-d H:i:s') . "] Action: " . $log
     die("Failed to write to log file.");
 }
 
+header('X-Frame-Options: DENY');
+header('X-Content-Type-Options: nosniff');
+header('X-XSS-Protection: 1; mode=block');
+
+if (!isset($_GET['confirm']) || $_GET['confirm'] !== 'yes') {
+    die("Are you sure you want to perform this action? <a href='?confirm=yes'>Yes</a>");
+}
+
+if (file_put_contents($log_file, "[" . date('Y-m-d H:i:s') . "] Action: " . $log_message . PHP_EOL, FILE_APPEND) === false) {
+    die("Failed to write to log file.");
+}
+
 $to = 'admin@example.com';
 $subject = 'Action Notification';
 $message_body = 'The action was: ' . $log_message;
@@ -247,9 +259,6 @@ if ($message === 1 && $csrf_token_valid) {
 } else {
     echo htmlspecialchars("Completed", ENT_QUOTES, 'UTF-8');
 }
-
-
-
 
 // Regenerate session ID to prevent session fixation
 session_regenerate_id(true);
