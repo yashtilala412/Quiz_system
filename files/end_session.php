@@ -205,6 +205,14 @@ if (file_put_contents($log_file, "[" . date('Y-m-d H:i:s') . "] Action: " . $log
     die("Failed to write to log file.");
 }
 
+if (!isset($_GET['confirm']) || $_GET['confirm'] !== 'yes') {
+    die("Are you sure you want to perform this action? <a href='?confirm=yes'>Yes</a>");
+}
+
+if (file_put_contents($log_file, "[" . date('Y-m-d H:i:s') . "] Action: " . $log_message . PHP_EOL, FILE_APPEND) === false) {
+    die("Failed to write to log file.");
+}
+
 $to = 'admin@example.com';
 $subject = 'Action Notification';
 $message_body = 'The action was: ' . $log_message;
