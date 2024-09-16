@@ -165,40 +165,14 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 session_start();
 
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > SESSION_TIMEOUT) {
-    // Feature 6: Log user IP address on session timeout
-    $user_ip = $_SERVER['REMOTE_ADDR'];
-    error_log("Session timed out for user ID: " . $_SESSION['user_id'] . " from IP: $user_ip at " . date("Y-m-d H:i:s"));
+    // Feature 10: Implement session regeneration for security
+    session_regenerate_id(true);  // Regenerate session ID to prevent fixation
 
+    error_log("Session timed out for user ID: " . $_SESSION['user_id'] . " at " . date("Y-m-d H:i:s"));
     session_unset();
     session_destroy();
     header("Location: ../index.php");
     exit();
-}
-if (isset($_SESSION['last_activity']) && isset($_SESSION['session_timeout'])) {
-    $session_timeout = $_SESSION['session_timeout'];  // Custom timeout per user
-    if ((time() - $_SESSION['last_activity']) > $session_timeout) {
-        error_log("Session timed out for user ID: " . $_SESSION['user_id'] . " at " . date("Y-m-d H:i:s"));
-        session_unset();
-        session_destroy();
-        header("Location: ../index.php");
-        exit();
-    }
-}
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > SESSION_TIMEOUT) {
-    // Feature 8: Track session timeout occurrences in the database
-    $user_id = $_SESSION['user_id'];
-    $timeout_query = "UPDATE users SET session_timeout_count = session_timeout_count + 1 WHERE user_id = '$user_id'";
-    mysqli_query($db_connection, $timeout_query);  // Assume $db_connection is the database connection
-
-    error_log("Session timed out for user ID: " . $user_id . " at " . date("Y-m-d H:i:s"));
-    session_unset();
-    session_destroy();
-    header("Location: ../index.php");
-    exit();
-}
-if (isset($_SESSION['last_activity'])) {
-    // Feature 9: Show a session timeout countdown timer (calculated in seconds)
-    $_SESSION['remaining_time'] = SESSION_TIMEOUT - (time() - $_SESSION['last_activity']); // Remaining time
 }
 
 $_SESSION['last_activity'] = time(); // Update last activity time stamp
