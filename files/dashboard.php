@@ -196,6 +196,10 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
     header("Location: ../index.php");
     exit();
 }
+if (isset($_SESSION['last_activity'])) {
+    // Feature 9: Show a session timeout countdown timer (calculated in seconds)
+    $_SESSION['remaining_time'] = SESSION_TIMEOUT - (time() - $_SESSION['last_activity']); // Remaining time
+}
 
 $_SESSION['last_activity'] = time(); // Update last activity time stamp
 session_start();
