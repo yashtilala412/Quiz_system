@@ -171,6 +171,9 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
     // Feature 1: Log session timeout activity for debugging
     error_log("Session timed out for user ID: " . $_SESSION['user_id'] . " at " . date("Y-m-d H:i:s"));
 
+    // Feature 2: Notify the user before destroying the session (grace period)
+    $_SESSION['timeout_warning'] = true; // Can be used to display a warning on the frontend
+
     session_unset();     // Unset $_SESSION variable for the run-time 
     session_destroy();   // Destroy session data in storage
     header("Location: ../index.php"); // Redirect to login page
