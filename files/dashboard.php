@@ -165,22 +165,13 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 session_start();
 
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > SESSION_TIMEOUT) {
-    // Feature 4: Send session expiration notification via email
-    $to = $_SESSION['user_email'];
-    $subject = "Session Expired";
-    $message = "Your session has expired. Please log in again.";
-    mail($to, $subject, $message);
+    // Feature 6: Log user IP address on session timeout
+    $user_ip = $_SERVER['REMOTE_ADDR'];
+    error_log("Session timed out for user ID: " . $_SESSION['user_id'] . " from IP: $user_ip at " . date("Y-m-d H:i:s"));
 
-    error_log("Session timed out for user ID: " . $_SESSION['user_id'] . " at " . date("Y-m-d H:i:s"));
-    $_SESSION['timeout_warning'] = true;
     session_unset();
     session_destroy();
     header("Location: ../index.php");
-    exit();
-}
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > SESSION_TIMEOUT) {
-    // Feature 5: Redirect to a custom timeout page
-    header("Location: ../session_timeout.php"); // Custom timeout page
     exit();
 }
 
