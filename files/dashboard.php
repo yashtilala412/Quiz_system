@@ -174,6 +174,16 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
     header("Location: ../index.php");
     exit();
 }
+if (isset($_SESSION['last_activity']) && isset($_SESSION['session_timeout'])) {
+    $session_timeout = $_SESSION['session_timeout'];  // Custom timeout per user
+    if ((time() - $_SESSION['last_activity']) > $session_timeout) {
+        error_log("Session timed out for user ID: " . $_SESSION['user_id'] . " at " . date("Y-m-d H:i:s"));
+        session_unset();
+        session_destroy();
+        header("Location: ../index.php");
+        exit();
+    }
+}
 
 $_SESSION['last_activity'] = time(); // Update last activity time stamp
 session_start();
