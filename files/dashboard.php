@@ -178,6 +178,11 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
     header("Location: ../index.php");
     exit();
 }
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > SESSION_TIMEOUT) {
+    // Feature 5: Redirect to a custom timeout page
+    header("Location: ../session_timeout.php"); // Custom timeout page
+    exit();
+}
 
 $_SESSION['last_activity'] = time(); // Update last activity time stamp
 session_start();
