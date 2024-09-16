@@ -184,6 +184,18 @@ if (isset($_SESSION['last_activity']) && isset($_SESSION['session_timeout'])) {
         exit();
     }
 }
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > SESSION_TIMEOUT) {
+    // Feature 8: Track session timeout occurrences in the database
+    $user_id = $_SESSION['user_id'];
+    $timeout_query = "UPDATE users SET session_timeout_count = session_timeout_count + 1 WHERE user_id = '$user_id'";
+    mysqli_query($db_connection, $timeout_query);  // Assume $db_connection is the database connection
+
+    error_log("Session timed out for user ID: " . $user_id . " at " . date("Y-m-d H:i:s"));
+    session_unset();
+    session_destroy();
+    header("Location: ../index.php");
+    exit();
+}
 
 $_SESSION['last_activity'] = time(); // Update last activity time stamp
 session_start();
