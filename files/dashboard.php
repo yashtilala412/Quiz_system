@@ -164,21 +164,19 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 }
 session_start();
 
-if (isset($_SESSION['last_activity'])) {
-    $time_since_last_activity = time() - $_SESSION['last_activity'];
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > SESSION_TIMEOUT) {
+    // Feature 4: Send session expiration notification via email
+    $to = $_SESSION['user_email'];
+    $subject = "Session Expired";
+    $message = "Your session has expired. Please log in again.";
+    mail($to, $subject, $message);
 
-    // Feature 3: Extend session if user interacts just before timeout
-    if ($time_since_last_activity > (SESSION_TIMEOUT - 300) && $time_since_last_activity < SESSION_TIMEOUT) {
-        $_SESSION['last_activity'] = time();  // Extend session
-    }
-    elseif ($time_since_last_activity > SESSION_TIMEOUT) {
-        error_log("Session timed out for user ID: " . $_SESSION['user_id'] . " at " . date("Y-m-d H:i:s"));
-        $_SESSION['timeout_warning'] = true;
-        session_unset(); 
-        session_destroy();   
-        header("Location: ../index.php");
-        exit();
-    }
+    error_log("Session timed out for user ID: " . $_SESSION['user_id'] . " at " . date("Y-m-d H:i:s"));
+    $_SESSION['timeout_warning'] = true;
+    session_unset();
+    session_destroy();
+    header("Location: ../index.php");
+    exit();
 }
 
 $_SESSION['last_activity'] = time(); // Update last activity time stamp
