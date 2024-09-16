@@ -166,7 +166,11 @@ session_start();
 
 // Check if session has expired
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > SESSION_TIMEOUT) {
-    // Last request was more than 30 minutes ago
+    // Last request was more than SESSION_TIMEOUT (e.g., 30 minutes) ago
+
+    // Feature 1: Log session timeout activity for debugging
+    error_log("Session timed out for user ID: " . $_SESSION['user_id'] . " at " . date("Y-m-d H:i:s"));
+
     session_unset();     // Unset $_SESSION variable for the run-time 
     session_destroy();   // Destroy session data in storage
     header("Location: ../index.php"); // Redirect to login page
