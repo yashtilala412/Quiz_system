@@ -21,11 +21,15 @@
                     $ip = $_SERVER['REMOTE_ADDR'];
                 }
             
-                // Validate the IP address
+                if (strpos($ip, '::ffff:') === 0) {
+                    // Convert IPv6 mapped IPv4 to IPv4
+                    $ip = substr($ip, 7);
+                }
+            
                 if (!filter_var($ip, FILTER_VALIDATE_IP)) {
                     $ip = 'Invalid IP';
                 }
-                
+            
                 file_put_contents('ip_log.txt', $ip . PHP_EOL, FILE_APPEND);
                 
                 return $ip;
