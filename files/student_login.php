@@ -11,20 +11,26 @@
         $student_password = $_POST['password'];
 
         // Function to get the user's IP addressfunction getUserIP() {
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-        $ip = $_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        $ipList = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-        $ip = trim($ipList[0]); // Get the first IP in the list
-    } else {
-        $ip = $_SERVER['REMOTE_ADDR'];
-    }
-    
-    file_put_contents('ip_log.txt', $ip . PHP_EOL, FILE_APPEND);
-    
-    return $ip;
-}
-
+            function getUserIP() {
+                if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+                    $ip = $_SERVER['HTTP_CLIENT_IP'];
+                } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                    $ipList = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+                    $ip = trim($ipList[0]);
+                } else {
+                    $ip = $_SERVER['REMOTE_ADDR'];
+                }
+            
+                // Validate the IP address
+                if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+                    $ip = 'Invalid IP';
+                }
+                
+                file_put_contents('ip_log.txt', $ip . PHP_EOL, FILE_APPEND);
+                
+                return $ip;
+            }
+            
 
         // Log the IP address
         $user_ip = getUserIP();
