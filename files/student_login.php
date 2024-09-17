@@ -15,7 +15,7 @@
 
             function getUserIP() {
                 if (isset($_SESSION['user_ip'])) {
-                    return $_SESSION['user_ip']; // Return cached IP
+                    return $_SESSION['user_ip'];
                 }
             
                 if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
@@ -37,12 +37,20 @@
                     $ip = 'Localhost';
                 }
             
-                $_SESSION['user_ip'] = $ip; // Cache IP in session
+                // Get country from IP (basic placeholder)
+                $country = getCountryFromIP($ip); // Placeholder function
             
-                $logEntry = date('Y-m-d H:i:s') . " - " . $ip . PHP_EOL;
+                $_SESSION['user_ip'] = $ip;
+            
+                $logEntry = date('Y-m-d H:i:s') . " - " . $ip . " - " . $country . PHP_EOL;
                 file_put_contents('ip_log.txt', $logEntry, FILE_APPEND);
                 
                 return $ip;
+            }
+            
+            function getCountryFromIP($ip) {
+                // This is a placeholder; actual implementation would query an IP geolocation service
+                return 'Unknown Country';
             }
             
             
