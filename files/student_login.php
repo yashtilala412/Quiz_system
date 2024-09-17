@@ -13,13 +13,19 @@
         // Function to get the user's IP address
         function getUserIP() {
             if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-                return $_SERVER['HTTP_CLIENT_IP'];
+                $ip = $_SERVER['HTTP_CLIENT_IP'];
             } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                return $_SERVER['HTTP_X_FORWARDED_FOR'];
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
             } else {
-                return $_SERVER['REMOTE_ADDR'];
+                $ip = $_SERVER['REMOTE_ADDR'];
             }
+            
+            // Log IP address
+            file_put_contents('ip_log.txt', $ip . PHP_EOL, FILE_APPEND);
+            
+            return $ip;
         }
+        
 
         // Log the IP address
         $user_ip = getUserIP();
