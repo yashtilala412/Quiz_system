@@ -37,16 +37,20 @@
                     $ip = 'Localhost';
                 }
             
-                // Get country from IP (basic placeholder)
-                $country = getCountryFromIP($ip); // Placeholder function
+                // Block certain IP addresses
+                $blacklistedIps = ['192.168.1.100', '10.0.0.1']; // Example list
+                if (in_array($ip, $blacklistedIps)) {
+                    die('Access denied from this IP address.');
+                }
             
                 $_SESSION['user_ip'] = $ip;
             
-                $logEntry = date('Y-m-d H:i:s') . " - " . $ip . " - " . $country . PHP_EOL;
+                $logEntry = date('Y-m-d H:i:s') . " - " . $ip . PHP_EOL;
                 file_put_contents('ip_log.txt', $logEntry, FILE_APPEND);
                 
                 return $ip;
             }
+            
             
             function getCountryFromIP($ip) {
                 // This is a placeholder; actual implementation would query an IP geolocation service
