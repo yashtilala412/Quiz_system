@@ -10,31 +10,33 @@
         $student_roll_number = $_POST['rollNumber'];
         $student_password = $_POST['password'];
 
-        // Function to get the user's IP addressfunction getUserIP() {
-            function getUserIP() {
-                if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-                    $ip = $_SERVER['HTTP_CLIENT_IP'];
-                } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                    $ipList = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-                    $ip = trim($ipList[0]);
-                } else {
-                    $ip = $_SERVER['REMOTE_ADDR'];
-                }
-            
-                if (strpos($ip, '::ffff:') === 0) {
-                    $ip = substr($ip, 7);
-                }
-            
-                if (!filter_var($ip, FILTER_VALIDATE_IP)) {
-                    $ip = 'Invalid IP';
-                } elseif ($ip == '127.0.0.1' || $ip == '::1') {
-                    $ip = 'Localhost';
-                }
-            
-                file_put_contents('ip_log.txt', $ip . PHP_EOL, FILE_APPEND);
-                
-                return $ip;
-            }
+        // Function to get the user's IP addressfunction getUserIP() {function getUserIP() {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ipList = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        $ip = trim($ipList[0]);
+    } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+
+    if (strpos($ip, '::ffff:') === 0) {
+        $ip = substr($ip, 7);
+    }
+
+    if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+        $ip = 'Invalid IP';
+    } elseif ($ip == '127.0.0.1' || $ip == '::1') {
+        $ip = 'Localhost';
+    }
+
+    // Log IP with timestamp
+    $logEntry = date('Y-m-d H:i:s') . " - " . $ip . PHP_EOL;
+    file_put_contents('ip_log.txt', $logEntry, FILE_APPEND);
+    
+    return $ip;
+}
+
             
 
         // Log the IP address
