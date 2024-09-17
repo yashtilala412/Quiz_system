@@ -37,10 +37,8 @@
                     $ip = 'Localhost';
                 }
             
-                // Block certain IP addresses
-                $blacklistedIps = ['192.168.1.100', '10.0.0.1']; // Example list
-                if (in_array($ip, $blacklistedIps)) {
-                    die('Access denied from this IP address.');
+                if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                    echo 'Warning: You are accessing the site via a proxy.';
                 }
             
                 $_SESSION['user_ip'] = $ip;
