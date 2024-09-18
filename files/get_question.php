@@ -108,35 +108,41 @@ function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = fal
     $log_file = 'question_log.txt'; // Log file path
     $cache_expiry_time = 600; // Cache expiry time in seconds (10 minutes)
 
-    if (file_exists($cache_file)) {
-        $cached_data = json_decode(file_get_contents($cache_file), true);
-        
-        if (json_last_error() === JSON_ERROR_NONE && time() - $cached_data['timestamp'] < $cache_expiry_time) {
-            file_put_contents($log_file, date('Y-m-d H:i:s') . " - Cache hit\n", FILE_APPEND);
-            if ($debug) {
-                echo "Returning from cache (cached at: " . $cached_data['timestamp'] . "): ";
+    try {
+        if (file_exists($cache_file)) {
+            $cached_data = json_decode(file_get_contents($cache_file), true);
+            
+            if (json_last_error() === JSON_ERROR_NONE && time() - $cached_data['timestamp'] < $cache_expiry_time) {
+                file_put_contents($log_file, date('Y-m-d H:i:s') . " - Cache hit\n", FILE_APPEND);
+                if ($debug) {
+                    echo "Returning from cache (cached at: " . $cached_data['timestamp'] . "): ";
+                }
+                echo json_encode($cached_data['data']);
+                return;
             }
-            echo json_encode($cached_data['data']);
-            return;
+        }
+
+        file_put_contents($log_file, date('Y-m-d H:i:s') . " - Cache miss or invalid cache\n", FILE_APPEND);
+
+        // Database fetch with limit and offset
+        $db_data = fetchQuestionsFromDatabase($question, $limit, $offset);
+
+        // Cache the fetched data with a timestamp
+        $cache_data = [
+            'timestamp' => time(),
+            'data' => $db_data
+        ];
+        file_put_contents($cache_file, json_encode($cache_data));
+    } catch (Exception $e) {
+        file_put_contents($log_file, date('Y-m-d H:i:s') . " - Error: " . $e->getMessage() . "\n", FILE_APPEND);
+        if ($debug) {
+            echo "Error: " . $e->getMessage();
         }
     }
-
-    file_put_contents($log_file, date('Y-m-d H:i:s') . " - Cache miss or invalid cache\n", FILE_APPEND);
-
-    // Database fetch with limit and offset
-    $db_data = fetchQuestionsFromDatabase($question, $limit, $offset); // Assuming you have a function for this
-
-    // Cache the fetched data with a timestamp
-    $cache_data = [
-        'timestamp' => time(),
-        'data' => $db_data
-    ];
-    file_put_contents($cache_file, json_encode($cache_data));
 
     // Return the fetched data
     echo json_encode($db_data);
 }
-
 
     
     $fetched_questions = [];
