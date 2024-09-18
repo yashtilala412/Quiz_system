@@ -115,7 +115,25 @@ function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = fal
         echo $cached_data;
         return;
     }
+    function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = false)
+{
+    $cache_file = 'question_cache.json'; // Cache file path
+    $log_file = 'question_log.txt'; // Log file path
+
+    if (file_exists($cache_file)) {
+        // Return cached data if available
+        $cached_data = json_decode(file_get_contents($cache_file), true);
+        
+        if ($debug) {
+            echo "Returning from cache (cached at: " . $cached_data['timestamp'] . "): ";
+        }
+        echo json_encode($cached_data['data']);
+        return;
+    }
     
+    // Add your logic to fetch data and cache it with a timestamp
+}
+
     $fetched_questions = [];
     if (mysqli_num_rows($question) > 0) {
         $count = 0;
