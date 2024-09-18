@@ -126,7 +126,15 @@ function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = fal
     // Database fetch with limit and offset
     $db_data = fetchQuestionsFromDatabase($question, $limit, $offset); // Assuming you have a function for this
 
-    // Add logic to cache the fetched data
+    // Cache the fetched data with a timestamp
+    $cache_data = [
+        'timestamp' => time(),
+        'data' => $db_data
+    ];
+    file_put_contents($cache_file, json_encode($cache_data));
+
+    // Return the fetched data
+    echo json_encode($db_data);
 }
 
 
