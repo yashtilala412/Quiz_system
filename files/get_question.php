@@ -113,6 +113,7 @@ function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = fal
         
         // Check if cache has expired
         if (time() - $cached_data['timestamp'] < $cache_expiry_time) {
+            file_put_contents($log_file, date('Y-m-d H:i:s') . " - Cache hit\n", FILE_APPEND);
             if ($debug) {
                 echo "Returning from cache (cached at: " . $cached_data['timestamp'] . "): ";
             }
@@ -120,9 +121,11 @@ function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = fal
             return;
         }
     }
-    
+
+    file_put_contents($log_file, date('Y-m-d H:i:s') . " - Cache miss\n", FILE_APPEND);
     // Add logic to fetch data and cache it with a timestamp
 }
+
 
     
     $fetched_questions = [];
