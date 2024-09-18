@@ -111,8 +111,8 @@ function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = fal
     if (file_exists($cache_file)) {
         $cached_data = json_decode(file_get_contents($cache_file), true);
         
-        // Check if cache has expired
-        if (time() - $cached_data['timestamp'] < $cache_expiry_time) {
+        // Check if cache has expired or is invalid
+        if (json_last_error() === JSON_ERROR_NONE && time() - $cached_data['timestamp'] < $cache_expiry_time) {
             file_put_contents($log_file, date('Y-m-d H:i:s') . " - Cache hit\n", FILE_APPEND);
             if ($debug) {
                 echo "Returning from cache (cached at: " . $cached_data['timestamp'] . "): ";
@@ -122,7 +122,9 @@ function fetchAndReturnQuestion($question, $limit = 1, $offset = 0, $debug = fal
         }
     }
 
-    file_put_contents($log_file, date('Y-m-d H:i:s') . " - Cache miss\n", FILE_APPEND);
+    file_put_contents($log_file, date('Y-m-d H:i:s') . " - Cache miss or invalid cache\n", FILE_APPEND);
+    
+    // Fetch data from the database as a fallback
     // Add logic to fetch data and cache it with a timestamp
 }
 
