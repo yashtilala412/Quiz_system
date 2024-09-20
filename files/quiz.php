@@ -188,6 +188,36 @@ function getSelectedItem(val) {
         }
     });
 }
+function showSubmissionMessage() {
+    var message = document.getElementById('submissionMessage');
+    message.textContent = "Answer submitted!";
+    message.style.display = 'block';
+    setTimeout(() => {
+        message.style.display = 'none';
+    }, 2000);
+}
+
+function getSelectedItem(val) {
+    // Existing code...
+
+    Cookies.set('last_question_was_answered', 'true')
+
+    $.ajax({
+        type: 'POST',
+        url: "check_answer.php",
+        data: {
+            'question_id': question_data.id.toString(),
+            'selected_option': val.toString(),
+            'score': question_data.score.toString(),
+            'time_taken': timeTaken.toString()
+        },
+        success: function(result) {
+            createQuestion();
+            showSubmissionMessage();
+            optionButtons.forEach(button => button.disabled = false);
+        }
+    });
+}
 
             function createQuestion(){
                 $.ajax({url: "get_question.php", success: function(result){
