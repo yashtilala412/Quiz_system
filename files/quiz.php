@@ -218,6 +218,23 @@ function getSelectedItem(val) {
         }
     });
 }
+function highlightSelectedOption(val) {
+    var options = document.querySelectorAll('.option-button');
+    options.forEach(button => button.classList.remove('selected-option'));
+    document.querySelector(`.option-button[data-value='${val}']`).classList.add('selected-option');
+}
+
+function getSelectedItem(val) {
+    // Existing code...
+    
+    highlightSelectedOption(val);
+
+    Cookies.set('last_question_was_answered', 'true')
+
+    $.ajax({
+        // Existing AJAX code...
+    });
+}
 
             function createQuestion(){
                 $.ajax({url: "get_question.php", success: function(result){
