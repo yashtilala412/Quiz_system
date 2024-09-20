@@ -240,15 +240,27 @@ function playSubmitSound() {
     audio.play();
 }
 
-function getSelectedItem(val) {
-    // Existing code...
-    
-    playSubmitSound();
+function showLoader() {
+    var loader = document.getElementById('answer-loader');
+    loader.style.display = 'block';
+}
 
-    Cookies.set('last_question_was_answered', 'true')
+function hideLoader() {
+    var loader = document.getElementById('answer-loader');
+    loader.style.display = 'none';
+}
+
+function getSelectedItem(val) {
+    showLoader();
 
     $.ajax({
         // Existing AJAX code...
+        success: function(result) {
+            hideLoader();
+            createQuestion();
+            showSubmissionMessage();
+            optionButtons.forEach(button => button.disabled = false);
+        }
     });
 }
 
