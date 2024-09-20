@@ -149,7 +149,13 @@
                 scale: 1.1
             })	
 
-            function getSelectedItem(val) {
+            let startTime;
+
+function startQuestionTimer() {
+    startTime = new Date();
+}
+
+function getSelectedItem(val) {
     var temp = document.getElementById('content');
     var temp1 = document.getElementById('loader');
     temp.style.display = 'none';
@@ -159,6 +165,10 @@
     var optionButtons = document.querySelectorAll('.option-button');
     optionButtons.forEach(button => button.disabled = true);
 
+    // Calculate the time taken to answer
+    var endTime = new Date();
+    var timeTaken = (endTime - startTime) / 1000; // time in seconds
+
     Cookies.set('last_question_was_answered', 'true')
 
     $.ajax({
@@ -167,7 +177,8 @@
         data: {
             'question_id': question_data.id.toString(),
             'selected_option': val.toString(),
-            'score': question_data.score.toString()
+            'score': question_data.score.toString(),
+            'time_taken': timeTaken.toString() // Sending time taken with the answer
         },
         success: function(result) {
             createQuestion();
@@ -177,7 +188,6 @@
         }
     });
 }
-
 
             function createQuestion(){
                 $.ajax({url: "get_question.php", success: function(result){
