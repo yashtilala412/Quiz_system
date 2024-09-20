@@ -149,26 +149,35 @@
                 scale: 1.1
             })	
 
-            function getSelectedItem(val){
-            	var temp = document.getElementById('content');
-            	var temp1 = document.getElementById('loader');
-            	temp.style.display = 'none';
-            	temp1.style.display = 'block';
+            function getSelectedItem(val) {
+    var temp = document.getElementById('content');
+    var temp1 = document.getElementById('loader');
+    temp.style.display = 'none';
+    temp1.style.display = 'block';
 
-                Cookies.set('last_question_was_answered', 'true')
-            
+    // Disable all option buttons after selection
+    var optionButtons = document.querySelectorAll('.option-button');
+    optionButtons.forEach(button => button.disabled = true);
 
-                $.ajax({
-                type : 'POST',
-                url: "check_answer.php",
-                data : {'question_id' : question_data.id.toString(), 
-                        'selected_option' : val.toString(),
-                        'score' : question_data.score.toString()
-                },
-                success: function(result){
-                   createQuestion();
-                }});
-            }
+    Cookies.set('last_question_was_answered', 'true')
+
+    $.ajax({
+        type: 'POST',
+        url: "check_answer.php",
+        data: {
+            'question_id': question_data.id.toString(),
+            'selected_option': val.toString(),
+            'score': question_data.score.toString()
+        },
+        success: function(result) {
+            createQuestion();
+
+            // Re-enable the option buttons when a new question is loaded
+            optionButtons.forEach(button => button.disabled = false);
+        }
+    });
+}
+
 
             function createQuestion(){
                 $.ajax({url: "get_question.php", success: function(result){
