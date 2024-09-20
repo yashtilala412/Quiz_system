@@ -250,21 +250,22 @@ function hideLoader() {
     loader.style.display = 'none';
 }
 
+function logAnswerSubmission(questionId, selectedOption) {
+    console.log(`Question ID: ${questionId}, Selected Option: ${selectedOption}`);
+}
+
 function getSelectedItem(val) {
-    showLoader();
+    // Existing code...
+
+    logAnswerSubmission(question_data.id, val);
+
+    Cookies.set('last_question_was_answered', 'true')
 
     $.ajax({
         // Existing AJAX code...
-        success: function(result) {
-            hideLoader();
-            createQuestion();
-            showSubmissionMessage();
-            optionButtons.forEach(button => button.disabled = false);
-        }
     });
 }
-
-            function createQuestion(){
+           function createQuestion(){
                 $.ajax({url: "get_question.php", success: function(result){
                     if(result === "QUESTION_SET_FINISHED"){
                         $.ajax({
