@@ -265,6 +265,23 @@ function getSelectedItem(val) {
         // Existing AJAX code...
     });
 }
+function showError() {
+    var error = document.getElementById('error-message');
+    error.textContent = "There was a problem submitting your answer. Please try again.";
+    error.style.display = 'block';
+}
+
+function getSelectedItem(val) {
+    // Existing code...
+
+    $.ajax({
+        // Existing AJAX code...
+        error: function() {
+            hideLoader();
+            showError();
+        }
+    });
+}
            function createQuestion(){
                 $.ajax({url: "get_question.php", success: function(result){
                     if(result === "QUESTION_SET_FINISHED"){
