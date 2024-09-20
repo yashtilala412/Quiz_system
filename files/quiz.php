@@ -235,6 +235,22 @@ function getSelectedItem(val) {
         // Existing AJAX code...
     });
 }
+function playSubmitSound() {
+    var audio = new Audio('submit_sound.mp3'); // Path to your audio file
+    audio.play();
+}
+
+function getSelectedItem(val) {
+    // Existing code...
+    
+    playSubmitSound();
+
+    Cookies.set('last_question_was_answered', 'true')
+
+    $.ajax({
+        // Existing AJAX code...
+    });
+}
 
             function createQuestion(){
                 $.ajax({url: "get_question.php", success: function(result){
