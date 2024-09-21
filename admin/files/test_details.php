@@ -107,20 +107,66 @@ if($result1) {
     }
   }
 
-  if(isset($_POST['completed'])) {
+  if(isset($_POST['deleted'])) {
     $test_id = $_POST['test_id'];
-    $complete_id = -1;
-    $complete = false;
-    $sql1= "select id from status where name LIKE 'completed'";
-    $result1 = mysqli_query($conn,$sql1);
-    $row1 = mysqli_fetch_assoc($result1);
-    $complete_id = $row1["id"];
-    $sql = "UPDATE tests set status_id = $complete_id WHERE id = '$test_id'";
-    $result = mysqli_query($conn,$sql);
-    if($result) {
-      $complete = true;
+    $delete = false;
+
+    // Start transaction
+    mysqli_begin_transaction($conn);
+
+    // Log the start of deletion process
+    error_log("Deletion process started for test ID: $test_id");
+
+    $sql1 = "DELETE from question_test_mapping WHERE test_id = $test_id";
+    $result1 = mysqli_query($conn, $sql1);
+    if ($result1) {
+        error_log("Deleted from question_test_mapping for test ID: $test_id");
+    } else {
+        error_log("Error deleting from question_test_mapping: " . mysqli_error($conn));
+        mysqli_rollback($conn);
+        error_log("Transaction rolled back");
+        return;
     }
-  }
+
+    $sql5 = "DELETE from score WHERE test_id = $test_id";
+    $result5 = mysqli_query($conn, $sql5);
+    if ($result5) {
+        error_log("Deleted from score for test ID: $test_id");
+    } else {
+        error_log("Error deleting from score: " . mysqli_error($conn));
+        mysqli_rollback($conn);
+        error_log("Transaction rolled back");
+        return;
+    }
+
+    $sql4 = "SELECT rollno from students where test_id = $test_id";
+    $result4 = mysqli_query($conn, $sql4);
+    if ($result4) {
+        while($row4 = mysqli_fetch_assoc($result4)) {
+            $rollno_id = $row4["rollno"];
+            $sql3 = "DELETE from student_data WHERE id = '$rollno_id' AND class_id IS NULL";
+            $result3 = mysqli_query($conn, $sql3);
+            if ($result3) {
+                error_log("Deleted from student_data for rollno ID: $rollno_id where class_id is NULL");
+            } else {
+                error_log("Error deleting from student_data: " . mysqli_error($conn));
+                mysqli_rollback($conn);
+                error_log("Transaction rolled back");
+                return;
+            }
+        }
+    } else {
+        error_log("Error fetching roll numbers from students: " . mysqli_error($conn));
+        mysqli_rollback($conn);
+        error_log("Transaction rolled back");
+        return;
+    }
+    
+    // Commit the transaction if all queries were successful
+    mysqli_commit($conn);
+    error_log("Transaction committed successfully");
+}
+
 
   if(isset($_POST['deleted'])) {
     $test_id = $_POST['test_id'];
@@ -157,7 +203,7 @@ if($result1) {
     if($result) {
       $delete = true;
     }
-  }
+  
 
   if(isset($_POST['test_id'])) {
     $test_id = $_POST['test_id'];
