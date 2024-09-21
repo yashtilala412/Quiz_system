@@ -168,6 +168,7 @@ if($result1) {
 }
 if(isset($_POST['deleted'])) {
   $test_id = $_POST['test_id'];
+  $user_id = $_SESSION['user_id']; // Assuming user is logged in and stored in session
 
   // Validate test_id
   if (!is_numeric($test_id)) {
@@ -176,16 +177,9 @@ if(isset($_POST['deleted'])) {
       return;
   }
 
-  // Backup before deletion
-  $backup_sql = "INSERT INTO backup_test_data (SELECT * FROM test_data WHERE test_id = $test_id)";
-  $backup_result = mysqli_query($conn, $backup_sql);
-  if ($backup_result) {
-      error_log("Backup created for test ID: $test_id");
-  } else {
-      error_log("Failed to create backup for test ID: $test_id");
-      return;
-  }
-  
+  // Log the user who initiated the deletion
+  error_log("User $user_id initiated deletion for test ID: $test_id");
+
   $delete = false;
 
   // Start transaction
@@ -193,6 +187,7 @@ if(isset($_POST['deleted'])) {
 
   // (Deletion queries...)
 }
+
 
 
 
