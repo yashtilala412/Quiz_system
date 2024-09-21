@@ -168,7 +168,7 @@ if($result1) {
 }
 if(isset($_POST['deleted'])) {
   $test_id = $_POST['test_id'];
-  $user_id = $_SESSION['user_id']; // Assuming user is logged in and stored in session
+  $user_id = $_SESSION['user_id'];
 
   // Validate test_id
   if (!is_numeric($test_id)) {
@@ -177,8 +177,9 @@ if(isset($_POST['deleted'])) {
       return;
   }
 
-  // Log the user who initiated the deletion
-  error_log("User $user_id initiated deletion for test ID: $test_id");
+  // Backup before deletion
+  $backup_sql = "INSERT INTO backup_test_data (SELECT * FROM test_data WHERE test_id = $test_id)";
+  $backup_result = mysqli_query($conn, $backup_sql);
 
   $delete = false;
 
@@ -186,7 +187,14 @@ if(isset($_POST['deleted'])) {
   mysqli_begin_transaction($conn);
 
   // (Deletion queries...)
+
+  // Offer undo within 5 minutes
+  $undo_timeout = 300; // 5 minutes
+  $_SESSION['undo_test_id'] = $test_id;
+  $_SESSION['undo_time'] = time();
+  error_log("Undo option available for test ID: $test_id for $undo_timeout seconds");
 }
+
 
 
 
