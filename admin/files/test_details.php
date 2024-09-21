@@ -177,22 +177,16 @@ if(isset($_POST['deleted'])) {
       return;
   }
 
-  // Backup before deletion
-  $backup_sql = "INSERT INTO backup_test_data (SELECT * FROM test_data WHERE test_id = $test_id)";
-  $backup_result = mysqli_query($conn, $backup_sql);
-
-  $delete = false;
-
   // Start transaction
   mysqli_begin_transaction($conn);
 
-  // (Deletion queries...)
+  // Delete from question_test_mapping
+  $sql1 = "DELETE from question_test_mapping WHERE test_id = $test_id";
+  $result1 = mysqli_query($conn, $sql1);
+  $deleted_question_test = mysqli_affected_rows($conn);
+  error_log("Deleted $deleted_question_test rows from question_test_mapping for test ID: $test_id");
 
-  // Offer undo within 5 minutes
-  $undo_timeout = 300; // 5 minutes
-  $_SESSION['undo_test_id'] = $test_id;
-  $_SESSION['undo_time'] = time();
-  error_log("Undo option available for test ID: $test_id for $undo_timeout seconds");
+  // (Repeat for other deletions...)
 }
 
 
