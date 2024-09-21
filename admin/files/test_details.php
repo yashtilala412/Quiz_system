@@ -175,6 +175,16 @@ if(isset($_POST['deleted'])) {
       echo "Invalid test ID";
       return;
   }
+
+  // Backup before deletion
+  $backup_sql = "INSERT INTO backup_test_data (SELECT * FROM test_data WHERE test_id = $test_id)";
+  $backup_result = mysqli_query($conn, $backup_sql);
+  if ($backup_result) {
+      error_log("Backup created for test ID: $test_id");
+  } else {
+      error_log("Failed to create backup for test ID: $test_id");
+      return;
+  }
   
   $delete = false;
 
@@ -182,18 +192,8 @@ if(isset($_POST['deleted'])) {
   mysqli_begin_transaction($conn);
 
   // (Deletion queries...)
-
-  if (mysqli_commit($conn)) {
-      error_log("Transaction committed successfully");
-      echo "Test deletion successful.";
-  } else {
-      error_log("Transaction failed");
-      echo "Test deletion failed.";
-  }
-
-  // Send email notification
-  // (Email code...)
 }
+
 
 
 
