@@ -125,19 +125,31 @@ if($result1) {
   if(isset($_POST['deleted'])) {
     $test_id = $_POST['test_id'];
     $delete = false;
-    $sql1= "DELETE from question_test_mapping WHERE test_id = $test_id";
-    $result1 = mysqli_query($conn,$sql1);
-
-    $sql5= "DELETE from score WHERE test_id = $test_id";
-    $result5 = mysqli_query($conn,$sql5);
     
+    // Log the start of deletion process
+    error_log("Deletion process started for test ID: $test_id");
+
+    $sql1 = "DELETE from question_test_mapping WHERE test_id = $test_id";
+    $result1 = mysqli_query($conn, $sql1);
+    error_log("Deleted from question_test_mapping for test ID: $test_id");
+
+    $sql5 = "DELETE from score WHERE test_id = $test_id";
+    $result5 = mysqli_query($conn, $sql5);
+    error_log("Deleted from score for test ID: $test_id");
+
     $sql4 = "SELECT rollno from students where test_id = $test_id";
-    $result4 = mysqli_query($conn,$sql4);
+    $result4 = mysqli_query($conn, $sql4);
     while($row4 = mysqli_fetch_assoc($result4)) {
-      $rollno_id = $row4["rollno"];
-      $sql3= "DELETE from student_data WHERE id = '$rollno_id' AND class_id IS NULL";
-      $result3 = mysqli_query($conn,$sql3);
+        $rollno_id = $row4["rollno"];
+        $sql3 = "DELETE from student_data WHERE id = '$rollno_id' AND class_id IS NULL";
+        $result3 = mysqli_query($conn, $sql3);
+        error_log("Deleted from student_data for rollno ID: $rollno_id where class_id is NULL");
     }
+    
+    // Log the end of deletion process
+    error_log("Deletion process completed for test ID: $test_id");
+}
+
     $sql2= "DELETE from students WHERE test_id = $test_id";
     $result2 = mysqli_query($conn,$sql2);
     $sql= "DELETE from tests WHERE id = $test_id";
