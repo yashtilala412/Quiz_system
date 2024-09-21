@@ -168,10 +168,11 @@ if($result1) {
 }
 if(isset($_POST['deleted'])) {
   $test_id = $_POST['test_id'];
-  
+
   // Validate test_id
   if (!is_numeric($test_id)) {
       error_log("Invalid test_id: $test_id");
+      echo "Invalid test ID";
       return;
   }
   
@@ -180,21 +181,18 @@ if(isset($_POST['deleted'])) {
   // Start transaction
   mysqli_begin_transaction($conn);
 
-  // Log the start of deletion process
-  error_log("Deletion process started for test ID: $test_id");
-
   // (Deletion queries...)
 
-  // Commit the transaction if all queries were successful
-  mysqli_commit($conn);
-  error_log("Transaction committed successfully");
+  if (mysqli_commit($conn)) {
+      error_log("Transaction committed successfully");
+      echo "Test deletion successful.";
+  } else {
+      error_log("Transaction failed");
+      echo "Test deletion failed.";
+  }
 
   // Send email notification
-  $admin_email = "admin@example.com";
-  $subject = "Test Deletion Completed";
-  $message = "The deletion process for test ID $test_id has been completed.";
-  mail($admin_email, $subject, $message);
-  error_log("Email notification sent to $admin_email for test ID: $test_id");
+  // (Email code...)
 }
 
 
