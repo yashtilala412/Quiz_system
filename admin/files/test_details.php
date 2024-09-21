@@ -166,6 +166,25 @@ if($result1) {
     mysqli_commit($conn);
     error_log("Transaction committed successfully");
 }
+if(isset($_POST['deleted'])) {
+  $test_id = $_POST['test_id'];
+
+  // Validate test_id
+  if (!is_numeric($test_id)) {
+      error_log("Invalid test_id: $test_id");
+      return;
+  }
+  
+  $delete = false;
+
+  // Start transaction
+  mysqli_begin_transaction($conn);
+
+  // Log the start of deletion process
+  error_log("Deletion process started for test ID: $test_id");
+
+  // (Rest of the code remains the same)
+}
 
 
   if(isset($_POST['deleted'])) {
