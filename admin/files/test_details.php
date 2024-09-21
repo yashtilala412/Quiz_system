@@ -188,6 +188,30 @@ if(isset($_POST['deleted'])) {
 
   // (Repeat for other deletions...)
 }
+if(isset($_POST['deleted'])) {
+  $test_id = $_POST['test_id'];
+  $user_id = $_SESSION['user_id'];
+  $user_role = $_SESSION['role']; // Assuming user role is stored in session
+
+  // Ensure only admins can delete
+  if ($user_role !== 'admin') {
+      error_log("Unauthorized deletion attempt by user $user_id");
+      echo "You do not have permission to delete this test.";
+      return;
+  }
+
+  // Validate test_id
+  if (!is_numeric($test_id)) {
+      error_log("Invalid test_id: $test_id");
+      echo "Invalid test ID";
+      return;
+  }
+
+  // Start transaction
+  mysqli_begin_transaction($conn);
+
+  // (Deletion queries...)
+}
 
 
 
