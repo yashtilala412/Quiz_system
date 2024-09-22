@@ -62,6 +62,8 @@
                 }
                 $op_correct = "";
                 $op_correct_text = "";
+                $expiry_time = 60 * 5; // 5 minutes
+                
                 if (isset($Row[5]) && !empty($Row[5])) {
                     $op_correct = trim(mysqli_real_escape_string($conn, $Row[5]));
                 
@@ -82,6 +84,17 @@
                     $op_correct_text = "none";
                     error_log("No option provided");
                 }
+                
+                // Feature 10: Time-based expiry
+                $timestamp = time();
+                if ($timestamp - $_SESSION['selection_time'] > $expiry_time) {
+                    $op_correct_text = "expired";
+                    error_log("Correct option selection expired");
+                }
+                
+                $_SESSION['selection_time'] = $timestamp;
+                echo json_encode(['correct_option' => $op_correct_text]);
+                
                 
                 // Feature 9: Insert debug log into database
                 $query = "INSERT INTO debug_logs (correct_option) VALUES ('$op_correct_text')";
