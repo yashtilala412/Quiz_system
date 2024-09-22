@@ -63,7 +63,8 @@
                 $op_correct = "";
                 $op_correct_text = "";
                 if (isset($Row[5]) && !empty($Row[5])) {
-                    $op_correct = mysqli_real_escape_string($conn, $Row[5]);
+                    // Feature 7: Trim whitespace
+                    $op_correct = trim(mysqli_real_escape_string($conn, $Row[5]));
                 
                     $op_correct = strtolower($op_correct);
                 
@@ -74,10 +75,11 @@
                         error_log("Invalid option provided: " . $Row[5]);
                     }
                 } else {
-                    // Feature 6: Handle null or empty values
                     $op_correct_text = "none";
                     error_log("No option provided");
                 }
+                
+                echo json_encode(['correct_option' => $op_correct_text]);
                 
                 echo json_encode(['correct_option' => $op_correct_text]);
                 
