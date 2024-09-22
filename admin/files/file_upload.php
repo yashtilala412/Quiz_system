@@ -71,12 +71,15 @@
                         $op_correct_text = $op_correct;
                     } else {
                         $op_correct_text = "none";
-                        // Feature 4: Log error for invalid option
                         error_log("Invalid option provided: " . $Row[5]);
                     }
                 
                     error_log("Correct option selected: " . $op_correct_text);
+                
+                    // Feature 5: Return correct option in JSON format
+                    echo json_encode(['correct_option' => $op_correct_text]);
                 }
+                
                 
                 $score = "";
                 if(isset($Row[6])) {
