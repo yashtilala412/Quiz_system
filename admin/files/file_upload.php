@@ -62,23 +62,23 @@
                 }
 
                 $op_correct = "";
-                $op_correct_text = "";
-                if(isset($Row[5])) {
-                    $op_correct = mysqli_real_escape_string($conn,$Row[5]);
+$op_correct_text = "";
+if (isset($Row[5])) {
+    $op_correct = mysqli_real_escape_string($conn, $Row[5]);
 
-                    if($op_correct == "A" || $op_correct == "a") {
-                        $op_correct_text = "a";
-                    }
-                    else if($op_correct == "B" || $op_correct == "b") {
-                        $op_correct_text = "b";
-                    }
-                    else if($op_correct == "C" || $op_correct == "c") {
-                        $op_correct_text = "c";
-                    }
-                    else if($op_correct == "D" || $op_correct == "d") {
-                        $op_correct_text = "d";
-                    } 
-                }
+    if ($op_correct == "A" || $op_correct == "a") {
+        $op_correct_text = "a";
+    } elseif ($op_correct == "B" || $op_correct == "b") {
+        $op_correct_text = "b";
+    } elseif ($op_correct == "C" || $op_correct == "c") {
+        $op_correct_text = "c";
+    } elseif ($op_correct == "D" || $op_correct == "d") {
+        $op_correct_text = "d";
+    } 
+
+    // Feature 1: Log the selected correct option
+    error_log("Correct option selected: " . $op_correct_text);
+}
 
                 $score = "";
                 if(isset($Row[6])) {
