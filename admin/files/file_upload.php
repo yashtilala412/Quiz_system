@@ -65,19 +65,14 @@
                 if (isset($Row[5])) {
                     $op_correct = mysqli_real_escape_string($conn, $Row[5]);
                 
-                    // Feature 3: Case-insensitive option check
                     $op_correct = strtolower($op_correct);
                 
-                    if ($op_correct == "a") {
-                        $op_correct_text = "a";
-                    } elseif ($op_correct == "b") {
-                        $op_correct_text = "b";
-                    } elseif ($op_correct == "c") {
-                        $op_correct_text = "c";
-                    } elseif ($op_correct == "d") {
-                        $op_correct_text = "d";
+                    if ($op_correct == "a" || $op_correct == "b" || $op_correct == "c" || $op_correct == "d") {
+                        $op_correct_text = $op_correct;
                     } else {
                         $op_correct_text = "none";
+                        // Feature 4: Log error for invalid option
+                        error_log("Invalid option provided: " . $Row[5]);
                     }
                 
                     error_log("Correct option selected: " . $op_correct_text);
