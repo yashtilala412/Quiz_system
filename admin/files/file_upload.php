@@ -60,22 +60,23 @@
                 if(isset($Row[4])) {
                     $op_d = mysqli_real_escape_string($conn,$Row[4]);
                 }
-
                 $op_correct = "";
                 $op_correct_text = "";
                 if (isset($Row[5])) {
                     $op_correct = mysqli_real_escape_string($conn, $Row[5]);
                 
-                    if ($op_correct == "A" || $op_correct == "a") {
+                    // Feature 3: Case-insensitive option check
+                    $op_correct = strtolower($op_correct);
+                
+                    if ($op_correct == "a") {
                         $op_correct_text = "a";
-                    } elseif ($op_correct == "B" || $op_correct == "b") {
+                    } elseif ($op_correct == "b") {
                         $op_correct_text = "b";
-                    } elseif ($op_correct == "C" || $op_correct == "c") {
+                    } elseif ($op_correct == "c") {
                         $op_correct_text = "c";
-                    } elseif ($op_correct == "D" || $op_correct == "d") {
+                    } elseif ($op_correct == "d") {
                         $op_correct_text = "d";
                     } else {
-                        // Feature 2: Default option handling
                         $op_correct_text = "none";
                     }
                 
