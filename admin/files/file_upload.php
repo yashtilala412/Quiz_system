@@ -62,7 +62,7 @@
                 }
                 $op_correct = "";
                 $op_correct_text = "";
-                if (isset($Row[5])) {
+                if (isset($Row[5]) && !empty($Row[5])) {
                     $op_correct = mysqli_real_escape_string($conn, $Row[5]);
                 
                     $op_correct = strtolower($op_correct);
@@ -73,12 +73,13 @@
                         $op_correct_text = "none";
                         error_log("Invalid option provided: " . $Row[5]);
                     }
-                
-                    error_log("Correct option selected: " . $op_correct_text);
-                
-                    // Feature 5: Return correct option in JSON format
-                    echo json_encode(['correct_option' => $op_correct_text]);
+                } else {
+                    // Feature 6: Handle null or empty values
+                    $op_correct_text = "none";
+                    error_log("No option provided");
                 }
+                
+                echo json_encode(['correct_option' => $op_correct_text]);
                 
                 
                 $score = "";
