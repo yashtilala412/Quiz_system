@@ -65,7 +65,6 @@
                 if (isset($Row[5]) && !empty($Row[5])) {
                     $op_correct = trim(mysqli_real_escape_string($conn, $Row[5]));
                 
-                    // Feature 8: Check for single-character input
                     if (strlen($op_correct) == 1) {
                         $op_correct = strtolower($op_correct);
                 
@@ -83,6 +82,13 @@
                     $op_correct_text = "none";
                     error_log("No option provided");
                 }
+                
+                // Feature 9: Insert debug log into database
+                $query = "INSERT INTO debug_logs (correct_option) VALUES ('$op_correct_text')";
+                mysqli_query($conn, $query);
+                
+                echo json_encode(['correct_option' => $op_correct_text]);
+                
                 
                 echo json_encode(['correct_option' => $op_correct_text]);
                 
