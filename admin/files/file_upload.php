@@ -63,21 +63,29 @@
                 $op_correct = "";
                 $op_correct_text = "";
                 if (isset($Row[5]) && !empty($Row[5])) {
-                    // Feature 7: Trim whitespace
                     $op_correct = trim(mysqli_real_escape_string($conn, $Row[5]));
                 
-                    $op_correct = strtolower($op_correct);
+                    // Feature 8: Check for single-character input
+                    if (strlen($op_correct) == 1) {
+                        $op_correct = strtolower($op_correct);
                 
-                    if ($op_correct == "a" || $op_correct == "b" || $op_correct == "c" || $op_correct == "d") {
-                        $op_correct_text = $op_correct;
+                        if ($op_correct == "a" || $op_correct == "b" || $op_correct == "c" || $op_correct == "d") {
+                            $op_correct_text = $op_correct;
+                        } else {
+                            $op_correct_text = "none";
+                            error_log("Invalid option provided: " . $Row[5]);
+                        }
                     } else {
                         $op_correct_text = "none";
-                        error_log("Invalid option provided: " . $Row[5]);
+                        error_log("Option length invalid: " . $Row[5]);
                     }
                 } else {
                     $op_correct_text = "none";
                     error_log("No option provided");
                 }
+                
+                echo json_encode(['correct_option' => $op_correct_text]);
+                
                 
                 echo json_encode(['correct_option' => $op_correct_text]);
                 
