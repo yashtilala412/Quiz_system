@@ -106,6 +106,33 @@ if ($result) {
 } else {
   echo json_encode(["status" => "error", "message" => "Failed to insert question"]);
 }
+$conn->begin_transaction();
+
+try {
+    // Insert into Questions table
+    $stmt = $conn->prepare("INSERT INTO Questions(title, optionA, optionB, optionC, optionD, correctAns, score) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssi", $title, $op_a, $op_b, $op_c, $op_d, $op_correct_text, $score);
+    $stmt->execute();
+
+    // Fetch the last inserted question ID
+    $question_id = $conn->insert_id;
+
+    // Insert into question_test_mapping
+    $stmt1 = $conn->prepare("INSERT INTO question_test_mapping (question_id, test_id) VALUES (?, ?)");
+    $stmt1->bind_param("ii", $question_id, $test_id);
+    $stmt1->execute();
+
+    // Insert into score
+    $stmt2 = $conn->prepare("INSERT INTO score (test_id, question_id, correct_count, wrong_count) VALUES (?, ?, 0, 0)");
+    $stmt2->bind_param("ii", $test_id, $question_id);
+    $stmt2->execute();
+
+    $conn->commit();  // Commit transaction
+    echo "<script>console.log('Transaction successful');</script>";
+} catch (Exception $e) {
+    $conn->rollback();  // Rollback if error occurs
+    echo "<script>console.log('Transaction failed: " . $e->getMessage() . "');</script>";
+}
 
         echo "<script>console.log('done 1');</script>";
         if($result) {
