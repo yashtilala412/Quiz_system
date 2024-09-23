@@ -133,6 +133,8 @@ try {
     $conn->rollback();  // Rollback if error occurs
     echo "<script>console.log('Transaction failed: " . $e->getMessage() . "');</script>";
 }
+$stmt = $conn->prepare("INSERT INTO Questions(title, optionA, optionB, optionC, optionD, correctAns, score, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
+$stmt->bind_param("ssssssi", $title, $op_a, $op_b, $op_c, $op_d, $op_correct_text, $score);
 
         echo "<script>console.log('done 1');</script>";
         if($result) {
