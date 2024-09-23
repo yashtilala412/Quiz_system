@@ -135,6 +135,11 @@ try {
 }
 $stmt = $conn->prepare("INSERT INTO Questions(title, optionA, optionB, optionC, optionD, correctAns, score, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
 $stmt->bind_param("ssssssi", $title, $op_a, $op_b, $op_c, $op_d, $op_correct_text, $score);
+if ($stmt->affected_rows > 0) {
+  echo "<script>console.log('Question inserted successfully');</script>";
+} else {
+  echo "<script>console.log('No rows inserted');</script>";
+}
 
         echo "<script>console.log('done 1');</script>";
         if($result) {
