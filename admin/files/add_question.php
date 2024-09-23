@@ -92,6 +92,9 @@ $result = $stmt->execute();
 if (!$result) {
   error_log("Error inserting into Questions table: " . $conn->error);
 }
+if (empty($title) || empty($op_a) || empty($op_b) || empty($op_c) || empty($op_d) || empty($op_correct_text) || !is_numeric($score)) {
+  die("Invalid input data.");
+}
 
         echo "<script>console.log('done 1');</script>";
         if($result) {
