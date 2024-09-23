@@ -148,6 +148,9 @@ $stmt->fetch();
 if ($count > 0) {
     die("This question already exists.");
 }
+echo '<script type="text/javascript">',
+'fetchLatestQuestions();',
+'</script>';
 
         echo "<script>console.log('done 1');</script>";
         if($result) {
