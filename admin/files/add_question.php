@@ -95,6 +95,12 @@ if (!$result) {
 if (empty($title) || empty($op_a) || empty($op_b) || empty($op_c) || empty($op_d) || empty($op_correct_text) || !is_numeric($score)) {
   die("Invalid input data.");
 }
+$title = htmlspecialchars($title);
+$op_a = htmlspecialchars($op_a);
+$op_b = htmlspecialchars($op_b);
+$op_c = htmlspecialchars($op_c);
+$op_d = htmlspecialchars($op_d);
+$op_correct_text = htmlspecialchars($op_correct_text);
 
         echo "<script>console.log('done 1');</script>";
         if($result) {
