@@ -140,6 +140,14 @@ if ($stmt->affected_rows > 0) {
 } else {
   echo "<script>console.log('No rows inserted');</script>";
 }
+$stmt = $conn->prepare("SELECT COUNT(*) FROM Questions WHERE title = ?");
+$stmt->bind_param("s", $title);
+$stmt->execute();
+$stmt->bind_result($count);
+$stmt->fetch();
+if ($count > 0) {
+    die("This question already exists.");
+}
 
         echo "<script>console.log('done 1');</script>";
         if($result) {
