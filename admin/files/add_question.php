@@ -101,6 +101,11 @@ $op_b = htmlspecialchars($op_b);
 $op_c = htmlspecialchars($op_c);
 $op_d = htmlspecialchars($op_d);
 $op_correct_text = htmlspecialchars($op_correct_text);
+if ($result) {
+  echo json_encode(["status" => "success", "message" => "Question inserted successfully"]);
+} else {
+  echo json_encode(["status" => "error", "message" => "Failed to insert question"]);
+}
 
         echo "<script>console.log('done 1');</script>";
         if($result) {
