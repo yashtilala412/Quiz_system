@@ -45,7 +45,10 @@ if (isset($_GET['restart_test']) && $_GET['restart_test'] == 1) {
 // Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
-   
+    if (!$result) {
+        error_log("Failed to fetch question IDs: " . mysqli_error($conn));
+    }
+    
 } else {
     if (!isset($_SESSION['question_IDS_fetched'])) {
         $result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '" . $test_id . "' ");
