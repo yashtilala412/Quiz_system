@@ -65,7 +65,13 @@ if (!$conn) {
         return $difficulty_a - $difficulty_b; // Sort by ascending difficulty
     });
     shuffle($question_ids); // Shuffle within each difficulty level
-                
+    $_SESSION['questions_answered'] = isset($_SESSION['questions_answered']) ? $_SESSION['questions_answered'] : 0;
+
+    if ($_SESSION['question_counter'] < sizeof($_SESSION['question_IDS_fetched'])) {
+        $_SESSION['questions_answered']++;
+        echo 'Progress: ' . $_SESSION['questions_answered'] . ' out of ' . sizeof($_SESSION['question_IDS_fetched']);
+    }
+                    
 } else {
     if (!isset($_SESSION['question_IDS_fetched'])) {
         $result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '" . $test_id . "' ");
