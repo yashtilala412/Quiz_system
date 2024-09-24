@@ -59,7 +59,13 @@ if (!$conn) {
         echo 'TIME_LIMIT_EXCEEDED';
         exit();
     }
-            
+    usort($question_ids, function($a, $b) use ($conn) {
+        $difficulty_a = mysqli_fetch_assoc(mysqli_query($conn, "SELECT difficulty FROM questions WHERE question_id = '" . $a['question_id'] . "'"))['difficulty'];
+        $difficulty_b = mysqli_fetch_assoc(mysqli_query($conn, "SELECT difficulty FROM questions WHERE question_id = '" . $b['question_id'] . "'"))['difficulty'];
+        return $difficulty_a - $difficulty_b; // Sort by ascending difficulty
+    });
+    shuffle($question_ids); // Shuffle within each difficulty level
+                
 } else {
     if (!isset($_SESSION['question_IDS_fetched'])) {
         $result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '" . $test_id . "' ");
