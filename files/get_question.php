@@ -71,7 +71,9 @@ if (!$conn) {
         $_SESSION['questions_answered']++;
         echo 'Progress: ' . $_SESSION['questions_answered'] . ' out of ' . sizeof($_SESSION['question_IDS_fetched']);
     }
-                    
+    $question_log = implode(',', array_column($_SESSION['question_IDS_fetched'], 'question_id'));
+    mysqli_query($conn, "INSERT INTO question_fetch_log (user_id, test_id, fetched_questions) VALUES ('" . $user_id . "', '" . $test_id . "', '" . $question_log . "')");
+                        
 } else {
     if (!isset($_SESSION['question_IDS_fetched'])) {
         $result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '" . $test_id . "' ");
