@@ -48,7 +48,9 @@ if (!$conn) {
     if (!$result) {
         error_log("Failed to fetch question IDs: " . mysqli_error($conn));
     }
-    
+    $max_questions = 10;
+    $result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '" . $test_id . "' LIMIT " . $max_questions);
+        
 } else {
     if (!isset($_SESSION['question_IDS_fetched'])) {
         $result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '" . $test_id . "' ");
