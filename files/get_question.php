@@ -50,7 +50,16 @@ if (!$conn) {
     }
     $max_questions = 10;
     $result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '" . $test_id . "' LIMIT " . $max_questions);
-        
+    if (!isset($_SESSION['start_time'])) {
+        $_SESSION['start_time'] = time();
+    }
+    
+    $time_limit = 30 * 60; // 30 minutes
+    if (time() - $_SESSION['start_time'] > $time_limit) {
+        echo 'TIME_LIMIT_EXCEEDED';
+        exit();
+    }
+            
 } else {
     if (!isset($_SESSION['question_IDS_fetched'])) {
         $result = mysqli_query($conn, "SELECT question_id FROM question_test_mapping WHERE test_id = '" . $test_id . "' ");
