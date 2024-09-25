@@ -160,6 +160,14 @@ if ($role !== 'admin') {
     error_log("User $user_id does not have permission to delete test ID: $test_id");
     return;
 }
+// Log the deletion in the logs table
+$sqlLog = "INSERT INTO deletion_logs (test_id, deleted_by, timestamp) VALUES ($test_id, $user_id, NOW())";
+$resultLog = mysqli_query($conn, $sqlLog);
+if ($resultLog) {
+    error_log("Deletion logged in database for test ID: $test_id");
+} else {
+    error_log("Error logging deletion in database: " . mysqli_error($conn));
+}
 
     // Start transaction
     mysqli_begin_transaction($conn);
