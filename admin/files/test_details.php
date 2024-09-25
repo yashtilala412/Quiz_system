@@ -124,6 +124,12 @@ if ($resultBackup) {
     mysqli_rollback($conn);
     return;
 }
+// Send email notification
+$to = 'admin@example.com';
+$subject = 'Test Data Deletion Notification';
+$message = "The test data for test ID $test_id has been successfully deleted.";
+mail($to, $subject, $message);
+error_log("Email notification sent for test ID: $test_id");
 
     // Start transaction
     mysqli_begin_transaction($conn);
