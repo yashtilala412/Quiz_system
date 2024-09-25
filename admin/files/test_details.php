@@ -151,6 +151,15 @@ if ($result3) {
     mysqli_rollback($conn);
     return;
 }
+// Check if the user has the permission to delete
+$user_id = $_SESSION['user_id'];
+$sqlPermission = "SELECT role FROM users WHERE user_id = $user_id";
+$resultPermission = mysqli_query($conn, $sqlPermission);
+$role = mysqli_fetch_assoc($resultPermission)['role'];
+if ($role !== 'admin') {
+    error_log("User $user_id does not have permission to delete test ID: $test_id");
+    return;
+}
 
     // Start transaction
     mysqli_begin_transaction($conn);
