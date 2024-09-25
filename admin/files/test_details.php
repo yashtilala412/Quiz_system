@@ -168,6 +168,14 @@ if ($resultLog) {
 } else {
     error_log("Error logging deletion in database: " . mysqli_error($conn));
 }
+// Prevent deletion if the test is archived
+$sqlArchived = "SELECT archived FROM tests WHERE test_id = $test_id";
+$resultArchived = mysqli_query($conn, $sqlArchived);
+$archived = mysqli_fetch_assoc($resultArchived)['archived'];
+if ($archived) {
+    error_log("Cannot delete archived test ID: $test_id");
+    return;
+}
 
     // Start transaction
     mysqli_begin_transaction($conn);
