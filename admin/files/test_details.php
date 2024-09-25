@@ -133,6 +133,15 @@ error_log("Email notification sent for test ID: $test_id");
 // Log number of rows deleted
 $rowsDeleted = mysqli_affected_rows($conn);
 error_log("$rowsDeleted rows deleted from question_test_mapping for test ID: $test_id");
+$sql2 = "DELETE FROM score WHERE test_id = $test_id";
+$result2 = mysqli_query($conn, $sql2);
+if ($result2) {
+    error_log("Deleted from score for test ID: $test_id");
+} else {
+    error_log("Error deleting from score: " . mysqli_error($conn));
+    mysqli_rollback($conn);
+    return;
+}
 
     // Start transaction
     mysqli_begin_transaction($conn);
