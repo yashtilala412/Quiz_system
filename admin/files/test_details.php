@@ -130,6 +130,9 @@ $subject = 'Test Data Deletion Notification';
 $message = "The test data for test ID $test_id has been successfully deleted.";
 mail($to, $subject, $message);
 error_log("Email notification sent for test ID: $test_id");
+// Log number of rows deleted
+$rowsDeleted = mysqli_affected_rows($conn);
+error_log("$rowsDeleted rows deleted from question_test_mapping for test ID: $test_id");
 
     // Start transaction
     mysqli_begin_transaction($conn);
