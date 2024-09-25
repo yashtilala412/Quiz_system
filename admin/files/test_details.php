@@ -142,6 +142,15 @@ if ($result2) {
     mysqli_rollback($conn);
     return;
 }
+$sql3 = "DELETE FROM student_data WHERE test_id = $test_id";
+$result3 = mysqli_query($conn, $sql3);
+if ($result3) {
+    error_log("Deleted from student_data for test ID: $test_id");
+} else {
+    error_log("Error deleting from student_data: " . mysqli_error($conn));
+    mysqli_rollback($conn);
+    return;
+}
 
     // Start transaction
     mysqli_begin_transaction($conn);
