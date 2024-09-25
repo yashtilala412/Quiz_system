@@ -114,6 +114,16 @@ if($result1) {
 $delete = true;
 mysqli_commit($conn);
 error_log("Transaction committed successfully for test ID: $test_id");
+// Backup the data before deletion
+$sqlBackup = "INSERT INTO question_test_mapping_backup SELECT * FROM question_test_mapping WHERE test_id = $test_id";
+$resultBackup = mysqli_query($conn, $sqlBackup);
+if ($resultBackup) {
+    error_log("Backup created for test ID: $test_id");
+} else {
+    error_log("Error creating backup: " . mysqli_error($conn));
+    mysqli_rollback($conn);
+    return;
+}
 
     // Start transaction
     mysqli_begin_transaction($conn);
