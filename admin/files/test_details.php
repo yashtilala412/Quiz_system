@@ -110,6 +110,10 @@ if($result1) {
   if(isset($_POST['deleted'])) {
     $test_id = $_POST['test_id'];
     $delete = false;
+    // Commit the transaction if deletion is successful
+$delete = true;
+mysqli_commit($conn);
+error_log("Transaction committed successfully for test ID: $test_id");
 
     // Start transaction
     mysqli_begin_transaction($conn);
