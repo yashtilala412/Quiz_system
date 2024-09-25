@@ -176,6 +176,11 @@ if ($archived) {
     error_log("Cannot delete archived test ID: $test_id");
     return;
 }
+// Check for confirmation flag before proceeding
+if (!isset($_POST['confirm_delete']) || $_POST['confirm_delete'] !== 'yes') {
+  error_log("Deletion not confirmed for test ID: $test_id");
+  return;
+}
 
     // Start transaction
     mysqli_begin_transaction($conn);
