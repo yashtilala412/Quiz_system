@@ -149,7 +149,13 @@
         if (!preg_match('/^(?=.*\d)(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $student_password)) {
             throw new Exception('Password must be at least 8 characters long and include numbers, letters, and special characters.');
         }
-                                        
+        if (password_verify($student_password, $row2['password'])) {
+            $otp_code = mt_rand(100000, 999999); // Generate random 6-digit code
+            $_SESSION['otp'] = $otp_code;
+            // Send OTP to email or phone (integration required)
+            throw new Exception('Please enter the OTP sent to your email/phone.');
+        }
+                                                
 
         mysqli_stmt_close($stmt2);
     } catch (Exception $e) {
