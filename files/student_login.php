@@ -132,7 +132,10 @@
         if (time() - $last_password_change > ($password_expiry_days * 86400)) {
             throw new Exception('Password expired. Please change your password.');
         }
-                
+        if ($role !== 'student') {
+            throw new Exception('Unauthorized access.');
+        }
+                        
 
         mysqli_stmt_close($stmt2);
     } catch (Exception $e) {
