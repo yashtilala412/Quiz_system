@@ -133,6 +133,7 @@ if (time() - $_SESSION['last_activity'] > 1800) {
     throw new Exception('Session timed out. Please log in again.');
 }
 $_SESSION['last_activity'] = time();
+session_regenerate_id(true);
 
 
 // Prevent clickjacking
