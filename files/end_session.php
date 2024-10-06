@@ -108,6 +108,11 @@ setcookie('session', $session_id, [
 if (!filter_var($email_sanitized, FILTER_VALIDATE_EMAIL)) {
     throw new Exception('Invalid email format.');
 }
+$ip = $_SERVER['REMOTE_ADDR'];
+$attempts = get_login_attempts($ip);
+if ($attempts > 5) {
+    throw new Exception('Too many login attempts. Try again later.');
+}
 
 
 // Prevent clickjacking
