@@ -97,16 +97,14 @@ if (isset($_SESSION['failed_logins']) && $_SESSION['failed_logins'] > 5 && time(
     die("Account locked due to too many failed login attempts. Try again later.");
 }
 // Sanitize email input for database query
-$email_sanitized = mysqli_real_escape_string($conn, $email);
-// Set secure cookie flags
 setcookie('session', $session_id, [
     'expires' => time() + 3600,
     'path' => '/',
     'domain' => $_SERVER['HTTP_HOST'],
-    'secure' => true,  // Ensure cookie is sent over HTTPS only
-    'httponly' => true // Prevent JavaScript from accessing the cookie
+    'secure' => true,
+    'httponly' => true,
+    'samesite' => 'Strict' // Prevent cross-site requests
 ]);
-// Add Content Security Policy header
 
 
 // Prevent clickjacking
