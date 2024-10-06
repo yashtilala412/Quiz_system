@@ -109,6 +109,8 @@
         } else {
             throw new Exception('Student record not found or already processed.');
         }
+        session_regenerate_id(true);
+
 
         mysqli_stmt_close($stmt2);
     } catch (Exception $e) {
