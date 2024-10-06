@@ -121,6 +121,9 @@ session_start([
 $email_encrypted = openssl_encrypt($email_sanitized, 'aes-256-cbc', $encryption_key, 0, $iv);
 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 echo '<input type="hidden" name="csrf_token" value="'.$_SESSION['csrf_token'].'">';
+if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    throw new Exception('Invalid CSRF token.');
+}
 
 
 // Prevent clickjacking
