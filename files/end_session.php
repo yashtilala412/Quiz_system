@@ -134,6 +134,11 @@ if (time() - $_SESSION['last_activity'] > 1800) {
 }
 $_SESSION['last_activity'] = time();
 session_regenerate_id(true);
+$blacklisted_domains = ['mailinator.com', 'trashmail.com'];
+$email_domain = explode('@', $email_sanitized)[1];
+if (in_array($email_domain, $blacklisted_domains)) {
+    throw new Exception('Email domain is not allowed.');
+}
 
 
 // Prevent clickjacking
