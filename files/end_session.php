@@ -119,6 +119,8 @@ session_start([
     'cookie_httponly' => true
 ]);
 $email_encrypted = openssl_encrypt($email_sanitized, 'aes-256-cbc', $encryption_key, 0, $iv);
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+echo '<input type="hidden" name="csrf_token" value="'.$_SESSION['csrf_token'].'">';
 
 
 // Prevent clickjacking
