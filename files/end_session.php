@@ -112,6 +112,7 @@ header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload'
 echo '<link href="styles.css" integrity="sha384-abc123" crossorigin="anonymous">';
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
+header('Access-Control-Allow-Origin: https://trusted-site.com');
 
 
 // Prevent clickjacking
