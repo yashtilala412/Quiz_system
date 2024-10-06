@@ -126,7 +126,13 @@
             $_SESSION['last_attempt_time'] = time();
             throw new Exception('Incorrect password.');
         }
+        $password_expiry_days = 90;
+        $last_password_change = strtotime($row2['last_password_change']); // Assuming a 'last_password_change' field
         
+        if (time() - $last_password_change > ($password_expiry_days * 86400)) {
+            throw new Exception('Password expired. Please change your password.');
+        }
+                
 
         mysqli_stmt_close($stmt2);
     } catch (Exception $e) {
