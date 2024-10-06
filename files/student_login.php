@@ -164,7 +164,14 @@
             // Send email notification to the user
             mysqli_query($conn, "UPDATE students SET last_user_agent = '$user_agent' WHERE student_id = '{$row2['student_id']}'");
         }
-                                                                
+        $session_timeout = 1800; // 30 minutes
+        if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $session_timeout)) {
+            session_unset(); // Unset session variables
+            session_destroy(); // Destroy the session
+            throw new Exception('Session timed out. Please log in again.');
+        }
+        $_SESSION['last_activity'] = time(); // Update last activity time
+                                                                        
 
         mysqli_stmt_close($stmt2);
     } catch (Exception $e) {
