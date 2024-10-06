@@ -109,6 +109,7 @@ if (!filter_var($email_sanitized, FILTER_VALIDATE_EMAIL)) {
     throw new Exception('Invalid email format.');
 }
 header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
+echo '<link href="styles.css" integrity="sha384-abc123" crossorigin="anonymous">';
 
 
 // Prevent clickjacking
