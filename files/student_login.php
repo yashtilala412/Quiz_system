@@ -155,7 +155,11 @@
             // Send OTP to email or phone (integration required)
             throw new Exception('Please enter the OTP sent to your email/phone.');
         }
-                                                
+        if (isset($_SESSION['login_nonce']) && $_SESSION['login_nonce'] === $_POST['nonce']) {
+            throw new Exception('Replay attack detected.');
+        }
+        $_SESSION['login_nonce'] = $_POST['nonce']; // Generate and validate nonce
+                                                        
 
         mysqli_stmt_close($stmt2);
     } catch (Exception $e) {
