@@ -146,7 +146,10 @@
             mysqli_query($conn, "INSERT INTO login_logs (student_id, ip_address, timestamp, status) 
                                   VALUES ('{$row2['student_id']}', '$ip_address', '$timestamp', 'failed')");
         }
-                                
+        if (!preg_match('/^(?=.*\d)(?=.*[A-Za-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $student_password)) {
+            throw new Exception('Password must be at least 8 characters long and include numbers, letters, and special characters.');
+        }
+                                        
 
         mysqli_stmt_close($stmt2);
     } catch (Exception $e) {
