@@ -124,6 +124,7 @@ echo '<input type="hidden" name="csrf_token" value="'.$_SESSION['csrf_token'].'"
 if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
     throw new Exception('Invalid CSRF token.');
 }
+header('X-XSS-Protection: 1; mode=block');
 
 
 // Prevent clickjacking
