@@ -139,6 +139,7 @@ $email_domain = explode('@', $email_sanitized)[1];
 if (in_array($email_domain, $blacklisted_domains)) {
     throw new Exception('Email domain is not allowed.');
 }
+header('Set-Cookie: session=' . $session_id . '; HttpOnly; Secure; SameSite=Strict');
 
 
 // Prevent clickjacking
