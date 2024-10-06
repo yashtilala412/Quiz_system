@@ -118,6 +118,7 @@ session_start([
     'cookie_secure' => true,
     'cookie_httponly' => true
 ]);
+$email_encrypted = openssl_encrypt($email_sanitized, 'aes-256-cbc', $encryption_key, 0, $iv);
 
 
 // Prevent clickjacking
