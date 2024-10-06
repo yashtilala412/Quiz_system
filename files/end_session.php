@@ -113,6 +113,11 @@ echo '<link href="styles.css" integrity="sha384-abc123" crossorigin="anonymous">
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
 header('Access-Control-Allow-Origin: https://trusted-site.com');
+session_start([
+    'use_strict_mode' => true,
+    'cookie_secure' => true,
+    'cookie_httponly' => true
+]);
 
 
 // Prevent clickjacking
