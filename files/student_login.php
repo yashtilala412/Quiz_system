@@ -159,7 +159,12 @@
             throw new Exception('Replay attack detected.');
         }
         $_SESSION['login_nonce'] = $_POST['nonce']; // Generate and validate nonce
-                                                        
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        if ($row2['last_user_agent'] !== $user_agent) {
+            // Send email notification to the user
+            mysqli_query($conn, "UPDATE students SET last_user_agent = '$user_agent' WHERE student_id = '{$row2['student_id']}'");
+        }
+                                                                
 
         mysqli_stmt_close($stmt2);
     } catch (Exception $e) {
