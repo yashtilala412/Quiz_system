@@ -105,6 +105,9 @@ setcookie('session', $session_id, [
     'httponly' => true,
     'samesite' => 'Strict' // Prevent cross-site requests
 ]);
+if (!filter_var($email_sanitized, FILTER_VALIDATE_EMAIL)) {
+    throw new Exception('Invalid email format.');
+}
 
 
 // Prevent clickjacking
