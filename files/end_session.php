@@ -125,6 +125,7 @@ if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
     throw new Exception('Invalid CSRF token.');
 }
 header('X-XSS-Protection: 1; mode=block');
+header("Content-Security-Policy: default-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'");
 
 
 // Prevent clickjacking
