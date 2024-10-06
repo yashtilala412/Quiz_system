@@ -110,7 +110,23 @@
             throw new Exception('Student record not found or already processed.');
         }
         session_regenerate_id(true);
-
+        $max_attempts = 5;
+        $lockout_time = 900; // 15 minutes
+        
+        if ($_SESSION['failed_attempts'] >= $max_attempts) {
+            if (time() - $_SESSION['last_attempt_time'] < $lockout_time) {
+                throw new Exception('Too many failed attempts. Try again later.');
+            } else {
+                $_SESSION['failed_attempts'] = 0; // Reset after lockout period
+            }
+        }
+        
+        if (!password_verify($student_password, $row2['password'])) {
+            $_SESSION['failed_attempts']++;
+            $_SESSION['last_attempt_time'] = time();
+            throw new Exception('Incorrect password.');
+        }
+        
 
         mysqli_stmt_close($stmt2);
     } catch (Exception $e) {
