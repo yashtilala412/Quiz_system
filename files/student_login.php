@@ -135,7 +135,18 @@
         if ($role !== 'student') {
             throw new Exception('Unauthorized access.');
         }
-                        
+        $ip_address = $_SERVER['REMOTE_ADDR'];
+        $timestamp = date('Y-m-d H:i:s');
+        if (password_verify($student_password, $row2['password'])) {
+            // Log successful login
+            mysqli_query($conn, "INSERT INTO login_logs (student_id, ip_address, timestamp, status) 
+                                  VALUES ('{$row2['student_id']}', '$ip_address', '$timestamp', 'success')");
+        } else {
+            // Log failed login
+            mysqli_query($conn, "INSERT INTO login_logs (student_id, ip_address, timestamp, status) 
+                                  VALUES ('{$row2['student_id']}', '$ip_address', '$timestamp', 'failed')");
+        }
+                                
 
         mysqli_stmt_close($stmt2);
     } catch (Exception $e) {
