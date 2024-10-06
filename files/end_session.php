@@ -126,6 +126,7 @@ if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
 }
 header('X-XSS-Protection: 1; mode=block');
 header("Content-Security-Policy: default-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'");
+file_put_contents('session_log.txt', "Session ID: $session_id started at " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
 
 
 // Prevent clickjacking
