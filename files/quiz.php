@@ -188,13 +188,13 @@ function getSelectedItem(val) {
         }
     });
 }
-function showSubmissionMessage(customMessage = "Answer submitted!") {
+function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000) {
     var message = document.getElementById('submissionMessage');
     message.textContent = customMessage;
     message.style.display = 'block';
     setTimeout(() => {
         message.style.display = 'none';
-    }, 2000);
+    }, duration);
 }
 
 
