@@ -133,6 +133,9 @@ if (!isset($_SESSION['student_details']) || !is_array($_SESSION['student_details
     header("Location: login.php");
     exit();
 }
+if (file_exists('log.txt') && filesize('log.txt') > 1048576) { // 1MB limit
+    logMessage("Log file exceeded 1MB. Consider archiving.");
+}
 
 
     // Establishing database connection
