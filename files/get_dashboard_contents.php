@@ -121,29 +121,10 @@ session_regenerate_id(false);
 logMessage("Session ID rejected.");
 if ($loginSuccess) {
     logMessage("User successfully logged in.");
-}
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-    logMessage("Session started.");
-}
-if (!isset($_SESSION['student_details']) || !is_array($_SESSION['student_details'])) {
-    logMessage("Invalid session data. Possible tampering detected.");
-    session_unset();
-    session_destroy();
-    header("Location: login.php");
-    exit();
-}
-if (file_exists('log.txt') && filesize('log.txt') > 1048576) { // 1MB limit
-    logMessage("Log file exceeded 1MB. Consider archiving.");
-}
-if (isset($_COOKIE[session_name()]) && empty($_COOKIE[session_name()])) {
-    logMessage("Session cookie expired.");
-}
-if (isset($_SESSION['creation_time'])) {
-    $session_duration = time() - $_SESSION['creation_time'];
-    logMessage("Session lasted for " . $session_duration . " seconds.");
-}
-
+    if (!$loginSuccess) {
+        logMessage("Failed login attempt.");
+    }
+}    
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
