@@ -25,7 +25,8 @@ $testName = "";
 
 function logMessage($message) {
     $ip = $_SERVER['REMOTE_ADDR'];
-    error_log("[IP: $ip] " . $message . PHP_EOL, 3, 'log.txt');
+    $userAgent = $_SERVER['HTTP_USER_AGENT'];
+    error_log("[IP: $ip] [User Agent: $userAgent] " . $message . PHP_EOL, 3, 'log.txt');
 }
 
 logMessage("Script execution started.");
