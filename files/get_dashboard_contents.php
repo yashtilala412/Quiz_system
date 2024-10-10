@@ -68,6 +68,12 @@ session_start();
 logMessage("Session started successfully.");
 session_unset();
 logMessage("Session data unset.");
+function logMessage($message) {
+    $ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP) ? $_SERVER['REMOTE_ADDR'] : 'Unknown IP';
+    $userAgent = $_SERVER['HTTP_USER_AGENT'];
+    $timestamp = date('Y-m-d H:i:s');
+    error_log("[$timestamp] [IP: $ip] [User Agent: $userAgent] " . $message . PHP_EOL, 3, 'log.txt');
+}
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
