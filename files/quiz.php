@@ -203,7 +203,7 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
     }
 }
 
-function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null, fontSize = "16px", padding = "10px", centerHorizontally = false, centerVertically = false) {
+function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null, fontSize = "16px", padding = "10px", centerHorizontally = false, centerVertically = false, draggable = false) {
     var message = document.getElementById('submissionMessage');
     message.textContent = customMessage;
     message.style.display = 'block';
@@ -217,15 +217,38 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
         message.style.left = '50%';
         message.style.transform = 'translateX(-50%)';
     }
-
     if (centerVertically) {
         message.style.position = 'absolute';
         message.style.top = '50%';
         message.style.transform = 'translateY(-50%)';
     }
+
+    if (draggable) {
+        message.style.cursor = 'move';
+        message.onmousedown = function(event) {
+            let shiftX = event.clientX - message.getBoundingClientRect().left;
+            let shiftY = event.clientY - message.getBoundingClientRect().top;
+            document.onmousemove = function(event) {
+                message.style.left = event.pageX - shiftX + 'px';
+                message.style.top = event.pageY - shiftY + 'px';
+            };
+            document.onmouseup = function() {
+                document.onmousemove = null;
+                message.onmouseup = null;
+            };
+        };
+        message.ondragstart = function() {
+            return false;
+        };
+    }
     
-    // Rest of the code remains the same
+    if (!persistent) {
+        setTimeout(() => {
+            message.style.display = 'none';
+        }, duration);
+    }
 }
+
 
 
 function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false) {
