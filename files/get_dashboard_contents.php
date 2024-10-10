@@ -149,7 +149,12 @@ if ($loginSuccess) {
     if (isset($_SESSION['resumed'])) {
         logMessage("Session resumed after server restart.");
     }
-        
+    if (!isset($_SESSION['request_count'])) {
+        $_SESSION['request_count'] = 0;
+    }
+    $_SESSION['request_count']++;
+    logMessage("Session request count: " . $_SESSION['request_count']);
+    
     
 
         logMessage("Processing test_id: " . $test_id);
