@@ -92,6 +92,9 @@ if (!isset($_SESSION['creation_time'])) {
     $_SESSION['creation_time'] = time();
     logMessage("Session creation time: " . date('Y-m-d H:i:s', $_SESSION['creation_time']));
 }
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > 600) {
+    logMessage("User inactive for more than 10 minutes.");
+}
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
