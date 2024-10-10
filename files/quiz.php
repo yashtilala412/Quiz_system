@@ -188,14 +188,15 @@ function getSelectedItem(val) {
         }
     });
 }
-function showSubmissionMessage() {
+function showSubmissionMessage(customMessage = "Answer submitted!") {
     var message = document.getElementById('submissionMessage');
-    message.textContent = "Answer submitted!";
+    message.textContent = customMessage;
     message.style.display = 'block';
     setTimeout(() => {
         message.style.display = 'none';
     }, 2000);
 }
+
 
 function getSelectedItem(val) {
     // Existing code...
