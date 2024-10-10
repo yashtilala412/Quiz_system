@@ -210,12 +210,17 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
         }, 50);
     }, duration);
 }
-function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black") {
+function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false) {
     var message = document.getElementById('submissionMessage');
     message.textContent = customMessage;
     message.style.display = 'block';
     message.style.color = color;
-    // Rest of the code remains the same
+    
+    if (!persistent) {
+        setTimeout(() => {
+            message.style.display = 'none';
+        }, duration);
+    }
 }
 
 
