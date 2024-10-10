@@ -109,6 +109,12 @@ if (!isset($_SESSION['ip_address'])) {
 } elseif ($_SESSION['ip_address'] !== $_SERVER['REMOTE_ADDR']) {
     logMessage("IP address mismatch. Possible session hijacking.");
 }
+if (!isset($_SESSION['last_activity'])) {
+    $_SESSION['last_activity'] = time();
+} else {
+    $inactive_time = time() - $_SESSION['last_activity'];
+    logMessage("User inactive for " . $inactive_time . " seconds.");
+}
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
