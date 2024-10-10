@@ -200,9 +200,17 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
         if (opacity >= 1) clearInterval(fadeIn);
     }, 50);
     setTimeout(() => {
-        message.style.display = 'none';
+        let fadeOut = setInterval(() => {
+            opacity -= 0.05;
+            message.style.opacity = opacity;
+            if (opacity <= 0) {
+                message.style.display = 'none';
+                clearInterval(fadeOut);
+            }
+        }, 50);
     }, duration);
 }
+
 
 
 function getSelectedItem(val) {
