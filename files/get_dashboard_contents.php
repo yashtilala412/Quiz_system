@@ -126,6 +126,13 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
     logMessage("Session started.");
 }
+if (!isset($_SESSION['student_details']) || !is_array($_SESSION['student_details'])) {
+    logMessage("Invalid session data. Possible tampering detected.");
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
 
 
     // Establishing database connection
