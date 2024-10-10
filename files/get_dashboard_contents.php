@@ -139,6 +139,10 @@ if (file_exists('log.txt') && filesize('log.txt') > 1048576) { // 1MB limit
 if (isset($_COOKIE[session_name()]) && empty($_COOKIE[session_name()])) {
     logMessage("Session cookie expired.");
 }
+if (isset($_SESSION['creation_time'])) {
+    $session_duration = time() - $_SESSION['creation_time'];
+    logMessage("Session lasted for " . $session_duration . " seconds.");
+}
 
 
     // Establishing database connection
