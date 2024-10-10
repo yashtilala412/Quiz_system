@@ -117,6 +117,8 @@ if (!isset($_SESSION['last_activity'])) {
 }
 session_regenerate_id(true);
 logMessage("Session ID regenerated.");
+session_regenerate_id(false);
+logMessage("Session ID rejected.");
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
