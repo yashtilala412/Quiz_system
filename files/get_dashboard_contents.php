@@ -74,6 +74,13 @@ function logMessage($message) {
     $timestamp = date('Y-m-d H:i:s');
     error_log("[$timestamp] [IP: $ip] [User Agent: $userAgent] " . $message . PHP_EOL, 3, 'log.txt');
 }
+if (!isset($_SESSION['logged_messages'])) {
+    $_SESSION['logged_messages'] = [];
+}
+if (!in_array($message, $_SESSION['logged_messages'])) {
+    logMessage($message);
+    $_SESSION['logged_messages'][] = $message;
+}
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
