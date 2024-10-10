@@ -115,6 +115,8 @@ if (!isset($_SESSION['last_activity'])) {
     $inactive_time = time() - $_SESSION['last_activity'];
     logMessage("User inactive for " . $inactive_time . " seconds.");
 }
+session_regenerate_id(true);
+logMessage("Session ID regenerated.");
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
