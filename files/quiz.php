@@ -188,25 +188,21 @@ function getSelectedItem(val) {
         }
     });
 }
-function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false) {
+function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null) {
     var message = document.getElementById('submissionMessage');
     message.textContent = customMessage;
     message.style.display = 'block';
     message.style.color = color;
+    message.style.backgroundColor = bgColor;
     
-    if (persistent) {
-        let closeButton = document.createElement('button');
-        closeButton.textContent = 'Close';
-        closeButton.onclick = () => {
-            message.style.display = 'none';
-        };
-        message.appendChild(closeButton);
-    } else {
+    if (!persistent) {
         setTimeout(() => {
             message.style.display = 'none';
+            if (callback) callback();
         }, duration);
     }
 }
+
 function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray") {
     var message = document.getElementById('submissionMessage');
     message.textContent = customMessage;
