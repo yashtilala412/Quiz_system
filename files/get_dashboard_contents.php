@@ -53,6 +53,7 @@ if (isset($_SESSION['student_details'])) {
     $data = filter_var($_SESSION['student_details'], FILTER_SANITIZE_STRING);
     logMessage("Session data found: " . $data);
 }
+logMessage("Session ID: " . session_id());
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
