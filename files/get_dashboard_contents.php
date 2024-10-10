@@ -66,6 +66,8 @@ if (!isset($_SESSION['last_activity']) || (time() - $_SESSION['last_activity']) 
 }
 session_start();
 logMessage("Session started successfully.");
+session_unset();
+logMessage("Session data unset.");
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
