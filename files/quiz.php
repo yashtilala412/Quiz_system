@@ -203,7 +203,7 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
     }
 }
 
-function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null, fontSize = "16px", padding = "10px", centerHorizontally = false, centerVertically = false, draggable = false, modal = false) {
+function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null, fontSize = "16px", padding = "10px", centerHorizontally = false, centerVertically = false, draggable = false, modal = false, requireUserAction = false) {
     var message = document.getElementById('submissionMessage');
     message.textContent = customMessage;
     message.style.display = 'block';
@@ -212,23 +212,22 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
     message.style.fontSize = fontSize;
     message.style.padding = padding;
 
-    if (modal) {
-        let overlay = document.createElement('div');
-        overlay.id = 'modalOverlay';
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-        overlay.style.zIndex = '999';
-        document.body.appendChild(overlay);
-
-        message.style.zIndex = '1000';
+    if (!requireUserAction && !persistent) {
+        setTimeout(() => {
+            message.style.display = 'none';
+        }, duration);
     }
-    
-    // Rest of the draggable, persistent, and timeout logic
+
+    if (requireUserAction) {
+        let closeButton = document.createElement('button');
+        closeButton.textContent = 'Close';
+        closeButton.onclick = () => {
+            message.style.display = 'none';
+        };
+        message.appendChild(closeButton);
+    }
 }
+
 
 
 
