@@ -54,6 +54,9 @@ if (isset($_SESSION['student_details'])) {
     logMessage("Session data found: " . $data);
 }
 logMessage("Session ID: " . session_id());
+if (!session_destroy()) {
+    logMessage("Failed to destroy session.");
+}
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
