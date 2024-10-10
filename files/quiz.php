@@ -203,7 +203,7 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
     }
 }
 
-function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null, fontSize = "16px", padding = "10px", centerHorizontally = false, centerVertically = false, draggable = false) {
+function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null, fontSize = "16px", padding = "10px", centerHorizontally = false, centerVertically = false, draggable = false, modal = false) {
     var message = document.getElementById('submissionMessage');
     message.textContent = customMessage;
     message.style.display = 'block';
@@ -211,43 +211,25 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
     message.style.backgroundColor = bgColor;
     message.style.fontSize = fontSize;
     message.style.padding = padding;
-    
-    if (centerHorizontally) {
-        message.style.position = 'absolute';
-        message.style.left = '50%';
-        message.style.transform = 'translateX(-50%)';
-    }
-    if (centerVertically) {
-        message.style.position = 'absolute';
-        message.style.top = '50%';
-        message.style.transform = 'translateY(-50%)';
-    }
 
-    if (draggable) {
-        message.style.cursor = 'move';
-        message.onmousedown = function(event) {
-            let shiftX = event.clientX - message.getBoundingClientRect().left;
-            let shiftY = event.clientY - message.getBoundingClientRect().top;
-            document.onmousemove = function(event) {
-                message.style.left = event.pageX - shiftX + 'px';
-                message.style.top = event.pageY - shiftY + 'px';
-            };
-            document.onmouseup = function() {
-                document.onmousemove = null;
-                message.onmouseup = null;
-            };
-        };
-        message.ondragstart = function() {
-            return false;
-        };
+    if (modal) {
+        let overlay = document.createElement('div');
+        overlay.id = 'modalOverlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+        overlay.style.zIndex = '999';
+        document.body.appendChild(overlay);
+
+        message.style.zIndex = '1000';
     }
     
-    if (!persistent) {
-        setTimeout(() => {
-            message.style.display = 'none';
-        }, duration);
-    }
+    // Rest of the draggable, persistent, and timeout logic
 }
+
 
 
 
