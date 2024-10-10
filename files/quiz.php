@@ -207,6 +207,15 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
         }, duration);
     }
 }
+function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray") {
+    var message = document.getElementById('submissionMessage');
+    message.textContent = customMessage;
+    message.style.display = 'block';
+    message.style.color = color;
+    message.style.backgroundColor = bgColor;
+    
+    // Rest of the code remains the same
+}
 
 function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false) {
     var message = document.getElementById('submissionMessage');
