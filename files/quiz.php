@@ -227,41 +227,26 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
         message.appendChild(closeButton);
     }
 }
-function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null, fontSize = "16px", padding = "10px", centerHorizontally = false, centerVertically = false, draggable = false, modal = false, requireUserAction = false, messageId = 'submissionMessage', customClass = '') {
+function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null, fontSize = "16px", padding = "10px", centerHorizontally = false, centerVertically = false, draggable = false, modal = false, requireUserAction = false, messageId = 'submissionMessage', customClass = '', language = 'en') {
     var message = document.getElementById(messageId);
-    message.textContent = customMessage;
+    
+    const messages = {
+        en: "Answer submitted!",
+        es: "¡Respuesta enviada!",
+        fr: "Réponse soumise!",
+        de: "Antwort eingereicht!"
+    };
+
+    message.textContent = customMessage || messages[language];
     message.style.display = 'block';
     message.style.color = color;
     message.style.backgroundColor = bgColor;
     message.style.fontSize = fontSize;
     message.style.padding = padding;
-    
-    if (customClass) {
-        message.classList.add(customClass);
-    }
-
-    if (!persistent) {
-        let progressBar = document.createElement('div');
-        progressBar.style.width = '100%';
-        progressBar.style.height = '5px';
-        progressBar.style.backgroundColor = 'green';
-        progressBar.style.position = 'absolute';
-        progressBar.style.bottom = '0';
-        message.appendChild(progressBar);
-        
-        let width = 100;
-        let interval = setInterval(() => {
-            width -= (100 / (duration / 100));
-            progressBar.style.width = width + '%';
-            if (width <= 0) {
-                clearInterval(interval);
-                message.style.display = 'none';
-            }
-        }, 100);
-    }
 
     // Rest of the logic remains the same
 }
+
 
 
 
