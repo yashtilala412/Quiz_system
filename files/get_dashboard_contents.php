@@ -122,6 +122,10 @@ logMessage("Session ID rejected.");
 if ($loginSuccess) {
     logMessage("User successfully logged in.");
 }
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+    logMessage("Session started.");
+}
 
 
     // Establishing database connection
