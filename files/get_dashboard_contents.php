@@ -146,7 +146,10 @@ if ($loginSuccess) {
         'samesite' => 'Strict'
     ]);
     logMessage("Session cookie parameters set to secure, httponly, and samesite=Strict.");
-    
+    if (isset($_SESSION['resumed'])) {
+        logMessage("Session resumed after server restart.");
+    }
+        
     
 
         logMessage("Processing test_id: " . $test_id);
