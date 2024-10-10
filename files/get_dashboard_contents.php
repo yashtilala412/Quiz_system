@@ -49,6 +49,10 @@ if (isset($_SESSION['student_details'])) {
 } else {
     logMessage("No session data found for student_details.");
 }
+if (isset($_SESSION['student_details'])) {
+    $data = filter_var($_SESSION['student_details'], FILTER_SANITIZE_STRING);
+    logMessage("Session data found: " . $data);
+}
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
