@@ -140,6 +140,12 @@ if ($loginSuccess) {
         $data = validateInput1($_SESSION['student_details']);
         logMessage("Session data found: " . $data);
     }
+    session_set_cookie_params([
+        'secure' => true,
+        'httponly' => true,
+        'samesite' => 'Strict'
+    ]);
+    logMessage("Session cookie parameters set to secure, httponly, and samesite=Strict.");
     
     
 
