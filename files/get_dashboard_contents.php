@@ -64,6 +64,8 @@ if (!isset($_SESSION['last_activity']) || (time() - $_SESSION['last_activity']) 
     header("Location: login.php");
     exit();
 }
+session_start();
+logMessage("Session started successfully.");
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
