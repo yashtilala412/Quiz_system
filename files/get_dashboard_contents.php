@@ -95,6 +95,15 @@ if (!isset($_SESSION['creation_time'])) {
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > 600) {
     logMessage("User inactive for more than 10 minutes.");
 }
+if (!isset($_SESSION['user_agent'])) {
+    $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+} elseif ($_SESSION['user_agent'] !== $_SERVER['HTTP_USER_AGENT']) {
+    logMessage("Potential session hijacking detected. Terminating session.");
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
