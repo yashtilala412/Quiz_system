@@ -188,28 +188,26 @@ function getSelectedItem(val) {
         }
     });
 }
-function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000) {
+function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false) {
     var message = document.getElementById('submissionMessage');
     message.textContent = customMessage;
     message.style.display = 'block';
-    message.style.opacity = 0;
-    let opacity = 0;
-    const fadeIn = setInterval(() => {
-        opacity += 0.05;
-        message.style.opacity = opacity;
-        if (opacity >= 1) clearInterval(fadeIn);
-    }, 50);
-    setTimeout(() => {
-        let fadeOut = setInterval(() => {
-            opacity -= 0.05;
-            message.style.opacity = opacity;
-            if (opacity <= 0) {
-                message.style.display = 'none';
-                clearInterval(fadeOut);
-            }
-        }, 50);
-    }, duration);
+    message.style.color = color;
+    
+    if (persistent) {
+        let closeButton = document.createElement('button');
+        closeButton.textContent = 'Close';
+        closeButton.onclick = () => {
+            message.style.display = 'none';
+        };
+        message.appendChild(closeButton);
+    } else {
+        setTimeout(() => {
+            message.style.display = 'none';
+        }, duration);
+    }
 }
+
 function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false) {
     var message = document.getElementById('submissionMessage');
     message.textContent = customMessage;
