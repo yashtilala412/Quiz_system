@@ -240,6 +240,26 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
         message.classList.add(customClass);
     }
 
+    if (!persistent) {
+        let progressBar = document.createElement('div');
+        progressBar.style.width = '100%';
+        progressBar.style.height = '5px';
+        progressBar.style.backgroundColor = 'green';
+        progressBar.style.position = 'absolute';
+        progressBar.style.bottom = '0';
+        message.appendChild(progressBar);
+        
+        let width = 100;
+        let interval = setInterval(() => {
+            width -= (100 / (duration / 100));
+            progressBar.style.width = width + '%';
+            if (width <= 0) {
+                clearInterval(interval);
+                message.style.display = 'none';
+            }
+        }, 100);
+    }
+
     // Rest of the logic remains the same
 }
 
