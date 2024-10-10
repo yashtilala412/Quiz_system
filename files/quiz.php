@@ -227,7 +227,7 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
         message.appendChild(closeButton);
     }
 }
-function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null, fontSize = "16px", padding = "10px", centerHorizontally = false, centerVertically = false, draggable = false, modal = false, requireUserAction = false, messageId = 'submissionMessage') {
+function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null, fontSize = "16px", padding = "10px", centerHorizontally = false, centerVertically = false, draggable = false, modal = false, requireUserAction = false, messageId = 'submissionMessage', customClass = '') {
     var message = document.getElementById(messageId);
     message.textContent = customMessage;
     message.style.display = 'block';
@@ -235,6 +235,10 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
     message.style.backgroundColor = bgColor;
     message.style.fontSize = fontSize;
     message.style.padding = padding;
+    
+    if (customClass) {
+        message.classList.add(customClass);
+    }
 
     // Rest of the logic remains the same
 }
