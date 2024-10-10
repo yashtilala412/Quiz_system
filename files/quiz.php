@@ -192,6 +192,13 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
     var message = document.getElementById('submissionMessage');
     message.textContent = customMessage;
     message.style.display = 'block';
+    message.style.opacity = 0;
+    let opacity = 0;
+    const fadeIn = setInterval(() => {
+        opacity += 0.05;
+        message.style.opacity = opacity;
+        if (opacity >= 1) clearInterval(fadeIn);
+    }, 50);
     setTimeout(() => {
         message.style.display = 'none';
     }, duration);
