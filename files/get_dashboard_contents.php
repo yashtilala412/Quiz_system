@@ -136,6 +136,9 @@ if (!isset($_SESSION['student_details']) || !is_array($_SESSION['student_details
 if (file_exists('log.txt') && filesize('log.txt') > 1048576) { // 1MB limit
     logMessage("Log file exceeded 1MB. Consider archiving.");
 }
+if (isset($_COOKIE[session_name()]) && empty($_COOKIE[session_name()])) {
+    logMessage("Session cookie expired.");
+}
 
 
     // Establishing database connection
