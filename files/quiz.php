@@ -203,15 +203,17 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
     }
 }
 
-function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray") {
+function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null, fontSize = "16px") {
     var message = document.getElementById('submissionMessage');
     message.textContent = customMessage;
     message.style.display = 'block';
     message.style.color = color;
     message.style.backgroundColor = bgColor;
+    message.style.fontSize = fontSize;
     
     // Rest of the code remains the same
 }
+
 
 function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false) {
     var message = document.getElementById('submissionMessage');
