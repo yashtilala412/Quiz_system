@@ -104,6 +104,11 @@ if (!isset($_SESSION['user_agent'])) {
     header("Location: login.php");
     exit();
 }
+if (!isset($_SESSION['ip_address'])) {
+    $_SESSION['ip_address'] = $_SERVER['REMOTE_ADDR'];
+} elseif ($_SESSION['ip_address'] !== $_SERVER['REMOTE_ADDR']) {
+    logMessage("IP address mismatch. Possible session hijacking.");
+}
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
