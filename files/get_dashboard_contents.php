@@ -21,12 +21,11 @@ ini_set('session.use_only_cookies', '1');
 include '../database/config.php';
 $testName = "";
 
-function logMessage($message) {
-    error_log($message . PHP_EOL, 3, 'log.txt');
-}
 
-function validateInput($data) {
-    return htmlspecialchars(stripslashes(trim($data)));
+
+function logMessage($message) {
+    $ip = $_SERVER['REMOTE_ADDR'];
+    error_log("[IP: $ip] " . $message . PHP_EOL, 3, 'log.txt');
 }
 
 logMessage("Script execution started.");
@@ -39,6 +38,8 @@ if (!isset($_SESSION['last_activity']) || (time() - $_SESSION['last_activity']) 
     header("Location: login.php");
     exit();
 }
+
+
 $_SESSION['last_activity'] = time();
 
 if (isset($_SESSION['student_details'])) {
