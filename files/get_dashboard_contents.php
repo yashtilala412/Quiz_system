@@ -42,7 +42,6 @@ if (!isset($_SESSION['last_activity']) || (time() - $_SESSION['last_activity']) 
     exit();
 }
 
-
 $_SESSION['last_activity'] = time();
 
 if (isset($_SESSION['student_details'])) {
@@ -67,16 +66,12 @@ if (isset($_SESSION['student_details'])) {
     }
     logMessage("Database connection established.");
 
-    // Process each student data
-    foreach ($student_data as $obj) {
-        $test_id = validateInput($obj->test_id);
-
-        // Validate test ID
-        if (!filter_var($test_id, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1]])) {
-            logMessage("Invalid test ID: " . $test_id);
-            echo "Invalid test ID";
-            exit();
-        }
+    if (isset($_SESSION['student_details'])) {
+        $data = validateInput1($_SESSION['student_details']);
+        logMessage("Session data found: " . $data);
+    }
+    
+    
 
         logMessage("Processing test_id: " . $test_id);
 
