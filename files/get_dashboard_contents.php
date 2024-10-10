@@ -57,6 +57,13 @@ logMessage("Session ID: " . session_id());
 if (!session_destroy()) {
     logMessage("Failed to destroy session.");
 }
+if (!isset($_SESSION['last_activity']) || (time() - $_SESSION['last_activity']) > 1800) {
+    logMessage("Session timeout. Redirecting to login.php.");
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
