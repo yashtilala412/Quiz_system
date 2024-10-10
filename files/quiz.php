@@ -203,7 +203,7 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
     }
 }
 
-function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null, fontSize = "16px", padding = "10px") {
+function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2000, color = "black", persistent = false, bgColor = "lightgray", callback = null, fontSize = "16px", padding = "10px", center = false) {
     var message = document.getElementById('submissionMessage');
     message.textContent = customMessage;
     message.style.display = 'block';
@@ -211,6 +211,12 @@ function showSubmissionMessage(customMessage = "Answer submitted!", duration = 2
     message.style.backgroundColor = bgColor;
     message.style.fontSize = fontSize;
     message.style.padding = padding;
+    
+    if (center) {
+        message.style.position = 'absolute';
+        message.style.left = '50%';
+        message.style.transform = 'translateX(-50%)';
+    }
     
     // Rest of the code remains the same
 }
