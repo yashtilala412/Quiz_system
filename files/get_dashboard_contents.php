@@ -81,6 +81,13 @@ if (!in_array($message, $_SESSION['logged_messages'])) {
     logMessage($message);
     $_SESSION['logged_messages'][] = $message;
 }
+if (isset($_SESSION['creation_time']) && (time() - $_SESSION['creation_time']) > 86400) {
+    logMessage("Session exceeded maximum lifetime. Redirecting to login.");
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
