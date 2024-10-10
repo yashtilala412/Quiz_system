@@ -43,18 +43,12 @@ if (!isset($_SESSION['last_activity']) || (time() - $_SESSION['last_activity']) 
 }
 
 $_SESSION['last_activity'] = time();
-
 if (isset($_SESSION['student_details'])) {
-    $data = $_SESSION['student_details'];
+    $data = validateInput($_SESSION['student_details']);
     logMessage("Session data found: " . $data);
-
-    $student_data = json_decode($data);
-
-    if ($student_data === null) {
-        logMessage("Invalid session data: " . json_last_error_msg());
-        echo "Invalid data";
-        exit();
-    }
+} else {
+    logMessage("No session data found for student_details.");
+}
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
