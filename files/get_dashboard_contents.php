@@ -88,6 +88,10 @@ if (isset($_SESSION['creation_time']) && (time() - $_SESSION['creation_time']) >
     header("Location: login.php");
     exit();
 }
+if (!isset($_SESSION['creation_time'])) {
+    $_SESSION['creation_time'] = time();
+    logMessage("Session creation time: " . date('Y-m-d H:i:s', $_SESSION['creation_time']));
+}
 
     // Establishing database connection
     $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
