@@ -136,6 +136,7 @@ try {
     error_log('Error executing query: ' . $e->getMessage(), 3, 'error.log');
     throw $e;
 }
+$sql2 = "SELECT id, test_id, rollno, password, score, status FROM students WHERE rollno = ? AND status IN (0, 1)";
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
