@@ -146,6 +146,7 @@ $cachedResult = getCache($queryKey); // Assume getCache function is implemented
 if ($cachedResult) {
     return $cachedResult;
 }
+CREATE INDEX idx_rollno_status ON students(rollno, status);
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
