@@ -128,6 +128,8 @@ try {
 mysqli_options($conn, MYSQLI_OPT_CONNECT_TIMEOUT, 5);
 error_log('Query executed successfully for rollno: ' . $student_id, 3, 'success.log');
 $encryptedPassword = password_hash($password, PASSWORD_BCRYPT);
+$studentData = mysqli_fetch_assoc($result2);
+echo json_encode($studentData);
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
