@@ -83,16 +83,18 @@
 
         // Prepare the second statement
         $sql2 = "SELECT id, test_id, rollno, password, score, status FROM students WHERE rollno = ? AND status = 0";
-        $stmt2 = mysqli_prepare($conn, $sql2);
-        if ($stmt2 === false) {
-            throw new Exception('Prepare error for SQL2: ' . mysqli_error($conn));
-        }
-        mysqli_stmt_bind_param($stmt2, "s", $student_id);
-        mysqli_stmt_execute($stmt2);
-        $result2 = mysqli_stmt_get_result($stmt2);
-        if ($result2 === false) {
-            throw new Exception('Execute error for SQL2: ' . mysqli_error($conn));
-        }
+$stmt2 = mysqli_prepare($conn, $sql2);
+if ($stmt2 === false) {
+    error_log('Prepare error for SQL2: ' . mysqli_error($conn), 3, 'errors.log');
+    throw new Exception('Prepare error for SQL2: ' . mysqli_error($conn));
+}
+mysqli_stmt_bind_param($stmt2, "s", $student_id);
+mysqli_stmt_execute($stmt2);
+$result2 = mysqli_stmt_get_result($stmt2);
+if ($result2 === false) {
+    error_log('Execute error for SQL2: ' . mysqli_error($conn), 3, 'errors.log');
+    throw new Exception('Execute error for SQL2: ' . mysqli_error($conn));
+}
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
