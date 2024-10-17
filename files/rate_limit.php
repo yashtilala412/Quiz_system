@@ -95,6 +95,7 @@ if ($result2 === false) {
     error_log('Execute error for SQL2: ' . mysqli_error($conn), 3, 'errors.log');
     throw new Exception('Execute error for SQL2: ' . mysqli_error($conn));
 }
+error_log('SQL Query Prepared: ' . $sql2, 3, 'query.log');
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
