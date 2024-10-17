@@ -102,6 +102,11 @@ if (empty($student_id) || !is_numeric($student_id)) {
 if (mysqli_num_rows($result2) === 0) {
     throw new Exception('No student found with the provided roll number.');
 }
+$startTime = microtime(true);
+mysqli_stmt_execute($stmt2);
+$endTime = microtime(true);
+$executionTime = $endTime - $startTime;
+error_log('Query executed in ' . $executionTime . ' seconds', 3, 'query.log');
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
