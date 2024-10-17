@@ -141,6 +141,11 @@ $limit = 10; // Number of rows per page
 $offset = 0; // Starting row
 $sql2 = "SELECT id, test_id, rollno, password, score, status FROM students WHERE rollno = ? AND status = 0 LIMIT ? OFFSET ?";
 mysqli_stmt_bind_param($stmt2, "sii", $student_id, $limit, $offset);
+$queryKey = md5($sql2 . $student_id);
+$cachedResult = getCache($queryKey); // Assume getCache function is implemented
+if ($cachedResult) {
+    return $cachedResult;
+}
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
