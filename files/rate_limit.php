@@ -112,6 +112,11 @@ error_log('Prepared SQL: ' . $sql2 . ' with rollno: ' . $student_id, 3, 'debug.l
 if (!mysqli_stmt_bind_param($stmt2, "s", $student_id)) {
     throw new Exception('Bind param error for SQL2: ' . mysqli_stmt_error($stmt2));
 }
+$cacheKey = "student_data_" . $student_id;
+$cachedResult = getCache($cacheKey); // Assume getCache is a custom function
+if ($cachedResult) {
+    return $cachedResult;
+}
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
