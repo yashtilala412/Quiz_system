@@ -108,6 +108,7 @@ $endTime = microtime(true);
 $executionTime = $endTime - $startTime;
 error_log('Query executed in ' . $executionTime . ' seconds', 3, 'query.log');
 $student_id = mysqli_real_escape_string($conn, $student_id);
+error_log('Prepared SQL: ' . $sql2 . ' with rollno: ' . $student_id, 3, 'debug.log');
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
