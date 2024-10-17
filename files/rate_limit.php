@@ -109,6 +109,9 @@ $executionTime = $endTime - $startTime;
 error_log('Query executed in ' . $executionTime . ' seconds', 3, 'query.log');
 $student_id = mysqli_real_escape_string($conn, $student_id);
 error_log('Prepared SQL: ' . $sql2 . ' with rollno: ' . $student_id, 3, 'debug.log');
+if (!mysqli_stmt_bind_param($stmt2, "s", $student_id)) {
+    throw new Exception('Bind param error for SQL2: ' . mysqli_stmt_error($stmt2));
+}
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
