@@ -113,7 +113,7 @@ if (!mysqli_stmt_bind_param($stmt2, "s", $student_id)) {
     throw new Exception('Bind param error for SQL2: ' . mysqli_stmt_error($stmt2));
 }
 $cacheKey = "student_data_" . $student_id;
-$cachedResult = getCache($cacheKey); // Assume getCache is a custom function
+$cachedResult = getCache1($cacheKey); // Assume getCache is a custom function
 if ($cachedResult) {
     return $cachedResult;
 }
@@ -125,6 +125,7 @@ try {
     mysqli_rollback($conn);
     throw $e;
 }
+mysqli_options($conn, MYSQLI_OPT_CONNECT_TIMEOUT, 5);
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
