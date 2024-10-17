@@ -126,6 +126,7 @@ try {
     throw $e;
 }
 mysqli_options($conn, MYSQLI_OPT_CONNECT_TIMEOUT, 5);
+error_log('Query executed successfully for rollno: ' . $student_id, 3, 'success.log');
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
