@@ -117,6 +117,14 @@ $cachedResult = getCache($cacheKey); // Assume getCache is a custom function
 if ($cachedResult) {
     return $cachedResult;
 }
+mysqli_begin_transaction($conn);
+try {
+    // SQL execution logic
+    mysqli_commit($conn);
+} catch (Exception $e) {
+    mysqli_rollback($conn);
+    throw $e;
+}
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
