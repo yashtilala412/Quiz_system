@@ -130,6 +130,12 @@ error_log('Query executed successfully for rollno: ' . $student_id, 3, 'success.
 $encryptedPassword = password_hash($password, PASSWORD_BCRYPT);
 $studentData = mysqli_fetch_assoc($result2);
 echo json_encode($studentData);
+try {
+    mysqli_stmt_execute($stmt2);
+} catch (Exception $e) {
+    error_log('Error executing query: ' . $e->getMessage(), 3, 'error.log');
+    throw $e;
+}
 
         if (mysqli_num_rows($result2) > 0) {
             $row2 = mysqli_fetch_assoc($result2);
